@@ -11,7 +11,8 @@ jobs:
       - name: Check Feature Branch
         run: |
           branch_name="${GITHUB_REF#refs/heads/}"
-          if [[ $branch_name =~ ^feature/ID-[0-9]+-.*$ || $branch_name =~ ^fix/ID-[0-9]+-.*$ ]]; then
+          # Enforces requiring the Trello ID in the branch name.
+          if [[ $branch_name =~ ^feature/ID-[0-9]+-*$ || $branch_name =~ ^fix/ID-[0-9]+-*$ ]]; then
             echo "Branch with the correct pattern: $branch_name"
           else
             echo "::error::Invalid branch name: $branch_name"
