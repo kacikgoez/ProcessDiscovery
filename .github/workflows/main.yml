@@ -1,0 +1,20 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  check-feature-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Feature Branch
+        run: |
+          branch_name="${GITHUB_REF#refs/heads/}"
+          # Restrict the push requests to the prefixes feature/ID-[num]-... and fix/ID-[num]-...
+          if [[ $branch_name =~ ^feature\/ID-[0-9]+-.*$ || $branch_name =~ ^fix\/ID-[0-9]+-.*$ || $branch_name == main ]]; then
+            echo "Branch with the correct pattern: $branch_name"
+          else
+            echo "::error::Invalid branch name: $branch_name"
+            exit 1
+          fi
