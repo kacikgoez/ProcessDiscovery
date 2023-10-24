@@ -1,3 +1,6 @@
+# ADD YOUR JOBS TO THE BRANCH RULES, OTHERWISE MERGING IS STILL POSSIBLE EVEN IF THEY FAIL:
+# https://github.com/kacikgoez/ProcessDiscovery/settings/branch_protection_rules/43074520
+
 on:
   workflow_dispatch:
   push:
