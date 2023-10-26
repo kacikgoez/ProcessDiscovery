@@ -23,7 +23,7 @@ PATIENT_DATA_MAPPING = {
     'Race': 'race',
     'brain_death': 'brain_death',
     'Referral_Year': 'referral_year',  # interesting as the time attributes are randomly shifted
-    'Referral_DayOfWeek': 'referral_day_of_week',  # interesting as the time attributes are randomly shifted
+    'Referral_DayofWeek': 'referral_day_of_week',  # interesting as the time attributes are randomly shifted
     'Cause_of_Death_UNOS': 'cause_of_death',
     'Mechanism_of_Death': 'mechanism_of_death',
     'Circumstances_of_Death': 'circumstances_of_death',
