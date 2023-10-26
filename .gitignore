@@ -1,3 +1,4 @@
 **/.env.yml
 **/dist
 **/node_modules/
+.idea/
