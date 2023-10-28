@@ -28,7 +28,7 @@ jobs:
           RENDER_TOKEN: ${{ secrets.RENDER_TOKEN }}
           RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
         run: |
-          echo github.event_name
+          echo ${{ github.event_name }}
           CURL_RESULT=$(curl --request PATCH \
               --url https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }} \
               --header 'accept: application/json' \
