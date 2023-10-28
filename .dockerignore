@@ -1,0 +1,14 @@
+.dockerignore
+Dockerfile
+
+# Ignore git related files
+.git/
+.github/
+.gitignore
+
+# Ignore IDE related files
+.idea/
+
+# Ignore node related files
+**/node_modules/
+**/dist

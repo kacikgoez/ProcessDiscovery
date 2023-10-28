@@ -1,0 +1,48 @@
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Deploy"
+        default: "Deploy"
+
+jobs:
+    deploy-on-render:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Deploy on Render.com
+          env:
+            RENDER_TOKEN: ${{ secrets.RENDER_TOKEN }}
+            RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          run: |
+            echo ${{ github.event_name }}
+            CURL_RESULT=$(curl --request PATCH \
+                --url https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }} \
+                --header 'accept: application/json' \
+                --header 'authorization: Bearer ${{ secrets.RENDER_TOKEN }}' \
+                --header 'content-type: application/json' \
+                --data '
+                        {
+                          "autoDeploy": "yes",
+                          "branch": "${{ github.ref_name }}"
+                        }
+                      '
+                )
+              
+              URL_RESULT=$(echo $CURL_RESULT | jq -r '.serviceDetails.url')
+  
+              if [ -z "$URL_RESULT" ]; then
+                echo "::error::Something went wrong with the deployment on Render.com 🤷"
+              fi
+  
+              DEPLOY_REQUEST=$(curl --request POST \
+                  --url https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys \
+                  --header 'accept: application/json' \
+                  --header 'authorization: Bearer ${{ secrets.RENDER_TOKEN }}' \
+                  --header 'content-type: application/json' \
+                  --data '
+                    {
+                      "clearCache": "do_not_clear"
+                    }
+                    ')
+                
+                echo -e "\e[32mIt might take a minute, go on $URL_RESULT 🚀\e[0m"

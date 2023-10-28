@@ -1,0 +1,7 @@
+version: '0.1.0'
+services:
+  flask_server:
+    build:
+        context: .
+    ports:
+      - "80:80"

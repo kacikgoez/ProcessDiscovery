@@ -1,9 +1,8 @@
 on:
-  workflow_dispatch:
   push:
     branches:
       - '**'
-
+    
 jobs:
   check-feature-branch:
     runs-on: ubuntu-latest
