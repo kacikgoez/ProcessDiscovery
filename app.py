@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, send_from_directory
+from flask import Flask, jsonify, send_from_directory
 import threading as thread
 from waitress import serve
 from termcolor import colored
@@ -16,6 +16,13 @@ app = Flask('ORCA')
 def index():
     return send_from_directory('frontend/dist/', 'index.html')
 
+# If Render.com preview, show some info about the deployment to avoid confusion
+@app.route('/render-config')
+def render_sha_available():
+    if 'RENDER_GIT_BRANCH' in os.environ and 'RENDER_GIT_COMMIT' in os.environ:
+        return jsonify({'branch': os.environ['RENDER_GIT_BRANCH'], 'commit': os.environ['RENDER_GIT_COMMIT']})
+    else:
+        return jsonify({})
 
 @app.route('/<path:file>')
 def serve_static_file(file):

@@ -1,14 +1,35 @@
 <template>
   <h1>ORCA</h1>
+  <span v-if="isRenderDeployment" id="render-version">
+    {{ commit }} - {{ branch }}
+  </span>
   <KPIGrid :data="layout" @close="close"></KPIGrid>
 </template>
 
 <script setup lang="ts">
 
-import { reactive, nextTick } from 'vue';
+import { reactive, nextTick, ref } from 'vue';
 import KPIGrid from './components/grid/KPIGrid.vue'
 import { KPITile } from './types'
 // import * as d3 from 'd3'
+
+const commit = ref()
+const branch = ref()
+const isRenderDeployment = ref(false)
+
+fetch('/render-config')
+  .then(response => response.json())
+  .then(data => {
+    // If data is not empty, look extract "commit" and "branch" from JSON
+    if (Object.keys(data).length > 0) {
+      console.log("RENDERING DEPLOYMENT INFO")
+      commit.value = `SHA: ${data.commit.slice(0, 5)}...`
+      branch.value = data.branch.match(/id-.*/i)[0].slice(12)
+      isRenderDeployment.value = true;
+    }
+  }).catch(err => {
+    console.log(err)
+  })
 
 async function close(index: Number) {
   layout = layout.filter((kpi) => kpi.i !== index);
@@ -98,5 +119,12 @@ APP DESIGN
 
 .vue-grid-item {
   color: #777;
+}
+
+#render-version {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
 }
 </style>
