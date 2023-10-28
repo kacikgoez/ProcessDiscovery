@@ -1,0 +1,5 @@
+# requirements.txt maybe needed for render.com, just experimental for now
+flask
+waitress
+termcolor
+pandas
