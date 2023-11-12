@@ -1,22 +1,38 @@
 <template>
-  <h1>ORCA</h1>
-  <span v-if="isRenderDeployment" id="render-version">
-    {{ commit }} - {{ branch }}
-  </span>
-  <KPIGrid :data="layout" @close="close"></KPIGrid>
+  <div class="flex flex-col">
+    <nav id="navigation-bar" style="border-bottom: 1px solid #efefef;">
+      <div id="navbar-left">
+        <button id="navbar-sidebar-btn"></button>
+      </div>
+      <div id="navbar-center">
+        <h1 id="navbar-title">🐳 orca </h1>
+      </div>
+      <div id="navbar-right">
+        <div id="render-version" v-if="isRenderDeployment">
+          <h1>{{ commit }} - {{ branch }}</h1>
+        </div>
+      </div>
+    </nav>
+    <div class="bg-white p-3" style="border-bottom: 1px solid #efefef;">
+      <input class="bg-gray-50 border-[#cecece] border-[0.5px] p-1 rounded-xl text-sm pl-2 pr-2" placeholder="Search" />
+    </div>
+  </div>
+  <div style="max-width: 1500px; margin: auto;">
+    <KPIGrid class="mr-5 ml-5" v-model:data="layout" @close="close"></KPIGrid>
+  </div>
 </template>
 
 <script setup lang="ts">
 
-import { reactive, nextTick, ref } from 'vue';
-import KPIGrid from './components/grid/KPIGrid.vue'
-import { KPITile } from './types'
-// import * as d3 from 'd3'
+import { nextTick, ref } from 'vue';
+import KPIGrid from './components/grid/KPIGrid.vue';
+import { Charts, KPITile } from './types';
 
 const commit = ref()
 const branch = ref()
 const isRenderDeployment = ref(false)
 
+// Checks if a render.com deployment, if so, show version info top right
 fetch('/render-config')
   .then(response => response.json())
   .then(data => {
@@ -27,37 +43,25 @@ fetch('/render-config')
       branch.value = data.branch.match(/id-.*/i)[0].slice(12)
       isRenderDeployment.value = true;
     }
-  }).catch(err => {
-    console.log(err)
+
+  }).catch(() => {
+    // Not a render.com deployment (or something went wrong)
   })
 
+// Closes a KPI tile by its index
 async function close(index: Number) {
-  layout = layout.filter((kpi) => kpi.i !== index);
+  layout.value = layout.value.filter((kpi) => kpi.i !== index)
   await nextTick()
 }
 
-let layout: KPITile[] = reactive([
-  { title: "KPI", url: "google.com", x: 0, y: 0, w: 2, h: 2, i: 0 },
-  { title: "KPI", url: "google.com", x: 2, y: 0, w: 2, h: 4, i: 1 },
-  { title: "KPI", url: "google.com", x: 4, y: 0, w: 2, h: 5, i: 2 },
-  { title: "KPI", url: "google.com", x: 6, y: 0, w: 2, h: 3, i: 3 },
-  { title: "KPI", url: "google.com", x: 8, y: 0, w: 2, h: 3, i: 4 },
-  { title: "KPI", url: "google.com", x: 10, y: 0, w: 2, h: 3, i: 5 },
-  { title: "KPI", url: "google.com", x: 0, y: 5, w: 2, h: 5, i: 6 },
-  { title: "KPI", url: "google.com", x: 2, y: 5, w: 2, h: 5, i: 7 },
-  { title: "KPI", url: "google.com", x: 4, y: 5, w: 2, h: 5, i: 8 },
-  { title: "KPI", url: "google.com", x: 6, y: 4, w: 2, h: 4, i: 9 },
-  { title: "KPI", url: "google.com", x: 8, y: 4, w: 2, h: 4, i: 10 },
-  { title: "KPI", url: "google.com", x: 10, y: 4, w: 2, h: 4, i: 11 },
-  { title: "KPI", url: "google.com", x: 0, y: 10, w: 2, h: 5, i: 12 },
-  { title: "KPI", url: "google.com", x: 2, y: 10, w: 2, h: 5, i: 13 },
-  { title: "KPI", url: "google.com", x: 4, y: 8, w: 2, h: 4, i: 14 },
-  { title: "KPI", url: "google.com", x: 6, y: 8, w: 2, h: 4, i: 15 },
-  { title: "KPI", url: "google.com", x: 8, y: 10, w: 2, h: 5, i: 16 },
-  { title: "KPI", url: "google.com", x: 10, y: 4, w: 2, h: 2, i: 17 },
-  { title: "KPI", url: "google.com", x: 0, y: 9, w: 2, h: 3, i: 18 },
-  { title: "KPI", url: "google.com", x: 2, y: 6, w: 2, h: 2, i: 19 }
+// This is the layout which is passed down to KPIGrid, which is then synced back up
+let layout: KPITile[] = ref([
+  { title: "A Pie Chart", type: Charts.PieChart, url: "google.com", x: 0, y: 0, w: 4, h: 10, i: 0 },
+  { title: "A Line Chart", type: Charts.LineChart, url: "google.com", x: 4, y: 0, w: 4, h: 10, i: 1 },
+  { title: "A Horizontal Bar Chart", type: Charts.HorizontalBarChart, url: "google.com", x: 4, y: 0, w: 4, h: 10, i: 2 },
+  { title: "Add New KPI", url: "google.com", x: 8, y: 0, w: 4, h: 10, i: 3 },
 ]);
+
 
 </script>
 
@@ -65,6 +69,13 @@ let layout: KPITile[] = reactive([
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import '@/assets/variables.css';
+
+@font-face {
+  font-family: 'Titillium Web';
+  src: url('~@/assets/fonts/Titillium_Web/TitilliumWeb-Bold.ttf');
+}
 
 /* 
 -----------------------------------
@@ -79,7 +90,7 @@ SCROLLBAR DESIGN
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #fff;
+  background: var(--scroll-track-color);
 }
 
 /* Handle */
@@ -98,33 +109,85 @@ APP DESIGN
 -----------------------------------
 */
 
+html {
+  background-color: var(--dashboard-background-color);
+  font: 'Roboto', sans-serif;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: var(--app-text-color);
   -webkit-user-drag: none;
   user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
-  margin-top: 15px;
+}
+
+#navigation-bar {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--navbar-background-color);
+  width: 100%;
+  height: 80px;
+  padding: 0 10px;
+
+  #navbar-left {
+    display: flex;
+    justify-content: left;
+  }
+
+  #navbar-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    #navbar-title {
+      font-family: 'Titillium Web', sans-serif;
+      font-weight: bold;
+      font-size: 35px;
+      white-space: nowrap;
+    }
+  }
+
+  div {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 /* Color of the preview tile when dragging */
 .vue-grid-item.vue-grid-placeholder {
-  background-color: #a4e7ab;
+  background-color: var(--placeholder-tile-background-color);
+  box-shadow: 10px 10px 10px 20px var(--placeholder-tile-shadow-color);
 }
 
 .vue-grid-item {
-  color: #777;
+  color: var(--vue-tile-text-color);
+  border-radius: 15px;
+  background-color: var(--vue-tile-background-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 4px 4px 13px -13px #000000ff;
+
+  .vue-resizable-handle {
+    opacity: 0.5;
+    margin: 8px;
+  }
 }
 
-#render-version {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+#render-version * {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: text-gray-500;
   z-index: 1000;
 }
 </style>
