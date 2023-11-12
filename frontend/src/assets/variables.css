@@ -1,0 +1,18 @@
+:root {
+    --kpi-icon-width: 50px;
+    --kpi-icon-height: 50px;
+    --icon-hover-scale: scale(1.3);
+    --dashboard-background-color: #f8f9fd;
+    --scroll-track-color: #f4f4f4;
+    --navbar-background-color: #fff;
+    /* The preview tile when dragging */
+    --placeholder-tile-background-color: #84f7ff;
+    --placeholder-tile-shadow-color: #fff;
+
+    --app-text-color: #2c3e50;
+
+    --vue-tile-background-color: #fff;
+    --vue-tile-text-color: #777;
+    --vue-tile-exit-button-color: #8e8e8e;
+    --border-color: #f2f2f2;
+}
