@@ -64,7 +64,15 @@ git rebase -i origin/main
 
 - After you run `git rebase -i origin/main`, it will open up an editor in your terminal.
 
+<<<<<<< HEAD
+<<<<<<< HEAD
  🟡 On my machine (Mac), the editor is set to `Vim` by default, which is a more "difficult" editor with different modes. You can setup to VSC for a visual editor: ```git config --global core.editor code```. For this you might need to install the "code" command, to do this, press ```Ctrl+Shift+P```, which opens the command palette, and type "install code", click on the option "Shell Command: Install ..." that appears.
+=======
+ 🟡 On my machine (Mac), the editor is set to `Vim` by default, which is a more "difficult" editor with different modes. You can setup to VSC for a visual editor: ```git config --global core.editor code```
+>>>>>>> 6b9f4b2 (Feature: ID-hGqw1FNt: add dashboard customization)
+=======
+ 🟡 On my machine (Mac), the editor is set to `Vim` by default, which is a more "difficult" editor with different modes. You can setup to VSC for a visual editor: ```git config --global core.editor code```. For this you might need to install the "code" command, to do this, press ```Ctrl+Shift+P```, which opens the command palette, and type "install code", click on the option "Shell Command: Install ..." that appears.
+>>>>>>> 7e18e45 (Feature: ID-hGqw1FNt: add dashboard customization)
 
 - The editor in the terminal will list all the commits that you have locally different from the main branch. You can now `drop`, `reword` and `squash` (and do a bunch other stuff) by changing the word `pick` to one of the commands listed.
 

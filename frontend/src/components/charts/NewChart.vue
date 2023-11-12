@@ -1,14 +1,33 @@
 <template>
     <div class="kpi-new-tile-choose">
         <div class="kpi-choose-graph">
+<<<<<<< HEAD
+<<<<<<< HEAD
             <span class="kpi-icon material-symbols-outlined text-6xl cursor-pointer text-blue-400"
+<<<<<<< HEAD
+<<<<<<< HEAD
                 @click="emit('change', { action: KPIActions.ChangeComponent, component: Charts.PieChart } as KPIChange)">
+=======
+=======
+            <span
+class="kpi-icon material-symbols-outlined text-6xl cursor-pointer text-blue-400"
+>>>>>>> 1b0447f (Feature: ID-hGqw1FNt: addition of UI components & Chevron diagram and switch to ECharts)
+=======
+            <span class="kpi-icon material-symbols-outlined text-6xl cursor-pointer text-blue-400"
+>>>>>>> 143d6aa (Feature: ID-hGqw1FNt: addition of UI components & Chevron diagram and switch to ECharts)
+                @click="$emit('change', { action: KPIActions.ChangeComponent, component: Charts.PieChart } as KPIChange)">
+>>>>>>> 6b9f4b2 (Feature: ID-hGqw1FNt: add dashboard customization)
+=======
+                @click="emit('change', { action: KPIActions.ChangeComponent, component: Charts.PieChart } as KPIChange)">
+>>>>>>> 8da3a2a (Add BaseChart, fix Chevron to one big diagram, convert to typescript)
                 bar_chart
             </span>
         </div>
         <div class="kpi-choose-chatpgt">
             <img class="kpi-icon" src="@/assets/chatgpt.svg">
         </div>
+<<<<<<< HEAD
+<<<<<<< HEAD
     </div>
 </template>
 <script setup lang="ts">
@@ -16,6 +35,22 @@
 import { Charts, KPIActions, KPIChange } from '@/types';
 
 const emit = defineEmits(['change']);
+<<<<<<< HEAD
+=======
+
+=======
+>>>>>>> 1b0447f (Feature: ID-hGqw1FNt: addition of UI components & Chevron diagram and switch to ECharts)
+    </div>
+</template>
+<script setup lang="ts">
+
+<<<<<<< HEAD
+>>>>>>> 6b9f4b2 (Feature: ID-hGqw1FNt: add dashboard customization)
+=======
+import { Charts, KPIActions, KPIChange } from '@/types';
+>>>>>>> 1b0447f (Feature: ID-hGqw1FNt: addition of UI components & Chevron diagram and switch to ECharts)
+=======
+>>>>>>> 8da3a2a (Add BaseChart, fix Chevron to one big diagram, convert to typescript)
 
 </script>
 <style scoped>

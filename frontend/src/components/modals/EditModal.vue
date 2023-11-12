@@ -59,11 +59,27 @@ function closeModal() {
     visibleProp.value = false
 }
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 watch(visibleProp, async (value) => {
     emit('update:visible', value)
 })
 
 watch(visibleArg, async (value) => {
+=======
+watch(visibleProp, (value) => {
+    emit('update:visible', value)
+})
+
+watch(visibleArg, (value) => {
+>>>>>>> 1b0447f (Feature: ID-hGqw1FNt: addition of UI components & Chevron diagram and switch to ECharts)
+=======
+watch(visibleProp, async (value) => {
+    emit('update:visible', value)
+})
+
+watch(visibleArg, async (value) => {
+>>>>>>> 8da3a2a (Add BaseChart, fix Chevron to one big diagram, convert to typescript)
     visibleProp.value = value
 })
 
