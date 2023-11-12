@@ -1,48 +1,66 @@
 <template>
-    <grid-layout v-model:layout="layout" :col-num="12" :row-height="30" :is-draggable="true" :is-resizable="true"
-        :responsive="true" :vertical-compact="true" :use-css-transforms="true">
-        <grid-item v-for=" (item, index) in layout " :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="index"
-            :key="item.title" style="border: 1px solid rgb(239, 239, 239);">
-            <div class="tile-navbar">
-                <h1>{{ item.title }}</h1>
-                <div class="exit-button" @click="exit(item.i)">x</div>
-            </div>
+    <grid-layout v-model:layout="layout" :col-num="12" :row-height="20" :is-resizable="true" :responsive="true"
+        :is-draggable="draggable" :vertical-compact="true" :use-css-transforms="false">
+        <grid-item v-for="item in layout" :id="`vue-tile-${item.i}`" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
+            :i="item.i" :key="item.i" :min-w="minWidth" min-h="10" :is-draggable="draggable" @mousedown.prevent="">
+            <KPIGridItem :title="item.title" :type="(item.type as Charts)" :i="item.i" @close="exit"
+                @draggable="dragChange"></KPIGridItem>
         </grid-item>
     </grid-layout>
 </template>
+
 <script setup lang="ts">
 
-import { KPITile } from '@/types';
-import { ref, defineProps, PropType, defineEmits } from 'vue';
-import { GridLayout, GridItem } from 'vue3-grid-layout-next';
+import KPIGridItem from '@/components/grid/KPIGridItem.vue';
+import type { Charts, KPITile } from '@/types';
+import { PropType, defineEmits, defineProps, nextTick, ref, toRef, watch } from 'vue';
+import { GridItem, GridLayout } from 'vue3-grid-layout-next';
 
 const props = defineProps({
     data: { type: Object as PropType<KPITile[]>, required: true }
 })
 
-const emits = defineEmits(['close'])
+const minWidth = ref(3);
 
-function exit(index: Number) {
+const draggable = ref(false)
+
+// Parent layout prop and local prop, synced down below by watches
+const layoutParent = toRef(props, "data")
+const layout = ref(props.data)
+
+const emits = defineEmits(['close', 'update:data'])
+
+function exit(index: Number): void {
     emits("close", index)
 }
 
-const layout = ref(props.data)
+async function dragChange(state: Boolean) {
+    draggable.value = state
+    await nextTick();
+}
+
+// Watch ensures parent changes are synced to child
+// Skip first change (startup)
+
+// FIXME: Possibly replaceable by defineModel? 
+const startup = ref(true)
+watch(layoutParent, (newVal) => {
+    if (startup.value) {
+        startup.value = false
+        return
+    }
+    layout.value = newVal
+}, { deep: true })
+
+/* Watch ensures child changes are synced to parent
+    Example: change layout -> delete one of the items -> layout goes back to original state
+*/
+watch(layout, (newVal) => {
+    emits("update:data", newVal)
+}, { deep: true })
+
 
 </script>
-<style scoped>
-.tile-navbar {
-    position: relative;
-    display: block;
-    width: 100%;
-    padding: 8px 0px;
-}
 
-.exit-button {
-    position: absolute;
-    right: 5px;
-    top: 0px;
-    padding: 5px;
-    color: #c2c2c2;
-    cursor: pointer;
-}
-</style>
+
+<style scoped></style>
