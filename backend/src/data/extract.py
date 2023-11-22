@@ -1,7 +1,7 @@
 import pandas as pd
 from pandas import Timedelta
 
-from app import ROOT_DIR, CLEAN_EVENT_LOG_PATH
+from definitions import ROOT_DIR, CLEAN_EVENT_LOG_PATH
 
 """
 This script is used to extract an event log from the original data.
@@ -52,7 +52,7 @@ except FileNotFoundError:
 # Load the data
 path = f'{ROOT_DIR}/backend/data/raw/{RAW_DATASET}'
 try:
-    df = pd.read_csv(path)
+    df = pd.read_csv(path, low_memory=False)
 except FileNotFoundError:
     print(
         f'The ORCHID dataset was not found at {path}. Please download the dataset and place it in the data/raw folder.')
@@ -104,7 +104,7 @@ columns = ['concept:name', 'time:timestamp'] + list(PATIENT_DATA_MAPPING.values(
 event_log = pd.DataFrame(events_list, columns=columns)
 
 # Forward fill the time column to fill in the missing times
-event_log['time:timestamp'] = event_log['time:timestamp'].ffill()
+# event_log['time:timestamp'] = event_log['time:timestamp'].ffill()
 
 # Sort the event log by patient id and time
 event_log = event_log.sort_values(by=['case:concept:name', 'time:timestamp'])
