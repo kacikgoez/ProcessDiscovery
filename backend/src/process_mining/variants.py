@@ -48,4 +48,7 @@ def get_variants_with_frequencies(el: pd.DataFrame, disaggregation_attribute: st
             'distribution': distribution.to_dict(),
         })
 
+    # sort the variants by their frequency
+    result.sort(key=lambda v: v['frequency'], reverse=True)
+
     return result
