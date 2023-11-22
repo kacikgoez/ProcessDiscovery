@@ -3,3 +3,4 @@ flask
 waitress
 termcolor
 pandas
+pytest
