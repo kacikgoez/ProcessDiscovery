@@ -5,10 +5,9 @@ import threading as thread
 from waitress import serve
 from termcolor import colored
 
+from backend.src.flask.services.process_mining_service import ProcessMiningService
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-CLEAN_EVENT_LOG_PATH = f'{ROOT_DIR}/backend/data/processed/orchid_event_log.csv'
-
+PROCESS_MINING_SERVICE = ProcessMiningService()
 app = Flask('ORCA')
 
 
@@ -27,6 +26,10 @@ def render_sha_available():
 @app.route('/<path:file>')
 def serve_static_file(file):
     return send_from_directory('frontend/dist/', file)
+
+@app.route('/variants')
+def calculate():
+    return jsonify(PROCESS_MINING_SERVICE.get_variants())
 
 
 if __name__ == '__main__':
