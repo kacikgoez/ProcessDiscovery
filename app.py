@@ -3,6 +3,7 @@ import os
 from flask import Flask, jsonify, send_from_directory, request
 import threading as thread
 
+from flask_cors import CORS
 from flask_marshmallow import Marshmallow
 from waitress import serve
 from termcolor import colored
@@ -13,6 +14,7 @@ from backend.src.flask.services.process_mining_service import ProcessMiningServi
 PROCESS_MINING_SERVICE = ProcessMiningService()
 app = Flask('ORCA')
 ma = Marshmallow(app)
+CORS(app)
 
 
 @app.route('/')
@@ -34,9 +36,9 @@ def serve_static_file(file):
     return send_from_directory('frontend/dist/', file)
 
 
-@app.route('/variants')
+@app.route('/variants', methods=['POST'])
 def calculate():
-    json_data = request.get_json()
+    json_data = request.get_json(force=True)
     if not json_data:
         return jsonify({'message': 'No input data provided'}), 400
 
@@ -48,7 +50,7 @@ def calculate():
 
     data = schema.load(json_data)
 
-    return jsonify(PROCESS_MINING_SERVICE.get_variants(), status=200)
+    return jsonify(PROCESS_MINING_SERVICE.get_variants()), 200
 
 
 if __name__ == '__main__':
