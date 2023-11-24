@@ -15,4 +15,11 @@
     --vue-tile-text-color: #777;
     --vue-tile-exit-button-color: #8e8e8e;
     --border-color: #f2f2f2;
+
+    --activity-referal-color: #f1c40f;
+    --activity-evaluation-color: #e74c3c;
+    --activity-approach-color: #3498db;
+    --activity-authorization-color: #2ecc71;
+    --activity-procurement-color: #9b59b6;
+    --activity-transplant-color: #34495e;
 }
