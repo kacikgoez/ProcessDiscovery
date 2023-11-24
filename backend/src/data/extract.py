@@ -46,17 +46,17 @@ def extract(raw: pd.DataFrame) -> pd.DataFrame:
     # Convert all time columns to datetime
     time_columns = ['time_referred', 'time_approached', 'time_authorized', 'time_procured']
     for col in time_columns:
-        df[col] = pd.to_datetime(df[col], format='ISO8601')
+        raw[col] = pd.to_datetime(raw[col], format='ISO8601')
 
     # Only keep allowed outcomes
     allowed_outcomes = ['Transplanted', 'Recovered for Research', 'Recovered for Transplant but not Transplanted']
     include_outcomes = [c for c in PATIENT_DATA_MAPPING.keys() if c.startswith('outcome_')]
     for col in include_outcomes:
-        df[col] = df[col].astype('category').cat.set_categories(allowed_outcomes)
+        raw[col] = raw[col].astype('category').cat.set_categories(allowed_outcomes)
 
     events_list = []
     # Iterate over all rows that correspond to a patient and add all events that happened to the patient to the event list
-    for i, row in df.iterrows():
+    for i, row in raw.iterrows():
         # Collect patient data by mapping the original column names to the new column names
         patient_data = {v: row[k] for k, v in PATIENT_DATA_MAPPING.items()}
 
