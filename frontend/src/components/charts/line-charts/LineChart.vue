@@ -47,26 +47,19 @@ const chart = {
         },
         scales: {
             x: {
-                border: {
-                    display: false
-                },
                 grid: {
-                    color: function () {
-                        return '#ddd';
-                    },
-                },
+                    color: '#f0f0f0',
+                    borderColor: '#f0f0f0'
+                }
             },
             y: {
-                border: {
-                    display: false
-                },
                 grid: {
-                    color: function () {
-                        return '#ddd';
-                    },
-                },
+                    color: '#f0f0f0',
+                    borderColor: '#f0f0f0'
+                }
             }
-        }
+        },
+        devicePixelRatio: 1.2
     },
 };
 

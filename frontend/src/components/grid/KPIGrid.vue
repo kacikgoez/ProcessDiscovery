@@ -3,8 +3,8 @@
         :is-draggable="draggable" :vertical-compact="true" :use-css-transforms="false">
         <grid-item v-for="item in layout" :id="`vue-tile-${item.i}`" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
             :i="item.i" :key="item.i" :min-w="minWidth" min-h="10" :is-draggable="draggable" @mousedown.prevent="">
-            <KPIGridItem :title="item.title" :type="(item.type as Charts)" :i="item.i" @close="exit"
-                @draggable="dragChange"></KPIGridItem>
+            <KPIGridItem :title="item.title" :type="(item.type as Charts)" :i="item.i" @close="exit" @draggable="dragChange"
+                @edit="emits('edit',)"></KPIGridItem>
         </grid-item>
     </grid-layout>
 </template>
@@ -28,7 +28,7 @@ const draggable = ref(false)
 const layoutParent = toRef(props, "data")
 const layout = ref(props.data)
 
-const emits = defineEmits(['close', 'update:data'])
+const emits = defineEmits(['close', 'update:data', 'edit'])
 
 function exit(index: Number): void {
     emits("close", index)

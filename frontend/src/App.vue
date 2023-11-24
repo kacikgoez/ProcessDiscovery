@@ -20,12 +20,14 @@
   <div style="max-width: 1500px; margin: auto;">
     <KPIGrid class="mr-5 ml-5" v-model:data="layout" @close="close"></KPIGrid>
   </div>
+  <BaseModal name="example" />
 </template>
 
 <script setup lang="ts">
 
 import { nextTick, ref } from 'vue';
 import KPIGrid from './components/grid/KPIGrid.vue';
+import BaseModal from './components/modals/BaseModal.vue';
 import { Charts, KPITile } from './types';
 
 const commit = ref()
