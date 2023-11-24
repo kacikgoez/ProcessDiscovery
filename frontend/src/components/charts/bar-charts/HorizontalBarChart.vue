@@ -49,7 +49,21 @@ const chart = {
                 display: false,
                 position: 'bottom',
             }
-        }
+        },
+        scales: {
+            x: {
+                grid: {
+                    color: '#f0f0f0',
+                    borderColor: '#f0f0f0'
+                }
+            },
+            y: {
+                grid: {
+                    color: '#f0f0f0',
+                    borderColor: '#f0f0f0'
+                }
+            }
+        },
     },
 };
 

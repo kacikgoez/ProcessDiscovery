@@ -12,7 +12,7 @@
                 </span>
             </div>
             <div class="flex-1 mr-2">
-                <span class="tile-btn material-symbols-outlined text-base cursor-pointer">
+                <span class="tile-btn material-symbols-outlined text-base cursor-pointer" @click="store.show(true)">
                     edit
                 </span>
             </div>
@@ -31,8 +31,10 @@
 </template>
 <script setup lang="ts">
 
+import { modalStore } from '@/stores/ModalStore';
 import { Charts, KPIActions, KPIChange } from '@/types';
-import { PropType, defineAsyncComponent, defineEmits, defineProps, ref } from 'vue';
+import { PropType, defineAsyncComponent, defineEmits, defineProps, onMounted, ref } from 'vue';
+
 
 const props = defineProps({
     title: { type: String, required: true },
@@ -42,16 +44,20 @@ const props = defineProps({
     i: { type: Number, required: true }
 })
 
-const emits = defineEmits(['close', 'update:data', 'draggable'])
+const emits = defineEmits(['close', 'update:data', 'draggable', 'edit'])
 
+const store = modalStore();
 let chart: Object = ref()
-
 // If this is changed, the chart component will be reloaded
 let changed = ref(0)
 
 // Initalize chart if type is given
 let component = props.type !== undefined ? props.type : Charts.NewChart;
 change({ action: KPIActions.ChangeComponent, component: component })
+
+onMounted(() => {
+    store.show()
+})
 
 // Function to update the component / chart (e.g. change content)
 async function change(data: KPIChange) {
