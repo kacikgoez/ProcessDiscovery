@@ -1,6 +1,8 @@
-import pandas as pd
-import pm4py
+from typing import Any, Collection
 
+import pandas as pd
+
+from backend.src.process_mining.variants import get_variants_with_frequencies
 from definitions import CLEAN_EVENT_LOG_PATH
 
 
@@ -20,6 +22,5 @@ class ProcessMiningService:
         # Store the event log
         self.event_log = df
 
-    def get_variants(self) -> list[tuple[str]]:
-        variants = pm4py.get_variants(self.event_log)
-        return variants
+    def get_variants(self) -> list[dict[str, Collection[str] | int | Any]]:
+        return get_variants_with_frequencies(self.event_log, 'gender')

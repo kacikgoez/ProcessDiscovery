@@ -42,7 +42,8 @@ def get_variants_with_frequencies(el: pd.DataFrame, disaggregation_attribute: st
         distribution = el.loc[el['case:concept:name'].isin(case_ids)].groupby('case:concept:name').first()[
             disaggregation_attribute].value_counts()
         result.append({
-            'variant': variant,
+            'id': hash(variant),
+            'activities': variant,
             'count': len(case_ids),
             'frequency': len(case_ids) / total_case_count,
             'distribution': distribution.to_dict(),
