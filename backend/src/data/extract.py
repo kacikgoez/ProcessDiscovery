@@ -1,7 +1,7 @@
 import pandas as pd
 from pandas import Timedelta
 
-from app import ROOT_DIR, CLEAN_EVENT_LOG_PATH
+from definitions import ROOT_DIR, CLEAN_EVENT_LOG_PATH
 
 """
 This script is used to extract an event log from the original data.
@@ -127,3 +127,4 @@ if __name__ == '__main__':
 
     # Save the event log
     event_log.to_csv(CLEAN_EVENT_LOG_PATH, index=False)
+
