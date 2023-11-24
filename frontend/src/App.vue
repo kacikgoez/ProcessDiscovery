@@ -59,7 +59,7 @@ let layout: KPITile[] = ref([
   { title: "A Pie Chart", type: Charts.PieChart, url: "google.com", x: 0, y: 0, w: 4, h: 10, i: 0 },
   { title: "A Line Chart", type: Charts.LineChart, url: "google.com", x: 4, y: 0, w: 4, h: 10, i: 1 },
   { title: "A Horizontal Bar Chart", type: Charts.HorizontalBarChart, url: "google.com", x: 4, y: 0, w: 4, h: 10, i: 2 },
-  { title: "Add New KPI", url: "google.com", x: 8, y: 0, w: 4, h: 10, i: 3 },
+  { title: "Variant", type: Charts.Variant, url: "google.com", x: 8, y: 0, w: 4, h: 10, i: 3 },
 ]);
 
 
