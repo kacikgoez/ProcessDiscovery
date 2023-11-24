@@ -8,6 +8,7 @@ export enum Charts {
     LineChart = "line-charts/LineChart",
     HorizontalBarChart = "bar-charts/HorizontalBarChart",
     NewChart = "NewChart.vue",
+    Variant = "VariantList.vue",
 }
 
 export enum KPIActions {
@@ -28,4 +29,12 @@ export type KPITile = {
     w: Number,
     h: Number,
     i: Number
+}
+
+export type Variant = {
+    id: Number,
+    activities: String[],
+    count: Number,
+    frequency: Number,
+    distribution: Object,
 }
