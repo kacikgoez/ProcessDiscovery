@@ -1,7 +1,7 @@
 import pandas as pd
 from pandas import Timedelta
 
-from definitions import ROOT_DIR, CLEAN_EVENT_LOG_PATH
+from definitions import ROOT_DIR, CLEAN_EVENT_LOG_PATH, PATIENT_ATTRIBUTES
 
 """
 This script is used to extract an event log from the original data.
@@ -41,73 +41,89 @@ The mapping is used to map the original column names to the column names used in
 The keys are the original column names and the values are the new column names.
 """
 
-# Check if the event log already exists
-try:
-    pd.read_csv(CLEAN_EVENT_LOG_PATH)
-    print('The event log already exists. Skipping extraction.')
-    exit(0)
-except FileNotFoundError:
-    pass
 
-# Load the data
-path = f'{ROOT_DIR}/backend/data/raw/{RAW_DATASET}'
-try:
-    df = pd.read_csv(path, low_memory=False)
-except FileNotFoundError:
-    print(
-        f'The ORCHID dataset was not found at {path}. Please download the dataset and place it in the data/raw folder.')
-    exit(1)
+def extract(raw: pd.DataFrame) -> pd.DataFrame:
+    # Convert all time columns to datetime
+    time_columns = ['time_referred', 'time_approached', 'time_authorized', 'time_procured']
+    for col in time_columns:
+        raw[col] = pd.to_datetime(raw[col], format='ISO8601')
 
-# Convert all time columns to datetime
-time_columns = ['time_referred', 'time_approached', 'time_authorized', 'time_procured']
-for col in time_columns:
-    df[col] = pd.to_datetime(df[col], format='ISO8601')
+    # Only keep allowed outcomes
+    allowed_outcomes = ['Transplanted', 'Recovered for Research', 'Recovered for Transplant but not Transplanted']
+    include_outcomes = [c for c in PATIENT_DATA_MAPPING.keys() if c.startswith('outcome_')]
+    for col in include_outcomes:
+        raw[col] = raw[col].astype('category').cat.set_categories(allowed_outcomes)
 
-# Only keep allowed outcomes
-allowed_outcomes = ['Transplanted', 'Recovered for Research', 'Recovered for Transplant but not Transplanted']
-include_outcomes = [c for c in PATIENT_DATA_MAPPING.keys() if c.startswith('outcome_')]
-for col in include_outcomes:
-    df[col] = df[col].astype('category').cat.set_categories(allowed_outcomes)
+    events_list = []
+    # Iterate over all rows that correspond to a patient and add all events that happened to the patient to the event list
+    for i, row in raw.iterrows():
+        # Collect patient data by mapping the original column names to the new column names
+        patient_data = {v: row[k] for k, v in PATIENT_DATA_MAPPING.items() if v in PATIENT_ATTRIBUTES.keys()}
 
-events_list = []
-# Iterate over all rows that correspond to a patient and add all events that happened to the patient to the event list
-for i, row in df.iterrows():
-    # Collect patient data by mapping the original column names to the new column names
-    patient_data = {v: row[k] for k, v in PATIENT_DATA_MAPPING.items()}
+        # Add the referral and evaluation events for each patient as all patients were referred and evaluated
+        events_list.append({'concept:name': 'Referral', 'time:timestamp': row['time_referred']} | patient_data)
 
-    # Add the referral and evaluation events for each patient as all patients were referred and evaluated
-    events_list.append({'concept:name': 'Referral', 'time:timestamp': row['time_referred']} | patient_data)
+        # Unfortunately, the evaluation time is not available in the dataset
+        # We assume that the evaluation happens one minute after the referral
+        events_list.append(
+            {'concept:name': 'Evaluation',
+             'time:timestamp': row['time_referred'] + Timedelta(minutes=1)} | patient_data)
 
-    # Unfortunately, the evaluation time is not available in the dataset
-    # We assume that the evaluation happens one minute after the referral
-    events_list.append(
-        {'concept:name': 'Evaluation', 'time:timestamp': row['time_referred'] + Timedelta(minutes=1)} | patient_data)
+        # Add each activity only if its corresponding entry is not False
+        if row['approached']:
+            events_list.append({'concept:name': 'Approach', 'time:timestamp': row['time_approached']} | patient_data)
 
-    # Add each activity only if its corresponding entry is not False
-    if row['approached']:
-        events_list.append({'concept:name': 'Approach', 'time:timestamp': row['time_approached']} | patient_data)
+        if row['authorized']:
+            events_list.append(
+                {'concept:name': 'Authorization', 'time:timestamp': row['time_authorized']} | patient_data)
 
-    if row['authorized']:
-        events_list.append({'concept:name': 'Authorization', 'time:timestamp': row['time_authorized']} | patient_data)
+        if row['procured']:
+            events_list.append({'concept:name': 'Procurement', 'time:timestamp': row['time_procured']} | patient_data)
 
-    if row['procured']:
-        events_list.append({'concept:name': 'Procurement', 'time:timestamp': row['time_procured']} | patient_data)
+        # Unfortunately, the transplant time is not available in the dataset
+        # We assume that the transplant happens one minute after the procurement
+        if row['transplanted']:
+            events_list.append({'concept:name': 'Transplant',
+                                'time:timestamp': row['time_procured'] + Timedelta(minutes=1)} | patient_data)
 
-    # Unfortunately, the transplant time is not available in the dataset
-    # We assume that the transplant happens one minute after the procurement
-    if row['transplanted']:
-        events_list.append({'concept:name': 'Transplant',
-                            'time:timestamp': row['time_procured'] + Timedelta(minutes=1)} | patient_data)
+    # Transform the event list to a dataframe
+    columns = ['concept:name', 'time:timestamp'] + list(PATIENT_DATA_MAPPING.values())
+    event_log = pd.DataFrame(events_list, columns=columns)
 
-# Transform the event list to a dataframe
-columns = ['concept:name', 'time:timestamp'] + list(PATIENT_DATA_MAPPING.values())
-event_log = pd.DataFrame(events_list, columns=columns)
+    # Get cases where a timestamp is missing
+    cases_with_missing_timestamps = event_log[event_log['time:timestamp'].isna()]['case:concept:name'].unique()
+    print(f'Found {len(cases_with_missing_timestamps)} cases with missing timestamps. Removing them ...')
 
-# Forward fill the time column to fill in the missing times
-# event_log['time:timestamp'] = event_log['time:timestamp'].ffill()
+    # Remove cases with missing timestamps
+    event_log = event_log[~event_log['case:concept:name'].isin(cases_with_missing_timestamps)]
 
-# Sort the event log by patient id and time
-event_log = event_log.sort_values(by=['case:concept:name', 'time:timestamp'])
+    # Sort the event log by patient id and time
+    event_log = event_log.sort_values(by=['case:concept:name', 'time:timestamp'])
 
-# Save the event log
-event_log.to_csv(CLEAN_EVENT_LOG_PATH, index=False)
+    return event_log
+
+
+if __name__ == '__main__':
+    print('Extracting the event log ...')
+    # Check if the event log already exists
+    try:
+        pd.read_csv(CLEAN_EVENT_LOG_PATH)
+        print('The event log already exists. Skipping extraction.')
+        exit(0)
+    except FileNotFoundError:
+        pass
+
+    # Load the data
+    path = f'{ROOT_DIR}/backend/data/raw/{RAW_DATASET}'
+    try:
+        df = pd.read_csv(path)
+    except FileNotFoundError:
+        print(
+            f'The ORCHID dataset was not found at {path}. Please download the dataset and place it in the data/raw '
+            f'folder.')
+        exit(1)
+
+    event_log = extract(df)
+
+    # Save the event log
+    event_log.to_csv(CLEAN_EVENT_LOG_PATH, index=False)
