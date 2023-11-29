@@ -15,6 +15,7 @@ app = Flask('ORCA')
 def index():
     return send_from_directory('frontend/dist/', 'index.html')
 
+
 # If Render.com preview, show some info about the deployment to avoid confusion
 @app.route('/render-config')
 def render_sha_available():
@@ -23,13 +24,20 @@ def render_sha_available():
     else:
         return jsonify({})
 
+
 @app.route('/<path:file>')
 def serve_static_file(file):
     return send_from_directory('frontend/dist/', file)
 
+
 @app.route('/variants')
 def calculate():
     return jsonify(PROCESS_MINING_SERVICE.get_variants())
+
+
+@app.route('/patient-attributes')
+def get_patient_attributes():
+    return jsonify(PROCESS_MINING_SERVICE.get_patient_attributes())
 
 
 if __name__ == '__main__':

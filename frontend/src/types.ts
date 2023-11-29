@@ -11,3 +11,24 @@ export type KPITile = {
     h: Number,
     i: Number
 }
+
+export type CategoricalAttribute = {
+    name: String,
+    type: 'categorical',
+    values: String[]
+}
+
+export type NumericalAttribute = {
+    name: String,
+    type: 'numerical',
+    min: Number,
+    max: Number,
+    groups: Interval[]
+}
+
+export type Interval = {
+    lower: Number,
+    upper: Number
+}
+
+export type PatientAttribute = CategoricalAttribute | NumericalAttribute

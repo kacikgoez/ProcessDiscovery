@@ -1,7 +1,7 @@
 import pandas as pd
 from pandas import Timedelta
 
-from definitions import ROOT_DIR, CLEAN_EVENT_LOG_PATH
+from definitions import ROOT_DIR, CLEAN_EVENT_LOG_PATH, PATIENT_ATTRIBUTES
 
 """
 This script is used to extract an event log from the original data.
@@ -58,7 +58,7 @@ def extract(raw: pd.DataFrame) -> pd.DataFrame:
     # Iterate over all rows that correspond to a patient and add all events that happened to the patient to the event list
     for i, row in raw.iterrows():
         # Collect patient data by mapping the original column names to the new column names
-        patient_data = {v: row[k] for k, v in PATIENT_DATA_MAPPING.items()}
+        patient_data = {v: row[k] for k, v in PATIENT_DATA_MAPPING.items() if v in PATIENT_ATTRIBUTES.keys()}
 
         # Add the referral and evaluation events for each patient as all patients were referred and evaluated
         events_list.append({'concept:name': 'Referral', 'time:timestamp': row['time_referred']} | patient_data)
