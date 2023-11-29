@@ -1,11 +1,18 @@
 import enum
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+
+@enum.unique
+class AttributeType(enum.Enum):
+    CATEGORICAL = 'categorical'
+    NUMERICAL = 'numerical'
 
 
 @dataclass
 class CategoricalAttribute:
     name: str
     values: list[str]
+    type: str = field(init=False, default=AttributeType.CATEGORICAL.value)
 
     def __post_init__(self):
         self.values = sorted(self.values)
@@ -26,6 +33,7 @@ class NumericalAttribute:
     min: float
     max: float
     groups: list[Interval] = None
+    type: str = field(init=False, default=AttributeType.NUMERICAL.value)
 
     def __post_init__(self):
         assert self.min <= self.max, 'The minimum must be smaller than the maximum.'
@@ -43,15 +51,3 @@ class NumericalAttribute:
             upper = lower + step
             self.groups.append(Interval(lower, upper))
         return self
-
-
-@enum.unique
-class AttributeType(enum.Enum):
-    CATEGORICAL = 'categorical'
-    NUMERICAL = 'numerical'
-
-
-@dataclass
-class PatientAttributes:
-    categorical_attributes: list[CategoricalAttribute]
-    numerical_attributes: list[NumericalAttribute]
