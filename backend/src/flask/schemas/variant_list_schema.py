@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields
-from marshmallow.validate import OneOf
+
+from backend.src.flask.schemas.disaggregation_attribute_schema import DisaggregationAttributeSchema
 
 
 class GetVariantListSchema(Schema):
-    disaggregation_attribute = fields.Str(allow_none=True, validate=OneOf(['activity', 'resource', 'time']))
+    disaggregation_attribute = fields.Nested(DisaggregationAttributeSchema, required=True)
