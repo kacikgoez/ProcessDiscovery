@@ -36,7 +36,7 @@ class NumericalAttribute:
     type: str = field(init=False, default=AttributeType.NUMERICAL.value)
 
     def __post_init__(self):
-        assert self.min <= self.max, 'The minimum must be smaller than the maximum.'
+        assert self.min < self.max, 'The minimum must be smaller than the maximum.'
 
     def create_groups(self, n: int) -> 'NumericalAttribute':
         """Create n equally sized groups for the numerical attribute.

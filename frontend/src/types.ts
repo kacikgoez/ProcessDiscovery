@@ -32,3 +32,8 @@ export type Interval = {
 }
 
 export type PatientAttribute = CategoricalAttribute | NumericalAttribute
+
+export type DisaggregationAttribute = {
+    name: String,
+    groups: Interval[] | null
+}
