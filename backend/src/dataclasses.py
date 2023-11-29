@@ -30,7 +30,7 @@ class NumericalAttribute:
     def __post_init__(self):
         assert self.min <= self.max, 'The minimum must be smaller than the maximum.'
 
-    def create_groups(self, n: int):
+    def create_groups(self, n: int) -> 'NumericalAttribute':
         """Create n equally sized groups for the numerical attribute.
 
         Args:
@@ -42,9 +42,16 @@ class NumericalAttribute:
             lower = self.min + i * step
             upper = lower + step
             self.groups.append(Interval(lower, upper))
+        return self
 
 
 @enum.unique
 class AttributeType(enum.Enum):
     CATEGORICAL = 'categorical'
     NUMERICAL = 'numerical'
+
+
+@dataclass
+class PatientAttributes:
+    categorical_attributes: list[CategoricalAttribute]
+    numerical_attributes: list[NumericalAttribute]

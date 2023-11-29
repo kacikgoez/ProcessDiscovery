@@ -35,6 +35,11 @@ def calculate():
     return jsonify(PROCESS_MINING_SERVICE.get_variants())
 
 
+@app.route('/patient-attributes')
+def get_patient_attributes():
+    return jsonify(PROCESS_MINING_SERVICE.get_patient_attributes())
+
+
 if __name__ == '__main__':
     def run_server():
         # List of ports to attempt to allocate.
