@@ -50,7 +50,9 @@ def calculate():
 
     data = schema.load(json_data)
 
-    return jsonify(PROCESS_MINING_SERVICE.get_variants()), 200
+    variants = PROCESS_MINING_SERVICE.get_variants(data['disaggregation_attribute'])
+
+    return jsonify(variants), 200
 
 
 @app.route('/patient-attributes')

@@ -50,17 +50,11 @@ export type NumericalAttribute = {
     type: 'numerical',
     min: Number,
     max: Number,
-    groups: Interval[]
-}
-
-export type Interval = {
-    lower: Number,
-    upper: Number
 }
 
 export type PatientAttribute = CategoricalAttribute | NumericalAttribute
 
 export type DisaggregationAttribute = {
     name: String,
-    groups: Interval[] | null
+    bins: Number[] | null
 }
