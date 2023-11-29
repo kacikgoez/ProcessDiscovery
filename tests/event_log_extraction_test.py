@@ -1,7 +1,7 @@
 import pandas as pd
 import pytest
 
-from app import CLEAN_EVENT_LOG_PATH
+from definitions import CLEAN_EVENT_LOG_PATH
 from backend.src.data.extract import PATIENT_DATA_MAPPING
 
 
