@@ -257,7 +257,3 @@ def get_authorization_to_procurement(el: pd.DataFrame, disaggregation_attribute:
 
     return result
 
-
-df = pd.read_csv('orchid_event_log.csv')
-
-print(get_authorization_to_procurement(df, 'gender'))
