@@ -2,6 +2,7 @@
 import {onMounted, ref} from "vue";
 import {Variant} from "@/types";
 import VariantComponent from "@/components/variants/VariantComponent.vue";
+import VChart from 'vue-echarts';
 import { use } from 'echarts/core';
 import { PieChart } from 'echarts/charts';
 import { TooltipComponent } from 'echarts/components';
@@ -13,7 +14,6 @@ import type { TooltipComponentOption } from 'echarts/components';
 use([TooltipComponent, PieChart, CanvasRenderer]);
 
 type EChartsOption = ComposeOption<TooltipComponentOption | PieSeriesOption>;
-
 
 const variants = ref<Variant[]>([]);
 
@@ -29,13 +29,16 @@ function fetchVariants() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          'disaggregation_attribute': 'activity',
+          'disaggregation_attribute': {
+            'name': 'gender'
+          },
         }),
     }).then(response => response.json())
         .then(data => {
             variants.value = data;
         });
 }
+
 function optionsForVariant(variant: Variant): EChartsOption {
     return {
         tooltip: {
@@ -59,10 +62,10 @@ function optionsForVariant(variant: Variant): EChartsOption {
             labelLine: {
                 show: false
             },
-            data: Object.entries(variant.distribution).map((key, value) => {
+            data: Object.entries(variant.distribution).map(entry => {
                 return {
-                    name: key,
-                    value: value
+                    name: entry[0],
+                    value: entry[1]
                 }
             })
         }]
@@ -72,23 +75,19 @@ function optionsForVariant(variant: Variant): EChartsOption {
 </script>
 
 <template>
-    <div class="variant-list">
-      <div class="row" v-for="variant in variants" :key="variant.activities" >
-        <VariantComponent :variant="variant"></VariantComponent>
-      </div>
+    <div class="variant-list grid grid-cols-12 items-center">
+      <template v-for="variant in variants" :key="variant.activities" >
+        <v-chart class="col-span-2" :option="optionsForVariant(variant)" />
+        <VariantComponent class="col-span-10" :variant="variant"></VariantComponent>
+      </template>
     </div>
 </template>
 
 <style scoped>
 .variant-list {
   position: relative;
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: 100%;
   overflow: scroll;
-}
-.row {
-  margin: 1em;
 }
 </style>
