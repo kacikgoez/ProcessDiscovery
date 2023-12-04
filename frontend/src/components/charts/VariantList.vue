@@ -30,7 +30,7 @@ function fetchVariants() {
         },
         body: JSON.stringify({
           'disaggregation_attribute': {
-            'name': 'gender'
+            'name': 'race'
           },
         }),
     }).then(response => response.json())
@@ -43,6 +43,7 @@ function optionsForVariant(variant: Variant): EChartsOption {
     return {
         tooltip: {
             trigger: 'item',
+            position: 'right',
         },
         series: [{
             type: 'pie',
@@ -50,7 +51,7 @@ function optionsForVariant(variant: Variant): EChartsOption {
             avoidLabelOverlap: false,
             label: {
                 show: false,
-                position: 'center'
+                position: 'center',
             },
             emphasis: {
                 label: {
@@ -75,10 +76,11 @@ function optionsForVariant(variant: Variant): EChartsOption {
 </script>
 
 <template>
-    <div class="variant-list grid grid-cols-12 items-center">
+    <div class="variant-list grid grid-cols-12 items-center gap-3">
       <template v-for="variant in variants" :key="variant.activities" >
+        <p class="col-span-1">{{ variant.frequency * 100 }}%</p>
         <v-chart class="col-span-2" :option="optionsForVariant(variant)" />
-        <VariantComponent class="col-span-10" :variant="variant"></VariantComponent>
+        <VariantComponent class="col-span-9" :variant="variant"></VariantComponent>
       </template>
     </div>
 </template>
