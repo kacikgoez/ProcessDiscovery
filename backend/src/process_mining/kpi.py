@@ -1,38 +1,39 @@
 from typing import Dict, List, Any
 import pandas as pd
-from pm4py.filtering import filter_variants,filter_between
+from pm4py.filtering import filter_variants, filter_between
 from pm4py.statistics.end_activities.log.get import get_end_activities
 from pm4py.stats import get_all_case_durations
 from pm4py import discover_dfg
 
 
-def get_happy_path_adherence(el: pd.DataFrame, disaggregation_attribute: str) -> Dict[str, List[Any]]:
+DE_JURE_VARIANT = ('Referral', 'Evaluation', 'Approach', 'Authorization', 'Procurement', 'Transplant')
+
+
+def get_happy_path_adherence(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any]]:
     """
+    :param legend_column:
     :param el: The event log
-    :param disaggregation_attribute:
+    :param disaggregation_column:
     :return: A dictionary contains key-value pairs of attribute's value and a list of happy path proportions,
             as well as key-value pair for legend and the x-axis values.
     """
 
-    # Processing timestamp
-    el['time:timestamp'] = pd.to_datetime(el['time:timestamp'], format='ISO8601')
-    el = el.dropna(subset=['time:timestamp'])
-
     # get case number in each referral_year considering disaggregation_attribute
-    year_case = el.groupby([disaggregation_attribute,
-                            'referral_year']).apply(lambda x: x['case:concept:name'].nunique()).unstack()
+    year_case = el.groupby([disaggregation_column, legend_column]) \
+        .apply(lambda x: x['case:concept:name'].nunique()) \
+        .unstack()
 
     # filter only happy path
     variant = filter_variants(el,
-                              [('Referral', 'Evaluation', 'Approach', 'Authorization', 'Procurement', 'Transplant')],
+                              [DE_JURE_VARIANT],
                               retain=True,
                               activity_key='concept:name',
                               case_id_key='case:concept:name',
                               timestamp_key='time:timestamp')
 
     # get number of happy path in each year considering disaggregation_attribute
-    year_happy_proportion = variant.groupby([disaggregation_attribute, 'referral_year']).apply(
-        lambda x: x['case:concept:name'].nunique()).unstack() / year_case
+    year_happy_proportion = variant.groupby([disaggregation_column, legend_column]) \
+                                .apply(lambda x: x['case:concept:name'].nunique()).unstack() / year_case
 
     legend = year_happy_proportion.keys().tolist()
 
@@ -108,7 +109,7 @@ def get_permuted_path(el: pd.DataFrame, disaggregation_attribute: str) -> Dict[s
 
     # filter out happy path
     variant = filter_variants(el,
-                              [('Referral', 'Evaluation', 'Approach', 'Authorization', 'Procurement', 'Transplant')],
+                              [DE_JURE_VARIANT],
                               retain=False,
                               activity_key='concept:name',
                               case_id_key='case:concept:name',
@@ -146,8 +147,8 @@ def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | in
 
     # find the directly-following graph
     dfg, start_activities, end_activities = discover_dfg(el, case_id_key='case:concept:name',
-                                                               activity_key='concept:name',
-                                                               timestamp_key='time:timestamp')
+                                                         activity_key='concept:name',
+                                                         timestamp_key='time:timestamp')
 
     # find activities in the log
     act = set(start_activities.keys()).union(end_activities.keys())
@@ -174,7 +175,7 @@ def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | in
     return {'nodes': nodes, 'links': links}
 
 
-def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_attribute:str) -> pd.Series:
+def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_attribute: str) -> pd.Series:
     """
     :param el: The event log
     :param disaggregation_attribute:
@@ -186,17 +187,17 @@ def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_attribute:str) ->
     el = el.dropna(subset=['time:timestamp'])
 
     # filter on only happy path
-    variant = filter_between(el, 'Referral','Procurement',
-                              activity_key='concept:name',
-                              case_id_key='case:concept:name',
-                              timestamp_key='time:timestamp')
+    variant = filter_between(el, 'Referral', 'Procurement',
+                             activity_key='concept:name',
+                             case_id_key='case:concept:name',
+                             timestamp_key='time:timestamp')
     # case duration of happy path in each year considering disaggregation_attribute
     subcase_duration = variant.groupby([disaggregation_attribute,
-                                      'referral_year']).apply(lambda x:  get_all_case_durations(x))
-    reshape =  subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_attribute)
+                                        'referral_year']).apply(lambda x: get_all_case_durations(x))
+    reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_attribute)
 
     # conmbine the referral year and duration in minuten as a vector
-    result = reshape.apply(lambda x: [x['referral_year'], x[0]/60], axis=1)
+    result = reshape.apply(lambda x: [x['referral_year'], x[0] / 60], axis=1)
     result = result.groupby(disaggregation_attribute).apply(list)
 
     return result
@@ -214,17 +215,17 @@ def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_attribute: str) 
     el = el.dropna(subset=['time:timestamp'])
 
     # filter on only happy path
-    variant = filter_between(el, 'Evaluation','Approach',
-                              activity_key='concept:name',
-                              case_id_key='case:concept:name',
-                              timestamp_key='time:timestamp')
+    variant = filter_between(el, 'Evaluation', 'Approach',
+                             activity_key='concept:name',
+                             case_id_key='case:concept:name',
+                             timestamp_key='time:timestamp')
     # case duration of happy path in each year considering disaggregation_attribute
     subcase_duration = variant.groupby([disaggregation_attribute,
-                                      'referral_year']).apply(lambda x:  get_all_case_durations(x))
-    reshape =  subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_attribute)
+                                        'referral_year']).apply(lambda x: get_all_case_durations(x))
+    reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_attribute)
 
     # conmbine the referral year and duration in minuten as a vector
-    result = reshape.apply(lambda x: [x['referral_year'], x[0]/60], axis=1)
+    result = reshape.apply(lambda x: [x['referral_year'], x[0] / 60], axis=1)
     result = result.groupby(disaggregation_attribute).apply(list)
 
     return result
@@ -256,4 +257,3 @@ def get_authorization_to_procurement(el: pd.DataFrame, disaggregation_attribute:
     result = result.groupby(disaggregation_attribute).apply(list)
 
     return result
-

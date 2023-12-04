@@ -8,6 +8,8 @@ from flask_marshmallow import Marshmallow
 from waitress import serve
 from termcolor import colored
 
+from backend.src.dataclasses import KpiRequest
+from backend.src.flask.schemas.kpi_schema import KpiSchema
 from backend.src.flask.schemas.variant_list_schema import GetVariantListSchema
 from backend.src.flask.services.process_mining_service import ProcessMiningService
 
@@ -37,7 +39,7 @@ def serve_static_file(file):
 
 
 @app.route('/variants', methods=['POST'])
-def calculate():
+def variants():
     json_data = request.get_json(force=True)
     if not json_data:
         return jsonify({'message': 'No input data provided'}), 400
@@ -53,6 +55,23 @@ def calculate():
     variants = PROCESS_MINING_SERVICE.get_variants(data['disaggregation_attribute'])
 
     return jsonify(variants), 200
+
+
+@app.route('/kpi', methods=['POST'])
+def kpi():
+    json_data = request.get_json(force=True)
+    if not json_data:
+        return jsonify({'message': 'No input data provided'}), 400
+
+    # Validate and deserialize input
+    schema = KpiSchema()
+    errors = schema.validate(json_data)
+    if errors:
+        return jsonify({"status": "error", "errors": errors}), 422
+
+    kpi_data = PROCESS_MINING_SERVICE.get_kpi_data(kpi_request=schema.load(json_data))
+
+    return jsonify(kpi_data), 200
 
 
 @app.route('/patient-attributes')

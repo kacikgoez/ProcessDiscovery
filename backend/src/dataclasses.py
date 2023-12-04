@@ -63,7 +63,8 @@ class DisaggregationAttribute:
         """
         if self.type == AttributeType.NUMERICAL:
             if include_infinities:
-                return [f'< {self.bins[0]}'] + [f'{self.bins[i]} - {self.bins[i + 1]}' for i in range(len(self.bins) - 1)] + [f'> {self.bins[-1]}']
+                return [f'< {self.bins[0]}'] + [f'{self.bins[i]} - {self.bins[i + 1]}' for i in
+                                                range(len(self.bins) - 1)] + [f'> {self.bins[-1]}']
             else:
                 return [f'{self.bins[i]} - {self.bins[i + 1]}' for i in range(len(self.bins) - 1)]
         else:
@@ -80,3 +81,17 @@ class Variant:
 
     def __post_init__(self):
         self.id = hash(tuple(self.activities))
+
+
+@enum.unique
+class KpiType(enum.Enum):
+    HAPPY_PATH_ADHERENCE = 'happy_path_adherence'
+    DROP_OUT_RATE = 'drop_out_rate'
+    PERMUTED_PATH_ADHERENCE = 'permuted_path_adherence'
+
+
+@dataclass
+class KpiRequest:
+    kpi: KpiType
+    disaggregation_attribute: DisaggregationAttribute
+    legend_attribute: DisaggregationAttribute | None = None
