@@ -44,6 +44,7 @@ function optionsForVariant(variant: Variant): EChartsOption {
         tooltip: {
             trigger: 'item',
             position: 'right',
+            formatter: '{b}: {d}% ({c})'
         },
         series: [{
             type: 'pie',
@@ -78,7 +79,7 @@ function optionsForVariant(variant: Variant): EChartsOption {
 <template>
     <div class="variant-list grid grid-cols-12 items-center gap-3">
       <template v-for="variant in variants" :key="variant.activities" >
-        <p class="col-span-1">{{ variant.frequency * 100 }}%</p>
+        <p class="col-span-1">{{ (variant.frequency * 100).toFixed(2) }}%</p>
         <v-chart class="col-span-2" :option="optionsForVariant(variant)" />
         <VariantComponent class="col-span-9" :variant="variant"></VariantComponent>
       </template>
