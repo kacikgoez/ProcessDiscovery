@@ -34,78 +34,55 @@ def get_happy_path_adherence(el: pd.DataFrame, disaggregation_column: str, legen
     # get number of happy path in each year considering disaggregation_attribute
     year_happy_proportion = variant.groupby([disaggregation_column, legend_column]) \
                                 .apply(lambda x: x['case:concept:name'].nunique()).unstack() / year_case
+    year_happy_proportion_nan = year_happy_proportion.fillna(0)
 
     legend = year_happy_proportion.keys().tolist()
+    axis = year_happy_proportion.index.tolist()
 
-    result_dict = {}
+    value = {}
     for index, row in year_happy_proportion.iterrows():
-        result_dict[index] = row.tolist()
+        value[index] = row.tolist()
 
-    result_dict.update({'legend': legend})
-
-    return result_dict
+    return {'legend': legend, 'axis': axis, 'value': value}
 
 
-def get_dropout_quantity(el: pd.DataFrame, disaggregation_attribute: str) -> Dict[str, List[Any]]:
+def get_dropout(el: pd.DataFrame, disaggregation_column: str) -> Dict[str, List[Any] | Dict[str, List[Any]]]:
     """
     :param el: The event log
     :param disaggregation_attribute:
-    :return: A dictionary contains key-value pairs of attribute's value and a list of droppot quantity,
-            as well as key-value pair for legend and the x-axis values.
+    :return: A dictionary contains a key-value pair of legend in chart and its value,
+            a key-value pair of axis in chart and its value,
+            and a subdictionary with key-value pairs for dropout quanlity and dropout percentage
+            consindering disaggregation_attribute.
     """
 
     # get the end actvitity of each case considering disaggregation_attribute
-    drop_quantity = el.groupby(disaggregation_attribute).apply(lambda x: get_end_activities(x))
-
-    legend = set()
-    result_dict = {}
-    for index, row in drop_quantity.items():
-        legend.update(pd.json_normalize(row).keys().tolist())
-        result_dict[index] = pd.json_normalize(row).values.ravel().tolist()
-
-    legend = list(legend)
-    result_dict.update({'legend': legend})
-
-    return result_dict
-
-
-def get_dropout_percentage(el: pd.DataFrame, disaggregation_attribute: str) -> Dict[str, List[Any]]:
-    """
-    :param el: The event log
-    :param disaggregation_attribute:
-    :return: A dictionary contains key-value pairs of attribute's value and a list of droppot percentage,
-            as well as key-value pair for legend and the x-axis values.
-    """
-
+    drop_quantity = el.groupby(disaggregation_column).apply(lambda x: get_end_activities(x))
+    # drop nan in result
+    drop_quantity_nan = pd.DataFrame(drop_quantity.tolist(), index=drop_quantity.index).fillna(0)
     # get case number
     total_case = el['case:concept:name'].nunique()
 
-    # get the dropout percentage
-    drop_quantity = get_dropout_quantity(el, disaggregation_attribute)
+    axis = drop_quantity_nan.keys().tolist()
 
-    # add percentage
-    percentage = {}
-    for key, value in drop_quantity.items():
-        if key != 'legend':
-            per = [x / total_case for x in value]
-            percentage.update({key: per})
-        else:
-            percentage.update({key: value})
-    return percentage
+    value = {}
+    for index, row in drop_quantity_nan.iterrows():
+        value[index] = row.tolist()
+        value[index + '_percentage'] = [x / total_case if total_case != 0 else 0 for x in row.tolist()]
+    legend = list(value.keys())
+
+    return {'legend': legend, 'axis': axis, 'value': value}
 
 
-def get_permuted_path(el: pd.DataFrame, disaggregation_attribute: str) -> Dict[str, List[Any]]:
+def get_permuted_path(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] | Dict[str, List[Any]]]:
     """
     :param el: The event log
     :param disaggregation_attribute:
-    :return: A dictionary contains key-value pairs of attribute's value and a list of permuted_path numbers,
-            a key-value pair of  'case years' and a list of case numbers,
-            and a key-value pair for legend and the x-axis values.
+    :return: A dictionary contains a key-value pair of legend in chart and its value,
+            a key-value pair of axis in chart and its value,
+            and a subdictionary with key-value pairs for permuted path number
+            consindering disaggregation_attribute and year case number
     """
-
-    # Processing timestamp
-    el['time:timestamp'] = pd.to_datetime(el['time:timestamp'], format='ISO8601')
-    el = el.dropna(subset=['time:timestamp'])
 
     # filter out happy path
     variant = filter_variants(el,
@@ -116,22 +93,21 @@ def get_permuted_path(el: pd.DataFrame, disaggregation_attribute: str) -> Dict[s
                               timestamp_key='time:timestamp')
 
     # get number of happy path in each year considering disaggregation_attribute
-    permuted_path = variant.groupby([disaggregation_attribute, 'referral_year']).apply(
+    permuted_path = variant.groupby([disaggregation_column, legend_column]).apply(
         lambda x: x['case:concept:name'].nunique()).unstack()
 
-    # get case number in each referral_year considering disaggregation_attribute
-    year_case = el.groupby('referral_year').apply(lambda x: x['case:concept:name'].nunique()).tolist()
+    # get case number in each legend value considering disaggregation_attribute
+    legend_case = el.groupby(legend_column).apply(lambda x: x['case:concept:name'].nunique()).tolist()
 
-    legend = permuted_path.keys().tolist()
+    axis = permuted_path.keys().tolist()
 
-    result_dict = {}
+    value = {'total_cases': legend_case}
     for index, row in permuted_path.iterrows():
-        result_dict[index] = row.tolist()
+        value[index] = row.fillna(0).tolist()
 
-    result_dict.update({'year cases': year_case})
-    result_dict.update({'legend': legend})
+    legend = list(value.keys())
 
-    return result_dict
+    return {'legend': legend, 'axis': axis, 'value': value}
 
 
 def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | int]]]:
@@ -141,14 +117,9 @@ def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | in
              another list of dict containing directly-following relationships.
     """
 
-    # Processing timestamp
-    el['time:timestamp'] = pd.to_datetime(el['time:timestamp'], format='ISO8601')
-    el = el.dropna(subset=['time:timestamp'])
-
     # find the directly-following graph
     dfg, start_activities, end_activities = discover_dfg(el, case_id_key='case:concept:name',
-                                                         activity_key='concept:name',
-                                                         timestamp_key='time:timestamp')
+                                                        activity_key='concept:name', timestamp_key='time:timestamp')
 
     # find activities in the log
     act = set(start_activities.keys()).union(end_activities.keys())
@@ -175,39 +146,42 @@ def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | in
     return {'nodes': nodes, 'links': links}
 
 
-def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_attribute: str) -> pd.Series:
+def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |
+                                                                                      Dict[str, List[Any]]]:
     """
     :param el: The event log
     :param disaggregation_attribute:
-    :return: a pd.Series of list [refferal_year, bureaucratic_duration], indexed by disaggregation_attribute
+    :return:  A dictionary contains a key-value pair of legend in chart and its value,
+            and a subdictionary with key-value pairs for list of vectors [refferal_year,
+            referral_to_procurement_duration] consindering disaggregation_attribute.
     """
-
-    # Processing timestamp
-    el['time:timestamp'] = pd.to_datetime(el['time:timestamp'], format='ISO8601')
-    el = el.dropna(subset=['time:timestamp'])
 
     # filter on only happy path
     variant = filter_between(el, 'Referral', 'Procurement',
-                             activity_key='concept:name',
-                             case_id_key='case:concept:name',
-                             timestamp_key='time:timestamp')
+                              activity_key='concept:name',
+                              case_id_key='case:concept:name',
+                              timestamp_key='time:timestamp')
     # case duration of happy path in each year considering disaggregation_attribute
-    subcase_duration = variant.groupby([disaggregation_attribute,
-                                        'referral_year']).apply(lambda x: get_all_case_durations(x))
-    reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_attribute)
+    subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(lambda x:  get_all_case_durations(x))
+    reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_column)
 
-    # conmbine the referral year and duration in minuten as a vector
-    result = reshape.apply(lambda x: [x['referral_year'], x[0] / 60], axis=1)
-    result = result.groupby(disaggregation_attribute).apply(list)
+    # conmbine the legend value and duration in minuten as a vector
+    result = reshape.apply(lambda x: [x[legend_column], round(x[0]/60)], axis=1)
+    result = result.groupby(disaggregation_column).apply(list).to_dict()
 
-    return result
+    legend = list(result.keys())
+
+    return {'legend': legend, 'value': result}
 
 
-def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_attribute: str) -> pd.Series:
+def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |
+                                                                                        Dict[str, List[Any]]]:
     """
     :param el: The event log
     :param disaggregation_attribute:
-    :return: a pd.Series of list [refferal_year, evaluation_to_approach_duration], indexed by disaggregation_attribute
+    :return: A dictionary contains a key-value pair of legend in chart and its value,
+            and a subdictionary with key-value pairs for list of vectors [refferal_year,
+            evaluation_to_approach_duration] consindering disaggregation_attribute.
     """
 
     # Processing timestamp
@@ -216,31 +190,32 @@ def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_attribute: str) 
 
     # filter on only happy path
     variant = filter_between(el, 'Evaluation', 'Approach',
-                             activity_key='concept:name',
-                             case_id_key='case:concept:name',
-                             timestamp_key='time:timestamp')
+                              activity_key='concept:name',
+                              case_id_key='case:concept:name',
+                              timestamp_key='time:timestamp')
     # case duration of happy path in each year considering disaggregation_attribute
-    subcase_duration = variant.groupby([disaggregation_attribute,
-                                        'referral_year']).apply(lambda x: get_all_case_durations(x))
-    reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_attribute)
+    subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(
+        lambda x: get_all_case_durations(x))
+    reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_column)
 
-    # conmbine the referral year and duration in minuten as a vector
-    result = reshape.apply(lambda x: [x['referral_year'], x[0] / 60], axis=1)
-    result = result.groupby(disaggregation_attribute).apply(list)
+    # conmbine the legend value and duration in minuten as a vector
+    result = reshape.apply(lambda x: [x[legend_column], round(x[0] / 60)], axis=1)
+    result = result.groupby(disaggregation_column).apply(list).to_dict()
 
-    return result
+    legend = list(result.keys())
+
+    return {'legend': legend, 'value': result}
 
 
-def get_authorization_to_procurement(el: pd.DataFrame, disaggregation_attribute: str) -> pd.Series:
+def get_authorization_to_procurement(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |
+                                                                                              Dict[str, List[Any]]]:
     """
     :param el: The event log
     :param disaggregation_attribute:
-    :return: a pd.Series of list [refferal_year, authorization_to_procurement], indexed by disaggregation_attribute
+    :return: A dictionary contains a key-value pair of legend in chart and its value,
+            and a subdictionary with key-value pairs for list of vectors [refferal_year,
+            authorization_to_procurement_duration] consindering disaggregation_attribute.
     """
-
-    # Processing timestamp
-    el['time:timestamp'] = pd.to_datetime(el['time:timestamp'], format='ISO8601')
-    el = el.dropna(subset=['time:timestamp'])
 
     # filter on only happy path
     variant = filter_between(el, 'Authorization', 'Procurement',
@@ -248,12 +223,15 @@ def get_authorization_to_procurement(el: pd.DataFrame, disaggregation_attribute:
                              case_id_key='case:concept:name',
                              timestamp_key='time:timestamp')
     # case duration of happy path in each year considering disaggregation_attribute
-    subcase_duration = variant.groupby([disaggregation_attribute,
-                                        'referral_year']).apply(lambda x: get_all_case_durations(x))
-    reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_attribute)
+    subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(
+        lambda x: get_all_case_durations(x))
+    reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_column)
 
-    # conmbine the referral year and duration in minuten as a vector
-    result = reshape.apply(lambda x: [x['referral_year'], x[0] / 60], axis=1)
-    result = result.groupby(disaggregation_attribute).apply(list)
+    # conmbine the legend value and duration in minuten as a vector
+    result = reshape.apply(lambda x: [x[legend_column], round(x[0] / 60)], axis=1)
+    result = result.groupby(disaggregation_column).apply(list).to_dict()
 
-    return result
+    legend = list(result.keys())
+    return {'legend': legend, 'value': result}
+
+

@@ -36,9 +36,17 @@ class ProcessMiningService:
         match kpi_request.kpi:
             case KpiType.HAPPY_PATH_ADHERENCE:
                 return kpi.get_happy_path_adherence(el, disaggregation_attribute_column, legend_column)
-            case KpiType.DROP_OUT_RATE:
-                return kpi.get_dropout_percentage(el, disaggregation_attribute_column)
+            case KpiType.DROP_OUT:
+                return kpi.get_dropout(el, disaggregation_attribute_column)
             case KpiType.PERMUTED_PATH_ADHERENCE:
-                return kpi.get_permuted_path(el, disaggregation_attribute_column)
+                return kpi.get_permuted_path(el, disaggregation_attribute_column, legend_column)
+            case KpiType.PERMUTED_PATH_DFG:
+                return kpi.get_permuted_path_dfg(el)
+            case KpiType.BUREAUCRATIC_DURATION:
+                return kpi.get_bureaucratic_duration(el, disaggregation_attribute_column, legend_column)
+            case KpiType.EVALUATION_TO_APPROACH:
+                return kpi.get_evaluation_to_approach(el, disaggregation_attribute_column, legend_column)
+            case KpiType.AUTHORIZATION_TO_PROCUREMENT:
+                return kpi.get_authorization_to_procurement(el, disaggregation_attribute_column, legend_column)
             case _:
                 raise ValueError('The given KPI is not supported.')

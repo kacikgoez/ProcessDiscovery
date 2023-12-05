@@ -6,8 +6,8 @@ from backend.src.flask.schemas.disaggregation_attribute_schema import Disaggrega
 
 class KpiSchema(Schema):
     kpi = fields.Enum(required=True, enum=KpiType)
-    legend_attribute = fields.Nested(DisaggregationAttributeSchema, required=True)
-    disaggregation_attribute = fields.Nested(DisaggregationAttributeSchema, required=True)
+    legend_attribute = fields.Nested(DisaggregationAttributeSchema, required=False)
+    disaggregation_attribute = fields.Nested(DisaggregationAttributeSchema, required=False)
 
     @validates_schema
     def ensure_different_attributes(self, data, **kwargs):

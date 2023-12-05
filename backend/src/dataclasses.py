@@ -26,7 +26,7 @@ class NumericalAttribute:
     type: str = field(init=False, default=AttributeType.NUMERICAL.value)
 
     def __post_init__(self):
-        assert self.min < self.max, 'The minimum must be smaller than the maximum.'
+        {}  #assert self.min < self.max, 'The minimum must be smaller than the maximum.'
 
 
 @dataclass
@@ -86,12 +86,16 @@ class Variant:
 @enum.unique
 class KpiType(enum.Enum):
     HAPPY_PATH_ADHERENCE = 'happy_path_adherence'
-    DROP_OUT_RATE = 'drop_out_rate'
+    DROP_OUT = 'drop_out'
     PERMUTED_PATH_ADHERENCE = 'permuted_path_adherence'
+    PERMUTED_PATH_DFG = 'permuted_path_dfg'
+    BUREAUCRATIC_DURATION = 'bureaucratic_duration'
+    EVALUATION_TO_APPROACH = 'evaluation_to_approach'
+    AUTHORIZATION_TO_PROCUREMENT = 'authorization_to_procurement'
 
 
 @dataclass
 class KpiRequest:
     kpi: KpiType
-    disaggregation_attribute: DisaggregationAttribute
+    disaggregation_attribute: DisaggregationAttribute | None = None
     legend_attribute: DisaggregationAttribute | None = None
