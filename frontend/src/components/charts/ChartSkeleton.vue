@@ -5,23 +5,25 @@
 <template>
     <div class="chart-wrapper">
         <div class="chart-item">
-            <canvas :id="`chart-${props.id}`"></canvas>
+            <canvas ref="chartRef"></canvas>
         </div>
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-import Chart from 'chart.js/auto';
-import { defineProps, onMounted } from 'vue';
+import { Chart, ChartConfiguration } from 'chart.js/auto';
+import { PropType, defineProps, onMounted, ref } from 'vue';
+
+const chartRef = ref(null);
 
 const props = defineProps({
     id: { type: Number, required: true },
-    chart: { type: Object, required: true }
+    chart: { type: Object as PropType<ChartConfiguration>, required: true }
 })
 
 onMounted(() => {
-    new Chart(document.getElementById(`chart-${props.id}`), props.chart);
+    new Chart(chartRef.value!, props.chart);
 });
 
 </script>

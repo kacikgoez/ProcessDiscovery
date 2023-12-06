@@ -1,8 +1,8 @@
 <template>
     <grid-layout v-model:layout="layout" :col-num="12" :row-height="20" :is-resizable="true" :responsive="true"
         :is-draggable="draggable" :vertical-compact="true" :use-css-transforms="false">
-        <grid-item v-for="item in layout" :id="`vue-tile-${item.i}`" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
-            :i="item.i" :key="item.i" :min-w="minWidth" min-h="10" :is-draggable="draggable" @mousedown.prevent="">
+        <grid-item v-for="item in layout" :id="`vue-tile-${item.i}`" :key="item.i" :x="item.x" :y="item.y" :w="item.w"
+            :h="item.h" :i="item.i" :min-w="minWidth" :min-h="10" :is-draggable="draggable" @mousedown.prevent="">
             <KPIGridItem :title="item.title" :type="(item.type as Charts)" :i="item.i" @close="exit" @draggable="dragChange"
                 @edit="emits('edit',)"></KPIGridItem>
         </grid-item>
@@ -17,7 +17,7 @@ import { PropType, defineEmits, defineProps, nextTick, ref, toRef, watch } from 
 import { GridItem, GridLayout } from 'vue3-grid-layout-next';
 
 const props = defineProps({
-    data: { type: Object as PropType<KPITile[]>, required: true }
+    data: { type: Object as PropType<KPITile[] | undefined>, required: true }
 })
 
 const minWidth = ref(3);
@@ -25,16 +25,16 @@ const minWidth = ref(3);
 const draggable = ref(false)
 
 // Parent layout prop and local prop, synced down below by watches
-const layoutParent = toRef(props, "data")
+const layoutParent = toRef(props, 'data')
 const layout = ref(props.data)
 
 const emits = defineEmits(['close', 'update:data', 'edit'])
 
 function exit(index: Number): void {
-    emits("close", index)
+    emits('close', index)
 }
 
-async function dragChange(state: Boolean) {
+async function dragChange(state: boolean) {
     draggable.value = state
     await nextTick();
 }
@@ -56,7 +56,8 @@ watch(layoutParent, (newVal) => {
     Example: change layout -> delete one of the items -> layout goes back to original state
 */
 watch(layout, (newVal) => {
-    emits("update:data", newVal)
+    /* eslint-disable-next-line */
+    emits('update:data', newVal)
 }, { deep: true })
 
 

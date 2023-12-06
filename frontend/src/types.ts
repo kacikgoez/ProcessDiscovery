@@ -4,23 +4,36 @@
 
 // Chart must be named like file in /charts, so PieChart.vue -> PieChart
 export enum Charts {
-    PieChart = "other-charts/PieChart",
-    LineChart = "line-charts/LineChart",
-    HorizontalBarChart = "bar-charts/HorizontalBarChart",
-    NewChart = "NewChart.vue",
+    PieChart = 'other-charts/PieChart',
+    LineChart = 'line-charts/LineChart',
+    HorizontalBarChart = 'bar-charts/HorizontalBarChart',
+    ChevronDiagram = 'other-charts/ChevronDiagram',
+    VariantView = 'views/VariantView',
+    NewChart = 'NewChart.vue',
 }
+
+export enum Step {
+    REF = 'REF',
+    EVA = 'EVA',
+    APP = 'APP',
+    AUT = 'AUT',
+    PRO = 'PRO',
+    TRA = 'TRA'
+}
+
+/* ------------- KPI ---------------- */ 
 
 export enum KPIActions {
     ChangeComponent
 }
 
-export type KPIChange = {
+export interface KPIChange {
     action: KPIActions.ChangeComponent,
     component: Charts
-};
+}
 
-export type KPITile = {
-    title: String,
+export interface KPITile {
+    title: string,
     type: Charts,
     url: String,
     x: Number,
@@ -50,3 +63,21 @@ export type Interval = {
 }
 
 export type PatientAttribute = CategoricalAttribute | NumericalAttribute
+
+/* ------------- Modal ---------------- */ 
+
+export interface ModalEvent {
+    name: string,
+    data: Object
+}
+
+export interface EditModal {
+    name: string,
+    chart: Charts
+}
+
+/* ------------- General ---------------- */
+
+export interface IDictionary<TValue> {
+    [id: string]: TValue;
+}

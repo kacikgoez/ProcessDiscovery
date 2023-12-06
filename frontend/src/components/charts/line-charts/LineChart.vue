@@ -1,69 +1,54 @@
 <template>
-    <ChartSkeleton :chart="chart" :id="props.id"></ChartSkeleton>
+    <div id="main" ref="chartDom"></div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
-import ChartSkeleton from '@/components/charts/ChartSkeleton.vue';
-import { defineProps } from 'vue';
+import * as echarts from 'echarts';
+import { onMounted, ref, toRefs, watch } from 'vue';
 
+let option: EChartsOption;
+const chartDom = ref(null);
 const props = defineProps({
-    id: { type: Number, required: true }
+    width: { type: Number, required: true },
+    height: { type: Number, required: true }
 })
 
+const propRefs = toRefs(props)
 
-const labels = ["January", "Feburary", "March", "April", "May", "June", "July"];
-const data = {
-    labels: labels,
-    datasets: [
-        {
-            label: 'Dataset 1',
-            data: [1, 2, 3, 4, 8, 6, 7],
-            borderColor: "#6bccda",
-            backgroundColor: "#ffffff",
-        },
-        {
-            label: 'Dataset 2',
-            data: [1, 2, 3, 4, 8, 6, 7],
-            borderColor: "#0000ff",
-            backgroundColor: "#ffffff",
-        }
-    ]
+onMounted(() => {
+    var myChart = echarts.init(chartDom.value);
+    option && myChart.setOption(option)
+    myChart.resize({
+            width: props.width,
+            height: props.height
+        })
+
+    watch([propRefs.width, propRefs.height], ([newWidth, newHeight]) => {
+        myChart.resize({
+            width: newWidth,
+            height: newHeight
+        })
+    });
+
+});
+
+option = {
+  xAxis: {
+    type: 'category',
+    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [
+    {
+      data: [820, 932, 901, 934, 1290, 1330, 1320],
+      type: 'line',
+      smooth: true
+    }
+  ]
 };
-
-const chart = {
-    type: 'line',
-    data: data,
-    options: {
-        bezierCurve: true,
-        responsive: true,
-        chartArea: {
-            backgroundColor: "#fff"
-        },
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
-        scales: {
-            x: {
-                grid: {
-                    color: '#f0f0f0',
-                    borderColor: '#f0f0f0'
-                }
-            },
-            y: {
-                grid: {
-                    color: '#f0f0f0',
-                    borderColor: '#f0f0f0'
-                }
-            }
-        },
-        devicePixelRatio: 1.2
-    },
-};
-
-
 
 </script>
 <style scoped>
