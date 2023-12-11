@@ -18,10 +18,10 @@ def get_happy_path_adherence(el: pd.DataFrame, disaggregation_column: str, legen
             as well as key-value pair for legend and the x-axis values.
     """
 
-    # get case number in each referral_year considering disaggregation_attribute
-    year_case = el.groupby([disaggregation_column, legend_column]) \
+    # get case number in each legend_column value considering disaggregation_attribute
+    legend_case = el.groupby([disaggregation_column, legend_column]) \
         .apply(lambda x: x['case:concept:name'].nunique()) \
-        .unstack()
+        .unstack().fillna(0)
 
     # filter only happy path
     variant = filter_variants(el,
@@ -31,16 +31,16 @@ def get_happy_path_adherence(el: pd.DataFrame, disaggregation_column: str, legen
                               case_id_key='case:concept:name',
                               timestamp_key='time:timestamp')
 
-    # get number of happy path in each year considering disaggregation_attribute
-    year_happy_proportion = variant.groupby([disaggregation_column, legend_column]) \
-                                .apply(lambda x: x['case:concept:name'].nunique()).unstack() / year_case
-    year_happy_proportion_nan = year_happy_proportion.fillna(0)
+    # get number of happy path in legend_column value considering disaggregation_attribute
+    legend_happy_proportion = variant.groupby([disaggregation_column, legend_column]) \
+                                .apply(lambda x: x['case:concept:name'].nunique()).unstack() / legend_case
+    legend_happy_proportion_nan = legend_happy_proportion.fillna(0)
 
-    legend = year_happy_proportion.keys().tolist()
-    axis = year_happy_proportion.index.tolist()
+    axis = legend_happy_proportion.keys().tolist()
+    legend = legend_happy_proportion.index.tolist()
 
     value = {}
-    for index, row in year_happy_proportion.iterrows():
+    for index, row in legend_happy_proportion_nan.iterrows():
         value[index] = row.tolist()
 
     return {'legend': legend, 'axis': axis, 'value': value}
@@ -121,25 +121,27 @@ def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | in
     dfg, start_activities, end_activities = discover_dfg(el, case_id_key='case:concept:name',
                                                         activity_key='concept:name', timestamp_key='time:timestamp')
 
-    # find activities in the log
-    act = set(start_activities.keys()).union(end_activities.keys())
-    nodes = []
-    for value in act:
-        nodes.append(
-            {
-                'name': value
 
-            }
-        )
-    # find directly-following relations
+    act = set()
     links = []
+
     for pair, freq in dfg.items():
+        # find directly-following relations
         links.append(
             {
                 'source': pair[0],
                 'target': pair[1],
                 'absolute_frequency': freq
+            }
+        )
+        # find activities in the log
+        act.update([pair[0],pair[1]])
 
+    nodes = []
+    for value in act:
+        nodes.append(
+            {
+                'name': value
             }
         )
 
@@ -161,7 +163,7 @@ def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_column: str, lege
                               activity_key='concept:name',
                               case_id_key='case:concept:name',
                               timestamp_key='time:timestamp')
-    # case duration of happy path in each year considering disaggregation_attribute
+    # case duration of happy path in each legend value considering disaggregation_attribute
     subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(lambda x:  get_all_case_durations(x))
     reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_column)
 
