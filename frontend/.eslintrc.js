@@ -20,6 +20,11 @@ module.exports = {
             ],
             'parserOptions': {
                 'sourceType': 'script'
+            },
+            'rules': {
+                'vue/multi-word-component-names': 0,
+                'vue/no-reserved-component-names': 0,
+                'vue/first-attribute-linebreak': 0,
             }
         }
     ],
@@ -31,6 +36,9 @@ module.exports = {
         'vue',
     ],
     'rules': {
-        'quotes': [2, 'single', { 'avoidEscape': true }]
+        'quotes': [2, 'single', { 'avoidEscape': true }],
+        'vue/multi-word-component-names': 0,
+        'vue/no-reserved-component-names': 0,
+        'vue/first-attribute-linebreak': 0,
     }
 }

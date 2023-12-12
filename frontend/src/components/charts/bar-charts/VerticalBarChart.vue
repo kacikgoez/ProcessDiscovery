@@ -1,6 +1,6 @@
 <template>
     <div class="inline-flex">
-        <div id="main" ref="chartDom" :style="{ width: barChartWidth, height: barChartWidth }"></div>
+        <div id="main" ref="chartDom" :style="{ width: propRefs.width.value, height: propRefs.width.value }"></div>
     </div>
 </template>
 
@@ -14,11 +14,12 @@ const props = defineProps({
     height: { type: Number, required: true },
 });
 
+defineEmits(['change']);
+
 const propRefs = toRefs(props);
 
-const [chartDom, barChartWidth, svg] = [
+const [chartDom, svg] = [
     ref(null),
-    ref(propRefs.width),
     ref(null),
 ];
 const names = ref(['REF', 'EVA', 'APP', 'AUT', 'PRO', 'TRA']);
@@ -29,16 +30,6 @@ names.value.forEach((element) => {
     Object.assign(nameRefs, { [element]: ref(null) });
 });
 
-// Mapping of name to a color, consistent coloring
-const colorPalette: IDictionary<string> = {
-    REF: '#37A2DA',
-    EVA: '#32C5E9',
-    APP: '#67E0E3',
-    AUT: '#9FE6B8',
-    PRO: '#FFDB5C',
-    TRA: '#ff9f7f',
-};
-
 onMounted(() => {
     // Add the above SVG in the template as ECharts map
     echarts.registerMap('chevron', { svg: svg.value! });
@@ -47,10 +38,12 @@ onMounted(() => {
     // Rerenders the component and resets the option
     const render = (pWidth: number, pHeight: number) => {
         option && myChart.setOption(option);
-        myChart.resize({
-            width: pWidth,
-            height: pHeight
-        });
+        (async () => {
+            myChart.resize({
+                width: pWidth,
+                height: pHeight
+            });
+        })();
     };
 
     // Inital resize needed for drawing

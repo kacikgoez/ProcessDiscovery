@@ -21,22 +21,24 @@
       </div>
     </div>
     <div ref="tileContent" class="tile-content">
-      <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width" :height="height"
-        @change="change"></component>
+      <div class="overflow-y-auto overflow-x-hidden h-full">
+        <div>
+          <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width" :height="height"
+            @change="change"></component>
+        </div>
+      </div>
     </div>
     <div class="tile-footer">
     </div>
+    <EditModal v-model:visible="visible" :title="props.title">
+
+    </EditModal>
   </div>
-  <ConfirmPopup id="confirm" aria-label="popup" />
-  <EditModal v-model:visible="visible" :title="props.title">
-    yo
-  </EditModal>
 </template>
 
 <script setup lang="ts">
 import { Charts, KPIActions, KPIChange } from '@/types';
 import { useElementSize } from '@vueuse/core';
-import ConfirmPopup from 'primevue/confirmpopup';
 import { useConfirm } from 'primevue/useconfirm';
 import {
   PropType,
@@ -52,21 +54,17 @@ const tileContent = ref(null);
 const { width, height } = useElementSize(tileContent);
 
 const confirm = useConfirm();
-const isVisible = ref(false);
 const openPopup = (event: Event, i: number) => {
   confirm.require({
-    target: event.currentTarget,
+    target: event.currentTarget as HTMLElement,
     message: 'Are you sure you want to delete this tile?',
-    header: 'Confirmation',
-    onShow: () => {
-      isVisible.value = true;
-    },
-    onHide: () => {
-      isVisible.value = false;
-    },
+    icon: 'pi pi-exclamation-triangle',
     accept: () => {
-      emits('close', i)
+      emits('close', i);
     },
+    reject: () => {
+
+    }
   });
 };
 
@@ -105,7 +103,6 @@ async function change(data: KPIChange) {
       );
       changed.value++;
       break;
-    // Load default component ("New KPI" = NewChart.vue)
     default:
       chart.value = defineAsyncComponent(
         () => import('@/components/charts/NewChart.vue')
@@ -155,11 +152,13 @@ change({ action: KPIActions.ChangeComponent, component: component });
   flex-grow: 9;
   width: 100%;
   height: 100%;
-  padding: 0 20px;
+  padding: 0px 8px 16px 8px;
   margin: 0;
   background-color: #ffffff;
-  /* FIXME: overflow-y: auto or scroll causes resize error */
-  overflow: hidden;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
 }
 
 

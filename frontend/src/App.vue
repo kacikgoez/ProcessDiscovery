@@ -1,5 +1,7 @@
 <template>
-  <div class="absolute h-full top-0 bottom-0 left-0 right-0" :class="{ 'overflow-hidden': modalVisible }">
+  <Toast></Toast>
+  <ConfirmPopup></ConfirmPopup>
+  <div class="absolute h-full top-0 bottom-0 left-0 right-0">
     <div class="flex flex-col">
       <nav id="navigation-bar" style="border-bottom: 1px solid #efefef;">
         <div id="navbar-left">
@@ -27,28 +29,21 @@
       </div>
     </div>
     <div style="max-width: 1500px; margin: auto;">
-      <KPIGrid :data="layout" class="mr-5 ml-5" @close="close"></KPIGrid>
+      <KPIGrid v-model:data="layout" class="mr-5 ml-5" @close="close"></KPIGrid>
     </div>
   </div>
 </template>
-
 <script setup lang="ts">
 
-import { storeToRefs } from 'pinia';
 import MultiSelect from 'primevue/multiselect';
-import 'primevue/resources/themes/lara-light-cyan/theme.css';
 import Slider from 'primevue/slider';
-import { nextTick, ref } from 'vue';
+import { Ref, ref } from 'vue';
 import KPIGrid from './components/grid/KPIGrid.vue';
-import { modalStore } from './stores/ModalStore';
 import { Charts, KPITile } from './types';
 
 const commit = ref()
 const branch = ref()
 const isRenderDeployment = ref(false)
-
-const modal = modalStore();
-const { modalVisible } = storeToRefs(modal);
 
 const gender = ref(null)
 const genders = ref([
@@ -64,7 +59,7 @@ fetch('/render-config')
   .then(data => {
     // If data is not empty, look extract "commit" and "branch" from JSON
     if (Object.keys(data).length > 0) {
-      console.log('SHOWING DEPLOYMENT INFO')
+      ('SHOWING DEPLOYMENT INFO')
       commit.value = `SHA: ${data.commit.slice(0, 5)}...`
       branch.value = data.branch.match(/id-.*/i)[0].slice(12)
       isRenderDeployment.value = true
@@ -76,21 +71,20 @@ fetch('/render-config')
 // Closes a KPI tile by its index
 async function close(index: Number) {
   layout.value = layout.value!.filter((kpi) => kpi.i !== index)
-  await nextTick()
 }
 
 // This is the layout which is passed down to KPIGrid, which is then synced back up
-let layout = ref<KPITile[]>();
+let layout: Ref<KPITile[]> = ref<KPITile[]>([]);
+
 layout.value = [
-  { title: 'A Pie Chart', type: Charts.PieChart, url: 'google.com', x: 0, y: 0, w: 4, h: 10, i: 0 },
-  { title: 'A Line Chart', type: Charts.LineChart, url: 'google.com', x: 4, y: 0, w: 4, h: 10, i: 1 },
-  { title: 'A Horizontal Bar Chart', type: Charts.HorizontalBarChart, url: 'google.com', x: 4, y: 0, w: 4, h: 10, i: 2 },
-  { title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, url: 'google.com', x: 0, y: 0, w: 4, h: 10, i: 24 },
-  { title: 'Add New KPI', type: Charts.NewChart, url: 'google.com', x: 8, y: 0, w: 4, h: 10, i: 3 },
+  { title: 'A Pie Chart', type: Charts.PieChart, endpoint: 'google.com', x: 0, y: 0, w: 4, h: 10, i: 0 },
+  { title: 'A Line Chart', type: Charts.LineChart, endpoint: 'google.com', x: 4, y: 0, w: 4, h: 10, i: 1 },
+  { title: 'A Horizontal Bar Chart', type: Charts.HorizontalBarChart, endpoint: 'google.com', x: 4, y: 0, w: 4, h: 10, i: 2 },
+  { title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, endpoint: 'google.com', x: 0, y: 0, w: 4, h: 10, i: 24 },
+  { title: 'Add New KPI', type: Charts.NewChart, endpoint: 'google.com', x: 8, y: 0, w: 4, h: 10, i: 3 },
 ];
 
 </script>
-
 <style>
 @tailwind base;
 @tailwind components;
@@ -100,7 +94,7 @@ layout.value = [
 
 @font-face {
   font-family: 'Titillium Web';
-  src: url('~@/assets/fonts/Titillium_Web/TitilliumWeb-Bold.ttf');
+  src: endpoint('~@/assets/fonts/Titillium_Web/TitilliumWeb-Bold.ttf');
 }
 
 /* 
@@ -109,24 +103,33 @@ SCROLLBAR DESIGN
 -----------------------------------
 */
 
-/* width */
+/* WebKit (Chrome, Safari) */
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 12px;
+  /* Set the width of the scrollbar */
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: var(--scroll-track-color);
-}
-
-/* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background-color: #888;
+  /* Set the color of the thumb */
+  border-radius: 100px;
+  /* Set the border radius of the thumb */
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+  border-radius: 20px;
+  /* Set the color of the track */
+}
+
+/* Firefox */
+/* Note: scrollbar-color and scrollbar-width are not yet standard and may change in the future */
+/* So, use with caution and check for browser updates */
+html {
+  scrollbar-color: #333 #ffffff;
+  /* Set the color of the thumb and track */
+  scrollbar-width: thin;
+  /* Set the width of the scrollbar */
 }
 
 /* 
@@ -203,7 +206,8 @@ body {
   border-radius: 15px;
   background-color: var(--vue-tile-background-color);
   border: 1px solid var(--border-color);
-  box-shadow: 4px 4px 13px -13px #000000ff;
+  /* box-shadow: 4px 4px 13px -13px #000000ff; */
+  touch-action: none;
 
   .vue-resizable-handle {
     opacity: 0.5;
@@ -237,7 +241,7 @@ input.p-listbox-filter.p-inputtext {
 }
 
 .p-button {
-  padding: 0.5rem;
+  padding: 0.5rem 0.75rem;
   margin: 0.25rem;
   color: #fff;
 }
@@ -275,11 +279,23 @@ input.p-listbox-filter.p-inputtext {
 }
 
 .p-button.p-component.p-confirm-popup-reject {
-  background-color: red;
+  background-color: #E54F6D;
 }
 
 .p-button.p-component.p-confirm-popup-accept {
-  background-color: green;
+  background-color: #058E3F;
+}
+
+.p-confirm-popup {
+  padding: 0.5rem;
+}
+
+.p-confirm-popup-content {
+  padding: 0.5rem;
+}
+
+.p-confirm-popup-footer {
+  padding: 0.5rem;
 }
 
 * {

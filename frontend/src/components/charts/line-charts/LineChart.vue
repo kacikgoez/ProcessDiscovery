@@ -1,58 +1,73 @@
 <template>
-    <div id="main" ref="chartDom"></div>
+  <BaseChart :width="width" :height="height" :option="option"></BaseChart>
 </template>
 
 <script setup lang="ts">
 
 import * as echarts from 'echarts';
-import { onMounted, ref, toRefs, watch } from 'vue';
+import BaseChart from '../BaseChart.vue';
 
-let option: EChartsOption;
-const chartDom = ref(null);
-const props = defineProps({
-    width: { type: Number, required: true },
-    height: { type: Number, required: true }
+let option: echarts.EChartsOption;
+
+defineProps({
+  width: { type: Number, required: true },
+  height: { type: Number, required: true }
 })
 
-const propRefs = toRefs(props)
-
-onMounted(() => {
-    var myChart = echarts.init(chartDom.value);
-    option && myChart.setOption(option)
-    myChart.resize({
-            width: props.width,
-            height: props.height
-        })
-
-    watch([propRefs.width, propRefs.height], ([newWidth, newHeight]) => {
-        myChart.resize({
-            width: newWidth,
-            height: newHeight
-        })
-    });
-
-});
 
 option = {
+  grid: {
+    top: '10%',
+    bottom: '10%'
+  },
   xAxis: {
     type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    axisLine: {
+      lineStyle: {
+        color: '#AAA'
+      }
+    },
+    boundaryGap: false
   },
   yAxis: {
-    type: 'value'
+    type: 'value',
+    axisLine: {
+      lineStyle: {
+        color: '#AAA'
+      }
+    }
   },
   series: [
     {
       data: [820, 932, 901, 934, 1290, 1330, 1320],
       type: 'line',
-      smooth: true
+      smooth: true,
+      areaStyle: {
+        color: {
+          type: 'linear',
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 1,
+          colorStops: [
+            {
+              offset: 0, color: '#409EFF'
+            },
+            {
+              offset: 0.9, color: '#8975CB11'
+            }
+          ]
+        }
+      }
     }
   ]
 };
 
+
 </script>
 <style scoped>
 * {
-    cursor: pointer;
+  cursor: pointer;
 }
 </style>

@@ -59,11 +59,11 @@ function closeModal() {
     visibleProp.value = false
 }
 
-watch(visibleProp, (value) => {
+watch(visibleProp, async (value) => {
     emit('update:visible', value)
 })
 
-watch(visibleArg, (value) => {
+watch(visibleArg, async (value) => {
     visibleProp.value = value
 })
 

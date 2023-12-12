@@ -1,6 +1,7 @@
 /*
 * Central file for all the relevant types. 
 */
+import { LayoutItem } from 'vue3-grid-layout-next/dist/helpers/utils';
 
 // Chart must be named like file in /charts, so PieChart.vue -> PieChart
 export enum Charts {
@@ -32,16 +33,11 @@ export interface KPIChange {
     component: Charts
 }
 
-export interface KPITile {
+export type KPITile = {
     title: string,
     type: Charts,
-    url: String,
-    x: Number,
-    y: Number,
-    w: Number,
-    h: Number,
-    i: Number
-}
+    endpoint: String,
+} & LayoutItem;
 
 export type CategoricalAttribute = {
     name: String,
@@ -76,8 +72,37 @@ export interface EditModal {
     chart: Charts
 }
 
-/* ------------- General ---------------- */
+/* ------------- General Types ---------------- */
 
 export interface IDictionary<TValue> {
     [id: string]: TValue;
 }
+
+
+/* ------------- Chart Data Types ---------------- */
+
+export type Distribution = {
+    data: {
+        name: string,
+        value: number
+    }[]
+}
+
+export type TimeSeries = {
+    data: {
+        name: string,
+        value: number
+    }[]
+}
+
+/* ------------- Patient Data Types ---------------- */
+
+// Mapping of name to a color, consistent coloring
+export const colorPalette: IDictionary<string> = {
+    REF: '#37A2DA',
+    EVA: '#32C5E9',
+    APP: '#67E0E3',
+    AUT: '#9FE6B8',
+    PRO: '#FFDB5C',
+    TRA: '#ff9f7f',
+};

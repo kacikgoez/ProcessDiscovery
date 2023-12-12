@@ -1,35 +1,18 @@
 <template>
-  <div id="main" ref="chartDom"></div>
+  <BaseChart :width="width" :height="height" :option="option"></BaseChart>
 </template>
 
 <script setup lang="ts">
-import * as echarts from 'echarts';
-import { onMounted, ref, toRefs, watch } from 'vue';
 
-let option: EChartsOption;
-const chartDom = ref(null);
-const props = defineProps({
+defineProps({
   width: { type: Number, required: true },
   height: { type: Number, required: true },
 });
 
-const propRefs = toRefs(props);
+import BaseChart from '@/components/charts/BaseChart.vue';
+import * as echarts from 'echarts';
 
-onMounted(() => {
-  var myChart = echarts.init(chartDom.value);
-  option && myChart.setOption(option);
-  myChart.resize({
-    width: props.width,
-    height: props.height,
-  });
-
-  watch([propRefs.width, propRefs.height], ([newWidth, newHeight]) => {
-    myChart.resize({
-      width: newWidth,
-      height: newHeight,
-    });
-  });
-});
+let option: echarts.EChartsOption;
 
 option = {
   tooltip: {
