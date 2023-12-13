@@ -10,7 +10,7 @@ def create_bins(el: pd.DataFrame, disaggregation_attribute: DisaggregationAttrib
     if disaggregation_attribute is not None:
         el[temporary_column_name] = el[disaggregation_attribute.name]
 
-        if  disaggregation_attribute.type == AttributeType.NUMERICAL:
+        if disaggregation_attribute.type == AttributeType.NUMERICAL:
              # bin the numerical values
             el[temporary_column_name] = pd.cut(el[temporary_column_name],
                                            bins=disaggregation_attribute.get_bins(),

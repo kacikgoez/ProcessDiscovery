@@ -99,3 +99,12 @@ class KpiRequest:
     kpi: KpiType
     disaggregation_attribute: DisaggregationAttribute | None = None
     legend_attribute: DisaggregationAttribute | None = None
+
+
+@dataclass
+class Filter:
+    filter_attribute: DisaggregationAttribute
+    filter_values: list[str]
+
+
+    
