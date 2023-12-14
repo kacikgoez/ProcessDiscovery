@@ -2,15 +2,7 @@
     --kpi-icon-width: 50px;
     --kpi-icon-height: 50px;
     --icon-hover-scale: scale(1.3);
-<<<<<<< HEAD
-<<<<<<< HEAD
     --dashboard-background-color: #F8F9FC;
-=======
-    --dashboard-background-color: #f8f9fd;
->>>>>>> 6b9f4b2 (Feature: ID-hGqw1FNt: add dashboard customization)
-=======
-    --dashboard-background-color: #F8F9FC;
->>>>>>> 8da3a2a (Add BaseChart, fix Chevron to one big diagram, convert to typescript)
     --scroll-track-color: #f4f4f4;
     --navbar-background-color: #fff;
     /* The preview tile when dragging */
@@ -23,14 +15,6 @@
     --vue-tile-text-color: #777;
     --vue-tile-exit-button-color: #8e8e8e;
     --border-color: #f2f2f2;
-<<<<<<< HEAD
-<<<<<<< HEAD
     --button-background-color: #42bec7;
     --button-text-color: #fff;
-=======
->>>>>>> 6b9f4b2 (Feature: ID-hGqw1FNt: add dashboard customization)
-=======
-    --button-background-color: #42bec7;
-    --button-text-color: #fff;
->>>>>>> 1b0447f (Feature: ID-hGqw1FNt: addition of UI components & Chevron diagram and switch to ECharts)
 }

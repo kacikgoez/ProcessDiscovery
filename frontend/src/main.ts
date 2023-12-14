@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { createPinia } from 'pinia';
 import PrimeVue from 'primevue/config';
 import ConfirmationService from 'primevue/confirmationservice';
@@ -108,27 +105,6 @@ import TreeTable from 'primevue/treetable';
 import TriStateCheckbox from 'primevue/tristatecheckbox';
 import VirtualScroller from 'primevue/virtualscroller';
 
-<<<<<<< HEAD
-=======
-=======
-import { createPinia } from 'pinia'
->>>>>>> 7e18e45 (Feature: ID-hGqw1FNt: add dashboard customization)
-import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
-=======
-import { createPinia } from 'pinia';
-import PrimeVue from 'primevue/config';
-import ConfirmationService from 'primevue/confirmationservice';
-import { createApp } from 'vue';
-import { createRouter, createWebHistory } from 'vue-router';
->>>>>>> 1b0447f (Feature: ID-hGqw1FNt: addition of UI components & Chevron diagram and switch to ECharts)
-
-import App from './App.vue';
-import './registerServiceWorker';
-
->>>>>>> d06c702 (Feature: ID-hGqw1FNt: add dashboard customization)
-=======
->>>>>>> 8da3a2a (Add BaseChart, fix Chevron to one big diagram, convert to typescript)
 const routes = [
     { path: '/', component: App }
 ]
@@ -138,8 +114,6 @@ const router = createRouter({
     routes
 })
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 const pinia = createPinia()
 
 const app = createApp(App);
@@ -247,131 +221,3 @@ app.component('TreeTable', TreeTable);
 app.component('TriStateCheckbox', TriStateCheckbox);
 app.component('VirtualScroller', VirtualScroller);
 app.mount('#app');
-=======
-
-createApp(App).use(router).mount('#app')
->>>>>>> d06c702 (Feature: ID-hGqw1FNt: add dashboard customization)
-=======
-const pinia = createPinia()
-
-<<<<<<< HEAD
-createApp(App).
-    use(router).
-    use(pinia).
-<<<<<<< HEAD
-    mount('#app')
-
-export const $ = (id: string) => document.querySelector(id)
->>>>>>> 7e18e45 (Feature: ID-hGqw1FNt: add dashboard customization)
-=======
-    use(PrimeVue).
-    use(ConfirmationService).
-    mount('#app')
->>>>>>> 1b0447f (Feature: ID-hGqw1FNt: addition of UI components & Chevron diagram and switch to ECharts)
-=======
-const app = createApp(App);
-app.use(pinia);
-
-app.use(PrimeVue, { ripple: true  });
-app.use(ConfirmationService);
-app.use(ToastService);
-app.use(DialogService);
-app.use(router);
-
-app.directive('tooltip', Tooltip);
-app.directive('badge', BadgeDirective);
-app.directive('ripple', Ripple);
-app.directive('styleclass', StyleClass);
-app.directive('focustrap', FocusTrap);
-app.directive('animateonscroll', AnimateOnScroll);
-
-app.component('Accordion', Accordion);
-app.component('AccordionTab', AccordionTab);
-app.component('AutoComplete', AutoComplete);
-app.component('Avatar', Avatar);
-app.component('AvatarGroup', AvatarGroup);
-app.component('Badge', Badge);
-app.component('BlockUI', BlockUI);
-app.component('Breadcrumb', Breadcrumb);
-app.component('Button', Button);
-app.component('Calendar', Calendar);
-app.component('Card', Card);
-app.component('Carousel', Carousel);
-app.component('CascadeSelect', CascadeSelect);
-app.component('Checkbox', Checkbox);
-app.component('Chip', Chip);
-app.component('Chips', Chips);
-app.component('ColorPicker', ColorPicker);
-app.component('Column', Column);
-app.component('ColumnGroup', ColumnGroup);
-app.component('ConfirmDialog', ConfirmDialog);
-app.component('ConfirmPopup', ConfirmPopup);
-app.component('ContextMenu', ContextMenu);
-app.component('DataTable', DataTable);
-app.component('DataView', DataView);
-app.component('DataViewLayoutOptions', DataViewLayoutOptions);
-app.component('DeferredContent', DeferredContent);
-app.component('Dialog', Dialog);
-app.component('Divider', Divider);
-app.component('Dock', Dock);
-app.component('Dropdown', Dropdown);
-app.component('DynamicDialog', DynamicDialog);
-app.component('Fieldset', Fieldset);
-app.component('FileUpload', FileUpload);
-app.component('Galleria', Galleria);
-app.component('Image', Image);
-app.component('InlineMessage', InlineMessage);
-app.component('Inplace', Inplace);
-app.component('InputMask', InputMask);
-app.component('InputNumber', InputNumber);
-app.component('InputSwitch', InputSwitch);
-app.component('InputText', InputText);
-app.component('Knob', Knob);
-app.component('Listbox', Listbox);
-app.component('MegaMenu', MegaMenu);
-app.component('Menu', Menu);
-app.component('Menubar', Menubar);
-app.component('Message', Message);
-app.component('MultiSelect', MultiSelect);
-app.component('OrderList', OrderList);
-app.component('OrganizationChart', OrganizationChart);
-app.component('OverlayPanel', OverlayPanel);
-app.component('Paginator', Paginator);
-app.component('Panel', Panel);
-app.component('PanelMenu', PanelMenu);
-app.component('Password', Password);
-app.component('PickList', PickList);
-app.component('ProgressBar', ProgressBar);
-app.component('ProgressSpinner', ProgressSpinner);
-app.component('RadioButton', RadioButton);
-app.component('Rating', Rating);
-app.component('Row', Row);
-app.component('SelectButton', SelectButton);
-app.component('ScrollPanel', ScrollPanel);
-app.component('ScrollTop', ScrollTop);
-app.component('Slider', Slider);
-app.component('Sidebar', Sidebar);
-app.component('Skeleton', Skeleton);
-app.component('SpeedDial', SpeedDial);
-app.component('SplitButton', SplitButton);
-app.component('Splitter', Splitter);
-app.component('SplitterPanel', SplitterPanel);
-app.component('Steps', Steps);
-app.component('TabMenu', TabMenu);
-app.component('TabView', TabView);
-app.component('TabPanel', TabPanel);
-app.component('Tag', Tag);
-app.component('Textarea', Textarea);
-app.component('Terminal', Terminal);
-app.component('TieredMenu', TieredMenu);
-app.component('Timeline', Timeline);
-app.component('Toast', Toast);
-app.component('Toolbar', Toolbar);
-app.component('ToggleButton', ToggleButton);
-app.component('Tree', Tree);
-app.component('TreeSelect', TreeSelect);
-app.component('TreeTable', TreeTable);
-app.component('TriStateCheckbox', TriStateCheckbox);
-app.component('VirtualScroller', VirtualScroller);
-app.mount('#app');
->>>>>>> 8da3a2a (Add BaseChart, fix Chevron to one big diagram, convert to typescript)

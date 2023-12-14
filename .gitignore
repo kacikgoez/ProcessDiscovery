@@ -3,8 +3,4 @@
 **/node_modules/
 .idea/
 **/.DS_Store
-<<<<<<< HEAD
 **/*.pyc
-=======
-**/*.pyc
->>>>>>> 953d8d7 (Feature: ID-hGqw1FNt: fix Python error when no CSV exists)
