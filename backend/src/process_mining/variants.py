@@ -1,9 +1,9 @@
-from typing import Collection, Any, List, Dict
+from typing import Collection
 
 import pandas as pd
 from pm4py.objects.log.util import pandas_numpy_variants
 
-from backend.src.dataclasses import Variant, DisaggregationAttribute, AttributeType
+from backend.src.dataclasses.dataclasses import Variant
 
 
 def get_variants_with_case_ids(el: pd.DataFrame) -> dict[Collection[str], list[str]]:
@@ -27,7 +27,7 @@ def get_variants_with_case_ids(el: pd.DataFrame) -> dict[Collection[str], list[s
     return variants
 
 
-def get_variants_with_frequencies(el: pd.DataFrame, disaggregation_attribute: DisaggregationAttribute) -> list[Variant]:
+def get_variants_with_frequencies(el: pd.DataFrame, disaggregation_column: str) -> list[Variant]:
     """
     Returns a list of variants with their frequencies and distributions of the given disaggregation attribute.
 
@@ -36,20 +36,11 @@ def get_variants_with_frequencies(el: pd.DataFrame, disaggregation_attribute: Di
     variants = get_variants_with_case_ids(el)
     total_case_count = el['case:concept:name'].nunique()
 
-    # copy the column of the disaggregation attribute to a temporary column to avoid modifying the original data frame
-    el['temp'] = el[disaggregation_attribute.name]
-
-    # bin the numerical values
-    if disaggregation_attribute.type == AttributeType.NUMERICAL:
-        el['temp'] = pd.cut(el['temp'],
-                            bins=disaggregation_attribute.get_bins(),
-                            labels=disaggregation_attribute.get_bin_labels())
-
     result: list[Variant] = []
     for variant, case_ids in variants.items():
         distribution = el.loc[el['case:concept:name'].isin(case_ids)] \
             .groupby('case:concept:name') \
-            .first()['temp'] \
+            .first()[disaggregation_column] \
             .value_counts()
 
         result.append(Variant(

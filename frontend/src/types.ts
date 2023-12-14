@@ -13,7 +13,7 @@ export enum Charts {
     NewChart = 'NewChart.vue',
 }
 
-/* ------------- KPI ---------------- */ 
+/* ------------- KPI ---------------- */
 
 export enum KPIActions {
     ChangeComponent
@@ -30,7 +30,7 @@ export type KPITile = {
     endpoint: String,
 } & LayoutItem;
 
-/* ------------- Modal ---------------- */ 
+/* ------------- Modal ---------------- */
 
 export interface ModalEvent {
     name: string,
