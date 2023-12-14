@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, ValidationError, validates_schema, post_load
 from marshmallow.validate import OneOf, Length
 
-from backend.src.dataclasses import AttributeType, DisaggregationAttribute
+from backend.src.dataclasses.attributes import AttributeType, DisaggregationAttribute
 from definitions import PATIENT_ATTRIBUTES
 
 
