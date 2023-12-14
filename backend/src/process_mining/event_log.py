@@ -1,6 +1,6 @@
 import pandas as pd
 
-from backend.src.dataclasses import CategoricalAttribute, AttributeType, NumericalAttribute
+from backend.src.dataclasses import AttributeType, PatientAttribute, CategoricalAttribute, NumericalAttribute
 from definitions import PATIENT_ATTRIBUTES
 
 
@@ -26,14 +26,14 @@ def load_event_log(path: str) -> pd.DataFrame:
     return df
 
 
-def load_patient_attributes(event_log: pd.DataFrame) -> list[CategoricalAttribute | NumericalAttribute]:
+def load_patient_attributes(event_log: pd.DataFrame) -> list[PatientAttribute]:
     """Load the patient attributes from the event log.
 
     Args:
         event_log (pd.DataFrame): The event log.
 
     Returns:
-        PatientAttributes: The patient attributes.
+        list[[PatientAttribute][src.dataclasses.PatientAttribute]]: The patient attributes.
     """
     attributes = []
 

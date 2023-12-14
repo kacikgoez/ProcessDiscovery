@@ -11,8 +11,11 @@ def get_variants_with_case_ids(el: pd.DataFrame) -> dict[Collection[str], list[s
     Returns a dictionary of variants and the case ids that belong to them.
     The variants are tuples of activity names.
 
-    :param el: The event log
-    :return:
+    Attributes:
+        el (pd.DataFrame): The event log.
+
+    Returns:
+        A dictionary of variants and the case ids that belong to them.
     """
     # apply the pm4py function to get the variant per case
     _, cases = pandas_numpy_variants.apply(el, parameters={})
@@ -31,7 +34,12 @@ def get_variants_with_frequencies(el: pd.DataFrame, disaggregation_attribute: Di
     """
     Returns a list of variants with their frequencies and distributions of the given disaggregation attribute.
 
-    :return:
+    Attributes:
+        el (pd.DataFrame): The event log.
+        disaggregation_attribute (src.dataclasses.DisaggregationAttribute): The attribute to disaggregate the variants by.
+
+    Returns:
+        list[[Variant][src.dataclasses.Variant]]: A list of variants with their frequencies and distributions of the given disaggregation attribute.
     """
     variants = get_variants_with_case_ids(el)
     total_case_count = el['case:concept:name'].nunique()

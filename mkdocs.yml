@@ -1,0 +1,102 @@
+site_name: ORCA
+repo_url: https://github.com/kacikgoez/ProcessDiscovery
+repo_name: ProcessDiscovery
+
+nav:
+  - Home: index.md
+  - Event Log Extraction: event_log_extraction.md
+  - Process Mining:
+    - Event Log: process_mining/event_log.md
+    - Variants: process_mining/variants.md
+  - Dataclasses: dataclasses.md
+
+theme:
+  name: material
+  language: en
+  #logo: assets/logo.png
+  palette:
+    - scheme: default
+      media: "(prefers-color-scheme: light)"
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      media: "(prefers-color-scheme: dark)"
+      primary: black
+      accent: deep purple
+      toggle:
+        icon: material/weather-night
+        name: darker
+  features:
+    - navigation.indexes
+    - navigation.instant
+    - navigation.tabs.sticky
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.tabbed
+  - attr_list
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight:
+      linenums: false
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.details
+  - admonition
+  - toc:
+      baselevel: 2
+      permalink: true
+      slugify: !!python/name:pymdownx.slugs.uslugify
+  - meta
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+plugins:
+  - include-markdown
+  - search:
+      lang: en
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [./backend]
+          options:
+            # disable by default, as it can not do attributes anyways
+            inherited_members: false
+            merge_init_into_class: true
+
+watch:
+  - backend/src
