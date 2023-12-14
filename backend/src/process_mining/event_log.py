@@ -42,7 +42,6 @@ def load_patient_attributes(event_log: pd.DataFrame) -> list[CategoricalAttribut
         if attribute_type == AttributeType.CATEGORICAL:
             attributes.append(CategoricalAttribute(name, event_log[name].cat.categories))
         elif attribute_type == AttributeType.NUMERICAL:
-            attributes.append(NumericalAttribute(name, event_log[name].min(), event_log[name].max())
-                              .create_groups(5))
+            attributes.append(NumericalAttribute(name, event_log[name].min(), event_log[name].max()))
 
     return attributes

@@ -1,14 +1,20 @@
 import os
 
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, request
 import threading as thread
+
+from flask_cors import CORS
+from flask_marshmallow import Marshmallow
 from waitress import serve
 from termcolor import colored
 
+from backend.src.flask.schemas.variant_list_schema import GetVariantListSchema
 from backend.src.flask.services.process_mining_service import ProcessMiningService
 
 PROCESS_MINING_SERVICE = ProcessMiningService()
 app = Flask('ORCA')
+ma = Marshmallow(app)
+CORS(app)
 
 
 @app.route('/')
@@ -30,9 +36,23 @@ def serve_static_file(file):
     return send_from_directory('frontend/dist/', file)
 
 
-@app.route('/variants')
+@app.route('/variants', methods=['POST'])
 def calculate():
-    return jsonify(PROCESS_MINING_SERVICE.get_variants())
+    json_data = request.get_json(force=True)
+    if not json_data:
+        return jsonify({'message': 'No input data provided'}), 400
+
+    # Validate and deserialize input
+    schema = GetVariantListSchema()
+    errors = schema.validate(json_data)
+    if errors:
+        return jsonify({"status": "error", "errors": errors}), 422
+
+    data = schema.load(json_data)
+
+    variants = PROCESS_MINING_SERVICE.get_variants(data['disaggregation_attribute'])
+
+    return jsonify(variants), 200
 
 
 @app.route('/patient-attributes')

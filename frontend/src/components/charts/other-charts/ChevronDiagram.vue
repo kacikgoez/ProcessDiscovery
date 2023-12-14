@@ -7,14 +7,14 @@
 <script setup lang="ts">
 
 import BaseChart from '@/components/charts/BaseChart.vue';
-import { IDictionary, colorPalette } from '@/types';
+import {activityNameEnumMap, colorPalette, IDictionary, Variant} from '@/types';
 import * as echarts from 'echarts';
-import { PropType, Ref, onBeforeMount, ref, toRefs, watch } from 'vue';
+import {onBeforeMount, PropType, Ref, ref, toRefs, watch} from 'vue';
 
 const props = defineProps({
   width: { type: Number, required: true },
   height: { type: Number, required: true },
-  names: { type: Array as PropType<string[]>, required: true },
+  variants: { type: Array as PropType<Variant[]>, required: true },
 });
 
 const propRefs = toRefs(props);
@@ -24,41 +24,25 @@ const maximumWidth = ref(600);
 const options: Ref<echarts.EChartsOption> = ref({})
 const chevronCounter = ref(0);
 const nameRefs: IDictionary<Ref> = {};
-const data2 = [
-  120,
-  {
-    value: 200,
-    itemStyle: {
-      color: '#a90000'
-    }
-  },
-  150,
-];
 
 // Dynamically create refs for each name
-propRefs.names.value.forEach((element) => {
+Object.keys(colorPalette).forEach((element) => {
   Object.assign(nameRefs, { [element]: ref(null) });
 });
 
 // Calculate the sum of the array
-const sum: number = data2.reduce((prev: number, current) => {
-  const value = typeof current === 'object' ? current.value : current;
-  return prev + value;
-}, 0);
+const sum: number = propRefs.variants.value[0].count;
 
 // Calculate the percentage of the maximum value
-const max: number = data2.reduce((prev: number, current) => {
-  const value: number = typeof current === 'object' ? current.value : current;
-  return Math.max(prev, value);
-}, 0);
+const max: number = Math.max(...Object.values(propRefs.variants.value[0].distribution));
 
 const percentage: string = (sum !== 0) ? ((max / sum) * 100).toFixed(1) : '0';
 
-const addChevron: (total: number) => echarts.SeriesOption[] = (total) => {
+const addChevron: (variant: Variant, total_count: number) => echarts.SeriesOption[] = (variant, total_count) => {
   // Increase the id counter
   chevronCounter.value++;
   // Generate custom SVG and add it to the ECharts map
-  const svg = generateSVG()
+  const svg = generateSVG(variant);
   echarts.registerMap(`chevron_${chevronCounter.value}`, { svg: svg });
   const option: echarts.SeriesOption[] = [
     // Add the chevron chart
@@ -78,7 +62,7 @@ const addChevron: (total: number) => echarts.SeriesOption[] = (total) => {
       map: `chevron_${chevronCounter.value}`,
       roam: false,
       // place the chevrons in rows, evenly spaced, with the first one at the top (that's why - 0.5)
-      layoutCenter: ['56%', `${(100 / total) * (chevronCounter.value - 0.5)}%`],
+      layoutCenter: ['56%', `${(100 / total_count) * (chevronCounter.value - 0.5)}%`],
       // computed in render function
       layoutSize: 0,
       itemStyle: {
@@ -90,9 +74,9 @@ const addChevron: (total: number) => echarts.SeriesOption[] = (total) => {
     },
     // Add the pie chart
     {
-      name: `pie_${chevronCounter.value}`,
+      name: `variant ${chevronCounter.value}`,
       id: `pie_${chevronCounter.value}`,
-      center: ['10%', `${(100 / total) * (chevronCounter.value - 0.5)}%`],
+      center: ['10%', `${(100 / total_count) * (chevronCounter.value - 0.5)}%`],
       radius: ['9%', '12%'],
       avoidLabelOverlap: false,
       itemStyle: {
@@ -100,34 +84,34 @@ const addChevron: (total: number) => echarts.SeriesOption[] = (total) => {
         borderColor: '#fff',
         borderWidth: 1
       },
+      tooltip: {
+        trigger: 'item',
+        position: 'right',
+      },
       label: {
         show: true,
         color: '#000',
         fontSize: '12',
         position: 'center',
         formatter: () => {
-          return percentage + '%';
+          return (variant.frequency * 100).toFixed(2) + '%';
         }
       },
       labelLine: {
         show: false
       },
-      data: [
-        120,
-        {
-          value: 200,
-          itemStyle: {
-            color: '#a90000'
+      data: Object.entries(variant.distribution).map(entry => {
+          return {
+              name: entry[0],
+              value: entry[1]
           }
-        },
-        150,
-      ],
+      }),
       type: 'pie'
     }];
   return option;
 }
 
-function generateSVG() {
+function generateSVG(variant: Variant) {
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('ref', 'svg');
   svg.setAttribute('style', 'height: 0px; width: 0px;');
@@ -135,11 +119,12 @@ function generateSVG() {
   svg.setAttribute('height', '50');
 
   // Create and append paths
-  propRefs.names.value.forEach((name, i) => {
+  variant.activities.forEach((name, i) => {
+    const activityEnum = activityNameEnumMap[name];
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', 'M46 0 0 0 10 18 0 36 46 36 56 18 46 0z');
-    path.setAttribute('ref', nameRefs[name].value);
-    path.setAttribute('name', name);
+    path.setAttribute('ref', nameRefs[activityEnum].value);
+    path.setAttribute('name', activityEnum);
     path.setAttribute('transform', `translate(${i * 50}, 7)`);
     path.setAttribute('fill', 'blue');
     svg.appendChild(path);
@@ -148,17 +133,15 @@ function generateSVG() {
 }
 
 function generateDataArray() {
-  const data = Object.keys(colorPalette).map(key => ({
+  return Object.keys(colorPalette).map(key => ({
     name: key,
-    itemStyle: { areaColor: colorPalette[key] + 'ee' },
-    emphasis: { itemStyle: { areaColor: colorPalette[key] + '88' } },
+    itemStyle: {areaColor: colorPalette[key] + 'ee'},
+    emphasis: {itemStyle: {areaColor: colorPalette[key] + '88'}},
   }));
-
-  return data;
 }
 
 const generateOptions: () => [echarts.EChartsOption, number] = () => {
-  const total: number = 25;
+  const total: number = propRefs.variants.value.length;
   const options: echarts.EChartsOption = {
     tooltip: {
       show: true,
@@ -166,8 +149,8 @@ const generateOptions: () => [echarts.EChartsOption, number] = () => {
     },
     series: []
   };
-  for (let i = 0; i < total; i++) {
-    (options.series! as echarts.SeriesOption[]).push(...addChevron(total));
+  for (const variant of propRefs.variants.value) {
+    (options.series! as echarts.SeriesOption[]).push(...addChevron(variant, total));
   }
   return [options, total];
 }
@@ -197,13 +180,5 @@ onBeforeMount(() => {
 <style scoped>
 * {
   cursor: pointer;
-}
-
-.chart-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  /* Adjust as needed */
 }
 </style>
