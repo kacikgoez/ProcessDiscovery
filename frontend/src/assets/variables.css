@@ -2,7 +2,7 @@
     --kpi-icon-width: 50px;
     --kpi-icon-height: 50px;
     --icon-hover-scale: scale(1.3);
-    --dashboard-background-color: #f8f9fd;
+    --dashboard-background-color: #F8F9FC;
     --scroll-track-color: #f4f4f4;
     --navbar-background-color: #fff;
     /* The preview tile when dragging */
@@ -15,11 +15,6 @@
     --vue-tile-text-color: #777;
     --vue-tile-exit-button-color: #8e8e8e;
     --border-color: #f2f2f2;
-
-    --activity-referal-color: #f1c40f;
-    --activity-evaluation-color: #e74c3c;
-    --activity-approach-color: #3498db;
-    --activity-authorization-color: #2ecc71;
-    --activity-procurement-color: #9b59b6;
-    --activity-transplant-color: #34495e;
+    --button-background-color: #42bec7;
+    --button-text-color: #fff;
 }

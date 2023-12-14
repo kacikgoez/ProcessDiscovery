@@ -2,21 +2,20 @@
     <div class="kpi-new-tile-choose">
         <div class="kpi-choose-graph">
             <span class="kpi-icon material-symbols-outlined text-6xl cursor-pointer text-blue-400"
-                @click="$emit('change', { action: KPIActions.ChangeComponent, component: Charts.PieChart } as KPIChange)">
+                @click="emit('change', { action: KPIActions.ChangeComponent, component: Charts.PieChart } as KPIChange)">
                 bar_chart
             </span>
         </div>
         <div class="kpi-choose-chatpgt">
             <img class="kpi-icon" src="@/assets/chatgpt.svg">
         </div>
-
     </div>
 </template>
 <script setup lang="ts">
-import { Charts, KPIActions } from '@/types';
 
+import { Charts, KPIActions, KPIChange } from '@/types';
 
-
+const emit = defineEmits(['change']);
 
 </script>
 <style scoped>
