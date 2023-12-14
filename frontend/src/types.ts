@@ -13,15 +13,6 @@ export enum Charts {
     NewChart = 'NewChart.vue',
 }
 
-export enum Step {
-    REF = 'REF',
-    EVA = 'EVA',
-    APP = 'APP',
-    AUT = 'AUT',
-    PRO = 'PRO',
-    TRA = 'TRA'
-}
-
 /* ------------- KPI ---------------- */ 
 
 export enum KPIActions {
@@ -38,27 +29,6 @@ export type KPITile = {
     type: Charts,
     endpoint: String,
 } & LayoutItem;
-
-export type CategoricalAttribute = {
-    name: String,
-    type: 'categorical',
-    values: String[]
-}
-
-export type NumericalAttribute = {
-    name: String,
-    type: 'numerical',
-    min: Number,
-    max: Number,
-    groups: Interval[]
-}
-
-export type Interval = {
-    lower: Number,
-    upper: Number
-}
-
-export type PatientAttribute = CategoricalAttribute | NumericalAttribute
 
 /* ------------- Modal ---------------- */ 
 
@@ -97,6 +67,25 @@ export type TimeSeries = {
 
 /* ------------- Patient Data Types ---------------- */
 
+// Activity names in the order they appear in the data
+export enum Activity {
+    REF = 'REF',
+    EVA = 'EVA',
+    APP = 'APP',
+    AUT = 'AUT',
+    PRO = 'PRO',
+    TRA = 'TRA',
+}
+
+export const activityNameEnumMap = {
+    'Referral': Activity.REF,
+    'Evaluation': Activity.EVA,
+    'Approach': Activity.APP,
+    'Authorization': Activity.AUT,
+    'Procurement': Activity.PRO,
+    'Transplant': Activity.TRA,
+}
+
 // Mapping of name to a color, consistent coloring
 export const colorPalette: IDictionary<string> = {
     REF: '#37A2DA',
@@ -106,3 +95,31 @@ export const colorPalette: IDictionary<string> = {
     PRO: '#FFDB5C',
     TRA: '#ff9f7f',
 };
+
+export type Variant = {
+    id: number,
+    activities: string[],
+    count: number,
+    frequency: number,
+    distribution: IDictionary<number>,
+}
+
+export type CategoricalAttribute = {
+    name: string,
+    type: 'categorical',
+    values: string[]
+}
+
+export type NumericalAttribute = {
+    name: string,
+    type: 'numerical',
+    min: number,
+    max: number,
+}
+
+export type PatientAttribute = CategoricalAttribute | NumericalAttribute
+
+export type DisaggregationAttribute = {
+    name: string,
+    bins: number[] | null
+}

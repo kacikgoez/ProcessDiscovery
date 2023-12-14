@@ -1,10 +1,8 @@
 import pandas as pd
-import pm4py
 
 from backend.src.dataclasses import CategoricalAttribute, NumericalAttribute, DisaggregationAttribute, Variant
 from backend.src.process_mining.event_log import load_event_log, load_patient_attributes
 from backend.src.process_mining.variants import get_variants_with_frequencies
-from typing import Any, Collection
 from definitions import CLEAN_EVENT_LOG_PATH
 
 
