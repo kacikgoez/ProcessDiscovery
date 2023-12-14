@@ -127,4 +127,3 @@ if __name__ == '__main__':
 
     # Save the event log
     event_log.to_csv(CLEAN_EVENT_LOG_PATH, index=False)
-

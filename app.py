@@ -40,7 +40,7 @@ def serve_static_file(file):
 
 
 @app.route('/variants', methods=['POST'])
-def variants():
+def calculate():
     json_data = request.get_json(force=True)
     if not json_data:
         return jsonify({'message': 'No input data provided'}), 400
@@ -92,24 +92,6 @@ def kpi():
     kpi_data = PROCESS_MINING_SERVICE.get_kpi_data(kpi_request=schema.load(json_data))
 
     return jsonify(kpi_data), 200
-
-
-@app.route('/flog', methods=['POST'])
-def flog():
-    json_data = request.get_json(force=True)
-    if not json_data:
-        return jsonify({'message': 'No input data provided'}), 400
-
-    # Validate and deserialize input
-    schema = KpiSchema()
-    errors = schema.validate(json_data)
-    if errors:
-        return jsonify({"status": "error", "errors": errors}), 422
-
-    kpi_data = PROCESS_MINING_SERVICE.get_kpi_data(kpi_request=schema.load(json_data))
-
-    return jsonify(kpi_data), 200
-
 
 
 @app.route('/patient-attributes')

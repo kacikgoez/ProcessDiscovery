@@ -26,7 +26,7 @@ class NumericalAttribute:
     type: str = field(init=False, default=AttributeType.NUMERICAL.value)
 
     def __post_init__(self):
-        {}  #assert self.min < self.max, 'The minimum must be smaller than the maximum.'
+        assert self.min < self.max, 'The minimum must be smaller than the maximum.'
 
 
 @dataclass
@@ -51,6 +51,35 @@ class DisaggregationAttribute:
                 return self.bins
         else:
             raise ValueError('The bins are only available for numerical attributes.')
+
+    def get_bin_labels(self, include_infinities: bool = False) -> list[str]:
+        """Returns the bin labels of the numerical attribute.
+
+        Args:
+            include_infinities (bool, optional): Whether to include the infinities in the bin labels. Defaults to False.
+
+        Returns:
+            list[str]: The bin labels.
+        """
+        if self.type == AttributeType.NUMERICAL:
+            if include_infinities:
+                return [f'< {self.bins[0]}'] + [f'{self.bins[i]} - {self.bins[i + 1]}' for i in range(len(self.bins) - 1)] + [f'> {self.bins[-1]}']
+            else:
+                return [f'{self.bins[i]} - {self.bins[i + 1]}' for i in range(len(self.bins) - 1)]
+        else:
+            raise ValueError('The bin labels are only available for numerical attributes.')
+
+
+@dataclass
+class Variant:
+    activities: list[str]
+    count: int
+    frequency: float
+    distribution: dict[str, int]
+    id: int = field(init=False)
+
+    def __post_init__(self):
+        self.id = hash(tuple(self.activities))
 
     def get_bin_labels(self, include_infinities: bool = False) -> list[str]:
         """Returns the bin labels of the numerical attribute.
@@ -107,4 +136,3 @@ class Filter:
     filter_values: list[str]
 
 
-    
