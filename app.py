@@ -8,11 +8,8 @@ from flask_marshmallow import Marshmallow
 from waitress import serve
 from termcolor import colored
 
-from backend.src.flask.schemas.kpi_schema import KpiSchema
-from backend.src.flask.schemas.variant_list_schema import GetVariantListSchema
+from backend.src.flask.schemas.api_endpoint_schemas import GetVariantListSchema, KpiSchema, DistributionSchema
 from backend.src.flask.services.process_mining_service import ProcessMiningService
-from backend.src.flask.schemas.filter_schema import FilterSchema
-from backend.src.flask.schemas.distribution_schema import DistributionSchema
 
 PROCESS_MINING_SERVICE = ProcessMiningService()
 app = Flask('ORCA')
@@ -51,9 +48,7 @@ def calculate():
     if errors:
         return jsonify({"status": "error", "errors": errors}), 422
 
-    data = schema.load(json_data)
-
-    variants = PROCESS_MINING_SERVICE.get_variants(data['disaggregation_attribute'])
+    variants = PROCESS_MINING_SERVICE.get_variants(request=schema.load(json_data))
 
     return jsonify(variants), 200
 
@@ -70,9 +65,7 @@ def distributions():
     if errors:
         return jsonify({"status": "error", "errors": errors}), 422
 
-    data = schema.load(json_data)
-
-    distribution = PROCESS_MINING_SERVICE.get_attribute_distribution(data['disaggregation_attribute'])
+    distribution = PROCESS_MINING_SERVICE.get_attribute_distribution(request=schema.load(json_data))
 
     return jsonify(distribution), 200
 
@@ -89,7 +82,7 @@ def kpi():
     if errors:
         return jsonify({"status": "error", "errors": errors}), 422
 
-    kpi_data = PROCESS_MINING_SERVICE.get_kpi_data(kpi_request=schema.load(json_data))
+    kpi_data = PROCESS_MINING_SERVICE.get_kpi_data(request=schema.load(json_data))
 
     return jsonify(kpi_data), 200
 

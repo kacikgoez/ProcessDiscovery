@@ -2,12 +2,11 @@ from typing import Any
 
 import pandas as pd
 
-from backend.src.dataclasses import CategoricalAttribute, NumericalAttribute, DisaggregationAttribute, Variant, \
-    KpiRequest, KpiType, Filter, AttributeType
-from backend.src.process_mining.disagreggation_attribute import create_bins
-from backend.src.process_mining.event_log import load_event_log, load_patient_attributes
+from backend.src.dataclasses.attributes import CategoricalAttribute, NumericalAttribute, DisaggregationAttribute
+from backend.src.dataclasses.dataclasses import Variant
+from backend.src.dataclasses.requests import KpiRequest, KpiType, VariantListRequest, DistributionRequest
+from backend.src.process_mining.event_log import load_event_log, load_patient_attributes, create_bins, filter_log
 from backend.src.process_mining import kpi
-from backend.src.process_mining import logfilter
 from backend.src.process_mining import distribution
 from backend.src.process_mining.variants import get_variants_with_frequencies
 from definitions import CLEAN_EVENT_LOG_PATH
@@ -19,41 +18,35 @@ class ProcessMiningService:
         self.patient_attributes: list[CategoricalAttribute | NumericalAttribute] = load_patient_attributes(
             self.event_log)
 
-    def get_variants(self, disaggregation_attribute: DisaggregationAttribute) -> list[Variant]:
-        disaggregation_attribute_column = 'disaggregation'
-        el = create_bins(self.event_log, disaggregation_attribute, disaggregation_attribute_column)
-
-        return get_variants_with_frequencies(el, disaggregation_attribute_column)
-
     def get_patient_attributes(self) -> list[CategoricalAttribute | NumericalAttribute]:
         return self.patient_attributes
 
-    def get_attribute_distribution(self, disaggregation_attribute: DisaggregationAttribute) -> dict[str, list[Any]]:
+    def get_variants(self, request: VariantListRequest) -> list[Variant]:
+        el = filter_log(self.event_log, request.filters)
+
         disaggregation_attribute_column = 'disaggregation'
-        el = create_bins(self.event_log, disaggregation_attribute, disaggregation_attribute_column)
+        el = create_bins(el, request.disaggregation_attribute, disaggregation_attribute_column)
+
+        return get_variants_with_frequencies(el, disaggregation_attribute_column)
+
+    def get_attribute_distribution(self, request: DistributionRequest) -> dict[str, list[Any]]:
+        el = filter_log(self.event_log, request.filters)
+
+        disaggregation_attribute_column = 'disaggregation'
+        el = create_bins(el, request.disaggregation_attribute, disaggregation_attribute_column)
 
         return distribution.attribute_distribution(el, disaggregation_attribute_column)
 
-    def modify_service(self, new_log):
-        self.event_log = new_log
-        self.patient_attributes = load_patient_attributes(new_log)
+    def get_kpi_data(self, request: KpiRequest) -> dict[str, list[Any]]:
+        el = filter_log(self.event_log, request.filters)
 
-    def get_filtered_log(self, filter_request: Filter) -> pd.DataFrame:
-        filter_attribute_column = filter_request.filter_attribute.name + 'copy'
-        el = create_bins(self.event_log, filter_request.filter_attribute, filter_attribute_column)
-        filtered_log = logfilter.filter_attribute(el, filter_request.filter_attribute.name, filter_request.filter_values)
-        self.modify_service(filtered_log)
-
-        return self.event_log
-
-    def get_kpi_data(self, kpi_request: KpiRequest) -> dict[str, list[Any]]:
         disaggregation_attribute_column = 'disaggregation'
-        el = create_bins(self.event_log, kpi_request.disaggregation_attribute, disaggregation_attribute_column)
+        el = create_bins(el, request.disaggregation_attribute, disaggregation_attribute_column)
 
         legend_column = 'legend'
-        el = create_bins(el, kpi_request.legend_attribute, legend_column)
+        el = create_bins(el, request.legend_attribute, legend_column)
 
-        match kpi_request.kpi:
+        match request.kpi:
             case KpiType.HAPPY_PATH_ADHERENCE:
                 return kpi.get_happy_path_adherence(el, disaggregation_attribute_column, legend_column)
             case KpiType.DROP_OUT:
@@ -70,4 +63,3 @@ class ProcessMiningService:
                 return kpi.get_authorization_to_procurement(el, disaggregation_attribute_column, legend_column)
             case _:
                 raise ValueError('The given KPI is not supported.')
-
