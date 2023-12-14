@@ -21,7 +21,7 @@
         <div class="inline-flex">
           <MultiSelect v-model="gender" :options="genders" option-label="name" placeholder="Gender"
             :max-selected-labels="3" class="w-[200px]" />
-          <div class="block ml-5">
+          <div class="block m<l-5">
             <span>Ages: {{ ageRange }}</span>
             <Slider v-model="ageRange" range class="w-[200px]" />
           </div>
@@ -83,6 +83,7 @@ layout.value = [
   { title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, endpoint: 'google.com', x: 0, y: 0, w: 4, h: 10, i: 24 },
   { title: 'Add New KPI', type: Charts.NewChart, endpoint: 'google.com', x: 8, y: 0, w: 4, h: 10, i: 3 },
 ];
+
 
 </script>
 <style>

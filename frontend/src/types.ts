@@ -28,10 +28,10 @@ export enum KPIActions {
     ChangeComponent
 }
 
-export interface KPIChange {
+export type KPIChange = {
     action: KPIActions.ChangeComponent,
     component: Charts
-}
+};
 
 export type KPITile = {
     title: string,
