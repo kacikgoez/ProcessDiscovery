@@ -1,5 +1,4 @@
 .dockerignore
-Dockerfile
 
 # Ignore git related files
 .git/
