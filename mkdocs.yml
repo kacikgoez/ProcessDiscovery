@@ -92,7 +92,6 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [./backend]
           options:
             # disable by default, as it can not do attributes anyways
             inherited_members: false

@@ -1,7 +1,7 @@
 import pandas as pd
 
 from backend.src.dataclasses.attributes import AttributeType, CategoricalAttribute, NumericalAttribute, \
-    DisaggregationAttribute
+    DisaggregationAttribute, PatientAttribute
 from backend.src.dataclasses.filters import FilterOperator, BaseFilter
 from definitions import PATIENT_ATTRIBUTES
 
