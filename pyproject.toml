@@ -23,6 +23,9 @@ optional = true
 pytest = "^7.4.3"
 pytest-cov = "^4.1.0"
 
+[tool.pytest.ini_options]
+addopts = "--cov=backend/src --cov-report xml"
+
 [tool.poetry.group.docs]
 optional = true
 
