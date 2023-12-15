@@ -34,7 +34,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+          key: venv-docs-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
       #----------------------------------------------
       # install dependencies if cache does not exist
       #----------------------------------------------
@@ -44,9 +44,7 @@ jobs:
       #----------------------------------------------
       #       run mkdocs build to check docs
       #----------------------------------------------
-      - name: Activate venv
+      - name: Activate venv and run mkdocs build
         run: |
           source .venv/bin/activate
-      - name: Check docs
-        run: |
           mkdocs build
