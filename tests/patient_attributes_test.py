@@ -1,6 +1,6 @@
 import pytest
 
-from backend.src.dataclasses import CategoricalAttribute, NumericalAttribute
+from backend.src.dataclasses.attributes import CategoricalAttribute, NumericalAttribute
 from definitions import PATIENT_ATTRIBUTES
 
 

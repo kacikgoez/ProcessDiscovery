@@ -8,7 +8,7 @@ from flask_marshmallow import Marshmallow
 from waitress import serve
 from termcolor import colored
 
-from backend.src.flask.schemas.variant_list_schema import GetVariantListSchema
+from backend.src.flask.schemas.api_endpoint_schemas import GetVariantListSchema, KpiSchema, DistributionSchema
 from backend.src.flask.services.process_mining_service import ProcessMiningService
 
 PROCESS_MINING_SERVICE = ProcessMiningService()
@@ -48,11 +48,43 @@ def calculate():
     if errors:
         return jsonify({"status": "error", "errors": errors}), 422
 
-    data = schema.load(json_data)
-
-    variants = PROCESS_MINING_SERVICE.get_variants(data['disaggregation_attribute'])
+    variants = PROCESS_MINING_SERVICE.get_variants(request=schema.load(json_data))
 
     return jsonify(variants), 200
+
+
+@app.route('/distributions', methods=['POST'])
+def distributions():
+    json_data = request.get_json(force=True)
+    if not json_data:
+        return jsonify({'message': 'No input data provided'}), 400
+
+    # Validate and deserialize input
+    schema = DistributionSchema()
+    errors = schema.validate(json_data)
+    if errors:
+        return jsonify({"status": "error", "errors": errors}), 422
+
+    distribution = PROCESS_MINING_SERVICE.get_attribute_distribution(request=schema.load(json_data))
+
+    return jsonify(distribution), 200
+
+
+@app.route('/kpi', methods=['POST'])
+def kpi():
+    json_data = request.get_json(force=True)
+    if not json_data:
+        return jsonify({'message': 'No input data provided'}), 400
+
+    # Validate and deserialize input
+    schema = KpiSchema()
+    errors = schema.validate(json_data)
+    if errors:
+        return jsonify({"status": "error", "errors": errors}), 422
+
+    kpi_data = PROCESS_MINING_SERVICE.get_kpi_data(request=schema.load(json_data))
+
+    return jsonify(kpi_data), 200
 
 
 @app.route('/patient-attributes')

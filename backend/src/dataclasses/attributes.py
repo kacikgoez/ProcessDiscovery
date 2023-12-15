@@ -128,25 +128,3 @@ class DisaggregationAttribute:
                 return [f'{self.bins[i]} - {self.bins[i + 1]}' for i in range(len(self.bins) - 1)]
         else:
             raise ValueError('The bin labels are only available for numerical attributes.')
-
-
-@dataclass
-class Variant:
-    """
-    The data class for a variant of an event log.
-
-    Attributes:
-        activities (list[str]): The activities of the variant.
-        count (int): The number of cases of the variant.
-        frequency (float): The frequency of the variant.
-        distribution (dict[str, int]): The distribution of the variant.
-        id (int): The id of the variant.
-    """
-    activities: list[str]
-    count: int
-    frequency: float
-    distribution: dict[str, int]
-    id: int = field(init=False)
-
-    def __post_init__(self):
-        self.id = hash(tuple(self.activities))
