@@ -101,9 +101,9 @@ def filter_log(el: pd.DataFrame, filters: list[BaseFilter]) -> pd.DataFrame:
             case FilterOperator.NOT_EQUALS:
                 el = el[el[filter.attribute_name] != filter.filter_value]
             case FilterOperator.CONTAINS:
-                el = el[el[filter.attribute_name].str.contains(filter.filter_value)]
+                el = el[el[filter.attribute_name].isin(filter.filter_value)]
             case FilterOperator.NOT_CONTAINS:
-                el = el[~el[filter.attribute_name].str.contains(filter.filter_value)]
+                el = el[~el[filter.attribute_name].isin(filter.filter_value)]
             case FilterOperator.LESS_THAN:
                 el = el[el[filter.attribute_name] < filter.filter_value]
             case FilterOperator.LESS_THAN_OR_EQUALS:

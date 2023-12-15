@@ -20,8 +20,8 @@ class CategoryFilterSchema(Schema):
             if len(data['values']) != 1:
                 raise ValidationError('The operator requires a single value.')
         elif data['operator'] in [FilterOperator.CONTAINS, FilterOperator.NOT_CONTAINS]:
-            if len(data['values']) != 1:
-                raise ValidationError('The operator requires a single value.')
+            if len(data['values']) == 0:
+                raise ValidationError('The operator requires at least one value.')
         else:
             raise ValidationError('The operator is not supported for categorical attributes.')
 
