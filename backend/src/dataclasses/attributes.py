@@ -22,7 +22,7 @@ class CategoricalAttribute:
     Attributes:
         name (str): The name of the attribute.
         values (list[str]): The values of the attribute.
-        type (str): The type of the attribute. Defaults to [AttributeType.CATEGORICAL][src.dataclasses.AttributeType.CATEGORICAL].
+        type (str): The type of the attribute. Defaults to [AttributeType.CATEGORICAL][backend.src.dataclasses.attributes.AttributeType.CATEGORICAL].
     """
     name: str
     values: list[str]
@@ -41,7 +41,7 @@ class NumericalAttribute:
         name (str): The name of the attribute.
         min (float): The minimum value of the attribute.
         max (float): The maximum value of the attribute.
-        type (str): The type of the attribute. Defaults to [AttributeType.NUMERICAL][src.dataclasses.AttributeType.NUMERICAL].
+        type (str): The type of the attribute. Defaults to [AttributeType.NUMERICAL][backend.src.dataclasses.attributes.AttributeType.NUMERICAL].
     """
     name: str
     min: float
@@ -54,14 +54,18 @@ class NumericalAttribute:
 
 PatientAttribute: UnionType = CategoricalAttribute | NumericalAttribute
 """
-A patient attribute. Can be either a [CategoricalAttribute][src.dataclasses.CategoricalAttribute] or a [NumericalAttribute][src.dataclasses.NumericalAttribute].
+A patient attribute. Can be either a 
+[CategoricalAttribute][backend.src.dataclasses.attributes.CategoricalAttribute] or a 
+[NumericalAttribute][backend.src.dataclasses.attributes.NumericalAttribute].
 """
 
 
 @dataclass
 class DisaggregationAttribute:
     """
-    A disaggregation attribute.
+    A disaggregation attribute. This will be used to disaggregate the data into different groups.
+    For numerical attributes,the bins will be used to create the groups.
+    For categorical attributes, the values will be used to create the groups.
 
     Attributes:
         name (str): The name of the attribute.
@@ -90,7 +94,7 @@ class DisaggregationAttribute:
             include_infinities (bool, optional): Whether to include the infinities in the bins. Defaults to False.
 
         Returns:
-            list[float]: The bins.
+            (list[float]): The bins.
         """
         if self.type == AttributeType.NUMERICAL:
             if include_infinities:
@@ -118,7 +122,7 @@ class DisaggregationAttribute:
             include_infinities (bool, optional): Whether to include the infinities in the bin labels. Defaults to False.
 
         Returns:
-            list[str]: The bin labels.
+            (list[str]): The bin labels.
         """
         if self.type == AttributeType.NUMERICAL:
             if include_infinities:

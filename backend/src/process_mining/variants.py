@@ -8,8 +8,7 @@ from backend.src.dataclasses.dataclasses import Variant
 
 def get_variants_with_case_ids(el: pd.DataFrame) -> dict[Collection[str], list[str]]:
     """
-    Returns a dictionary of variants and the case ids that belong to them.
-    The variants are tuples of activity names.
+    Returns a dictionary of variants (tuples of activity names) and the case ids that belong to them.
 
     Attributes:
         el (pd.DataFrame): The event log.
@@ -33,13 +32,14 @@ def get_variants_with_case_ids(el: pd.DataFrame) -> dict[Collection[str], list[s
 def get_variants_with_frequencies(el: pd.DataFrame, disaggregation_column: str) -> list[Variant]:
     """
     Returns a list of variants with their frequencies and distributions of the given disaggregation attribute.
+    The variants are sorted by their frequency in descending order.
 
     Attributes:
         el (pd.DataFrame): The event log.
-        disaggregation_attribute (src.dataclasses.DisaggregationAttribute): The attribute to disaggregate the variants by.
+        disaggregation_column (str): The name of the column to disaggregate the variants.
 
     Returns:
-        list[[Variant][src.dataclasses.Variant]]: A list of variants with their frequencies and distributions of the given disaggregation attribute.
+        A list of variants with their frequencies and distributions of the given disaggregation attribute.
     """
     variants = get_variants_with_case_ids(el)
     total_case_count = el['case:concept:name'].nunique()

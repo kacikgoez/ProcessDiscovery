@@ -89,12 +89,12 @@ plugins:
   - include-markdown
   - search:
       lang: en
+  - autorefs
   - mkdocstrings:
       handlers:
         python:
           options:
             # disable by default, as it can not do attributes anyways
-            inherited_members: false
             merge_init_into_class: true
 
 watch:
