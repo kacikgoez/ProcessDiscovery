@@ -4,3 +4,5 @@
 .idea/
 **/.DS_Store
 **/*.pyc
+launch.json
+settings.json
