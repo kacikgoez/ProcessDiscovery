@@ -6,3 +6,6 @@
 **/*.pyc
 launch.json
 settings.json
+
+.coverage
+cov.xml
