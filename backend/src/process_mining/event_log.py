@@ -96,6 +96,10 @@ def filter_log(el: pd.DataFrame, filters: list[BaseFilter]) -> pd.DataFrame:
     """
     for filter in filters:
         match filter.operator:
+            case FilterOperator.IS_EMPTY:
+                el = el[el[filter.attribute_name].isna()]
+            case FilterOperator.IS_NOT_EMPTY:
+                el = el[el[filter.attribute_name].notna()]
             case FilterOperator.EQUALS:
                 el = el[el[filter.attribute_name] == filter.filter_value]
             case FilterOperator.NOT_EQUALS:

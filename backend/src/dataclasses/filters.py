@@ -8,6 +8,10 @@ class FilterOperator(enum.Enum):
     """
     An enumeration of the supported filter operators.
     """
+    IS_EMPTY = 'is_empty'
+    """The is empty operator."""
+    IS_NOT_EMPTY = 'is_not_empty'
+    """The is not empty operator."""
     EQUALS = 'equals'
     """The equals operator."""
     NOT_EQUALS = 'not_equals'
@@ -26,16 +30,16 @@ class FilterOperator(enum.Enum):
     """The greater than or equals operator."""
 
     @property
-    def accepts_multiple_values(self) -> bool:
+    def accepts_no_value(self) -> bool:
         """
-        Returns whether the operator accepts multiple values.
+        Returns whether the operator accepts no value.
 
         Returns:
-            (bool): Whether the operator accepts multiple values.
+            (bool): Whether the operator accepts no value.
         """
         return self in [
-            FilterOperator.CONTAINS,
-            FilterOperator.NOT_CONTAINS]
+            FilterOperator.IS_EMPTY,
+            FilterOperator.IS_NOT_EMPTY]
 
     @property
     def accepts_single_value(self):
@@ -53,6 +57,18 @@ class FilterOperator(enum.Enum):
             FilterOperator.GREATER_THAN,
             FilterOperator.GREATER_THAN_OR_EQUALS]
 
+    @property
+    def accepts_multiple_values(self) -> bool:
+        """
+        Returns whether the operator accepts multiple values.
+
+        Returns:
+            (bool): Whether the operator accepts multiple values.
+        """
+        return self in [
+            FilterOperator.CONTAINS,
+            FilterOperator.NOT_CONTAINS]
+
 
 @dataclass
 class BaseFilter(ABC):
@@ -66,25 +82,28 @@ class BaseFilter(ABC):
     attribute_name: str
     operator: FilterOperator
 
+    def __post_init__(self):
+        assert self.operator in self.supported_operators(), 'The operator is not supported for this type of attribute.'
+
     @property
     @abstractmethod
-    def filter_value(self) -> list[str] | str | float:
+    def filter_value(self) -> list[str] | str | float | None:
         """
         Returns the value to filter for.
 
         Returns:
-            (list[str] | str | float): The value to filter for.
+            (list[str] | str | float | None): The value to filter for.
         """
         pass
 
     @classmethod
     @abstractmethod
-    def supported_operators(cls) -> list[FilterOperator]:
+    def supported_operators(cls) -> tuple[FilterOperator, ...]:
         """
         Returns the supported operators for the filter.
 
         Returns:
-            (list[FilterOperator]): The supported operators for the filter.
+            (tuple[FilterOperator, ...]): The supported operators for the filter.
         """
         pass
 
@@ -95,42 +114,46 @@ class CategoricalFilter(BaseFilter):
     A categorical filter. The filter can be used to filter for categorical attributes.
     Currently, the filter supports the following operators:
 
+    - [IS_EMPTY][backend.src.dataclasses.filters.FilterOperator.IS_EMPTY]
+    - [NOT_EMPTY][backend.src.dataclasses.filters.FilterOperator.IS_NOT_EMPTY]
     - [EQUALS][backend.src.dataclasses.filters.FilterOperator.EQUALS]
     - [NOT_EQUALS][backend.src.dataclasses.filters.FilterOperator.NOT_EQUALS]
     - [CONTAINS][backend.src.dataclasses.filters.FilterOperator.CONTAINS]
     - [NOT_CONTAINS][backend.src.dataclasses.filters.FilterOperator.NOT_CONTAINS]
 
     Attributes:
-        values (list[str]): The values to filter for.
+        values (list[str] | None): The values to filter for.
     """
-    values: list[str]
-
-    def __post_init__(self):
-        assert self.operator in self.supported_operators(), 'The operator is not supported for categorical attributes.'
+    values: list[str] | None
 
     @classmethod
-    def supported_operators(cls) -> list[FilterOperator]:
+    def supported_operators(cls) -> tuple[FilterOperator, ...]:
         """
         Returns the supported operators for the filter.
 
         Returns:
-            (list[FilterOperator]): The supported operators for the filter.
+            (tuple[FilterOperator, ...]): The supported operators for the filter.
         """
-        return [
+        return (
+            FilterOperator.IS_EMPTY,
+            FilterOperator.IS_NOT_EMPTY,
             FilterOperator.EQUALS,
             FilterOperator.NOT_EQUALS,
             FilterOperator.CONTAINS,
-            FilterOperator.NOT_CONTAINS]
+            FilterOperator.NOT_CONTAINS)
 
     @property
-    def filter_value(self) -> list[str] | str:
+    def filter_value(self) -> list[str] | str | None:
         """
-        Returns the value to filter for. If the operator accepts multiple values, the values are returned as a list,
+        Returns the value to filter for. If the operator does not accept a value, None is returned.
+        If the operator accepts multiple values, the values are returned as a list,
         otherwise the first value is returned.
 
         Returns:
-            (list[str] | str): The value to filter for.
+            (list[str] | str | None): The value to filter for.
         """
+        if self.operator.accepts_no_value:
+            return None
         if self.operator.accepts_single_value:
             return self.values[0]
         else:
@@ -146,6 +169,8 @@ class NumericalFilter(BaseFilter):
     A numerical filter. The filter can be used to filter for numerical attributes.
     Currently, the filter supports the following operators:
 
+    - [IS_EMPTY][backend.src.dataclasses.filters.FilterOperator.IS_EMPTY]
+    - [NOT_EMPTY][backend.src.dataclasses.filters.FilterOperator.IS_NOT_EMPTY]
     - [EQUALS][backend.src.dataclasses.filters.FilterOperator.EQUALS]
     - [NOT_EQUALS][backend.src.dataclasses.filters.FilterOperator.NOT_EQUALS]
     - [LESS_THAN][backend.src.dataclasses.filters.FilterOperator.LESS_THAN]
@@ -154,36 +179,35 @@ class NumericalFilter(BaseFilter):
     - [GREATER_THAN_OR_EQUALS][backend.src.dataclasses.filters.FilterOperator.GREATER_THAN_OR_EQUALS]
 
     Attributes:
-        value (float): The value to filter for.
+        value (float | None): The value to filter for.
     """
-    value: float
-
-    def __post_init__(self):
-        assert self.operator in self.supported_operators(), 'The operator is not supported for numerical attributes.'
+    value: float | None
 
     @classmethod
-    def supported_operators(cls) -> list[FilterOperator]:
+    def supported_operators(cls) -> tuple[FilterOperator, ...]:
         """
         Returns the supported operators for the filter.
 
         Returns:
-            (list[FilterOperator]): The supported operators for the filter.
+            (tuple[FilterOperator, ...]): The supported operators for the filter.
         """
-        return [
+        return (
+            FilterOperator.IS_EMPTY,
+            FilterOperator.IS_NOT_EMPTY,
             FilterOperator.EQUALS,
             FilterOperator.NOT_EQUALS,
             FilterOperator.LESS_THAN,
             FilterOperator.LESS_THAN_OR_EQUALS,
             FilterOperator.GREATER_THAN,
-            FilterOperator.GREATER_THAN_OR_EQUALS]
+            FilterOperator.GREATER_THAN_OR_EQUALS)
 
     @property
-    def filter_value(self) -> float:
+    def filter_value(self) -> float | None:
         """
         Returns the value to filter for.
 
         Returns:
-            (float): The value to filter for.
+            (float | None): The value to filter for.
         """
         return self.value
 
