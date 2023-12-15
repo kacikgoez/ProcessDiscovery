@@ -1,0 +1,15 @@
+name: check docs validity
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - run: pip install .[doc]
+      - run: mkdocs build
