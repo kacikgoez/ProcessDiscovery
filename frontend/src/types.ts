@@ -30,6 +30,7 @@ export type KPITile = {
     endpoint: String,
 } & LayoutItem;
 
+
 /* ------------- Modal ---------------- */
 
 export interface ModalEvent {
@@ -58,13 +59,39 @@ export type Distribution = {
     }[]
 }
 
-export type TimeSeries = {
-    data: {
-        name: string,
-        value: number
-    }[]
+export type Graph = {
+    name: string,
+    edges: Edge[],
+    nodes: Node[]
 }
 
+export type Edge = {
+    source: string,
+    target: string,
+    label: string,
+    value: number
+}
+
+export type Node = {
+    id: string,
+    label: string,
+    value: number
+}
+
+export type DataSeries = {
+    name: string,
+    data: ({
+        x: string,
+        y: number
+    }[]) | ({
+        x: number,
+        y: number
+    }[])
+}
+
+export type MultiDataSeries = {
+    data: DataSeries[]
+}
 /* ------------- Patient Data Types ---------------- */
 
 // Activity names in the order they appear in the data

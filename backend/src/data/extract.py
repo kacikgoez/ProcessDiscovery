@@ -71,7 +71,7 @@ def extract(raw: pd.DataFrame) -> pd.DataFrame:
     # Iterate over all rows that correspond to a patient and add all events that happened to the patient to the event list
     for i, row in raw.iterrows():
         # Collect patient data by mapping the original column names to the new column names
-        patient_data = {v: row[k] for k, v in PATIENT_DATA_MAPPING.items() if v in PATIENT_ATTRIBUTES.keys()}
+        patient_data = {v: row[k] for k, v in PATIENT_DATA_MAPPING.items()}
 
         # Add the referral and evaluation events for each patient as all patients were referred and evaluated
         events_list.append({'concept:name': 'Referral', 'time:timestamp': row['time_referred']} | patient_data)
@@ -100,7 +100,7 @@ def extract(raw: pd.DataFrame) -> pd.DataFrame:
                                 'time:timestamp': row['time_procured'] + Timedelta(minutes=1)} | patient_data)
 
     # Transform the event list to a dataframe
-    columns = ['concept:name', 'time:timestamp'] + list(PATIENT_DATA_MAPPING.values())
+    columns = ['case:concept:name', 'concept:name', 'time:timestamp'] + list(PATIENT_ATTRIBUTES.keys())
     event_log = pd.DataFrame(events_list, columns=columns)
 
     # Get cases where a timestamp is missing
