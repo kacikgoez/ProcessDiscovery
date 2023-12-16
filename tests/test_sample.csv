@@ -1,0 +1,9 @@
+concept:name,time:timestamp,case:concept:name,opo_id,hospital_id,age,gender,race,brain_death,referral_year,referral_day_of_week,cause_of_death,mechanism_of_death,circumstances_of_death,outcome_heart,outcome_liver,outcome_kidney_left,outcome_kidney_right,outcome_lung_left,outcome_lung_right,outcome_pancreas
+Referral,2033-06-21 22:45:30.263,OPO2_P1000,OPO2,OPO2_H26589,15.0,M,Hispanic,False,2018,Wednesday,Head Trauma,Blunt Injury,"Accident, Non-MVA",,,,,,,
+Evaluation,2033-06-21 22:46:30.263,OPO2_P1000,OPO2,OPO2_H26589,15.0,M,Hispanic,False,2018,Wednesday,Head Trauma,Blunt Injury,"Accident, Non-MVA",,,,,,,
+Referral,2035-01-17 20:39:22.727,OPO1_P102650,OPO1,OPO1_H23111,39.0,F,White / Caucasian,True,2019,Thursday,Head Trauma,Blunt Injury,MVA,Transplanted,Transplanted,Transplanted,Transplanted,,,
+Evaluation,2035-01-17 20:40:22.727,OPO1_P102650,OPO1,OPO1_H23111,39.0,F,White / Caucasian,True,2019,Thursday,Head Trauma,Blunt Injury,MVA,Transplanted,Transplanted,Transplanted,Transplanted,,,
+Approach,2035-01-17 20:41:22.727,OPO1_P102650,OPO1,OPO1_H23111,39.0,F,White / Caucasian,True,2019,Thursday,Head Trauma,Blunt Injury,MVA,Transplanted,Transplanted,Transplanted,Transplanted,,,
+Authorization,2035-01-17 20:42:22.727,OPO1_P102650,OPO1,OPO1_H23111,39.0,F,White / Caucasian,True,2019,Thursday,Head Trauma,Blunt Injury,MVA,Transplanted,Transplanted,Transplanted,Transplanted,,,
+Procurement,2035-01-17 20:43:22.727,OPO1_P102650,OPO1,OPO1_H23111,39.0,F,White / Caucasian,True,2019,Thursday,Head Trauma,Blunt Injury,MVA,Transplanted,Transplanted,Transplanted,Transplanted,,,
+Transplant,2035-01-17 20:44:22.727,OPO1_P102650,OPO1,OPO1_H23111,39.0,F,White / Caucasian,True,2019,Thursday,Head Trauma,Blunt Injury,MVA,Transplanted,Transplanted,Transplanted,Transplanted,,,
