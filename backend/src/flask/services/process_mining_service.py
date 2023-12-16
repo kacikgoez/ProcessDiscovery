@@ -3,6 +3,7 @@ from typing import Any
 import pandas as pd
 
 from backend.src.dataclasses.attributes import CategoricalAttribute, NumericalAttribute, DisaggregationAttribute
+from backend.src.dataclasses.charts import DistributionDataItem
 from backend.src.dataclasses.dataclasses import Variant
 from backend.src.dataclasses.requests import KpiRequest, KpiType, VariantListRequest, DistributionRequest
 from backend.src.process_mining.event_log import load_event_log, load_patient_attributes, create_bins, filter_log
@@ -29,7 +30,7 @@ class ProcessMiningService:
 
         return get_variants_with_frequencies(el, disaggregation_attribute_column)
 
-    def get_attribute_distribution(self, request: DistributionRequest) -> dict[str, list[Any]]:
+    def get_attribute_distribution(self, request: DistributionRequest) -> list[DistributionDataItem]:
         el = filter_log(self.event_log, request.filters)
 
         disaggregation_attribute_column = 'disaggregation'
