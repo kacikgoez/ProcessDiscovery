@@ -46,6 +46,11 @@ const props = defineProps({
     id: { type: String, required: true }
 })
 
+const globalLayout = layoutStore();
+const { layout } = storeToRefs(globalLayout)
+
+const title = layout.value.find((kpi) => kpi.i === props.id)?.title
+
 const emit = defineEmits(['update:visible'])
 
 const globalLayout = layoutStore();
