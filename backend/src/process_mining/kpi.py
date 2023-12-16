@@ -32,16 +32,11 @@ def get_happy_path_adherence(el: pd.DataFrame, disaggregation_column: str, legen
         .unstack().fillna(0)
 
     # filter only happy path
-    variant = filter_variants(el,
-                              [DE_JURE_VARIANT],
-                              retain=True,
-                              activity_key='concept:name',
-                              case_id_key='case:concept:name',
-                              timestamp_key='time:timestamp')
+    variant = filter_variants(el, [DE_JURE_VARIANT], retain=True)
 
     # get number of happy path in legend_column value considering disaggregation_attribute
     legend_happy_proportion = variant.groupby([disaggregation_column, legend_column]) \
-                                .apply(lambda x: x['case:concept:name'].nunique()).unstack() / legend_case
+                                  .apply(lambda x: x['case:concept:name'].nunique()).unstack() / legend_case
     legend_happy_proportion_nan = legend_happy_proportion.fillna(0)
 
     axis = legend_happy_proportion.keys().tolist()
@@ -89,7 +84,8 @@ def get_dropout(el: pd.DataFrame, disaggregation_column: str) -> Dict[str, List[
 
 
 def get_permuted_path(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |
-                                                                                                Dict[str, List[Any]]]:
+                                                                                                     Dict[str, List[
+                                                                                                         Any]]]:
     """
     Calculate permuted path information based on specified disaggregation attributes in the event log.
 
@@ -109,10 +105,7 @@ def get_permuted_path(el: pd.DataFrame, disaggregation_column: str, legend_colum
     # filter out happy path
     variant = filter_variants(el,
                               [DE_JURE_VARIANT],
-                              retain=False,
-                              activity_key='concept:name',
-                              case_id_key='case:concept:name',
-                              timestamp_key='time:timestamp')
+                              retain=False)
 
     # get number of happy path in each year considering disaggregation_attribute
     permuted_path = variant.groupby([disaggregation_column, legend_column]).apply(
@@ -176,7 +169,9 @@ def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | in
 
 
 def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |
-                                                                                                Dict[str, List[Any]]]:
+                                                                                                             Dict[str,
+                                                                                                             List[
+                                                                                                                 Any]]]:
     """
     Calculate bureaucratic duration based on specified disaggregation attributes in the event log.
 
@@ -193,16 +188,14 @@ def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_column: str, lege
     """
 
     # filter on only happy path
-    variant = filter_between(el, 'Referral', 'Procurement',
-                              activity_key='concept:name',
-                              case_id_key='case:concept:name',
-                              timestamp_key='time:timestamp')
+    variant = filter_between(el, 'Referral', 'Procurement')
     # case duration of happy path in each legend value considering disaggregation_attribute
-    subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(lambda x: get_all_case_durations(x))
+    subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(
+        lambda x: get_all_case_durations(x))
     reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_column)
 
     # conmbine the legend value and duration in minuten as a vector
-    result = reshape.apply(lambda x: [x[legend_column], round(x[0]/60)], axis=1)
+    result = reshape.apply(lambda x: [x[legend_column], round(x[0] / 60)], axis=1)
     result = result.groupby(disaggregation_column).apply(list).to_dict()
 
     legend = list(result.keys())
@@ -210,8 +203,9 @@ def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_column: str, lege
     return {'legend': legend, 'value': result}
 
 
-def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |
-                                                                                        Dict[str, List[Any]]]:
+def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[
+    str, List[Any] |
+         Dict[str, List[Any]]]:
     """
         Calculate evaluation-to-approach duration information based on specified disaggregation attributes in the
         event log.
@@ -233,10 +227,7 @@ def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_column: str, leg
     el = el.dropna(subset=['time:timestamp'])
 
     # filter on only happy path
-    variant = filter_between(el, 'Evaluation', 'Approach',
-                              activity_key='concept:name',
-                              case_id_key='case:concept:name',
-                              timestamp_key='time:timestamp')
+    variant = filter_between(el, 'Evaluation', 'Approach')
     # case duration of happy path in legend value considering disaggregation_attribute
     subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(
         lambda x: get_all_case_durations(x))
@@ -252,7 +243,7 @@ def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_column: str, leg
 
 
 def get_authorization_to_procurement(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str,
-                                                                                   List[Any] | Dict[str, List[Any]]]:
+List[Any] | Dict[str, List[Any]]]:
     """
         Calculate authorization-to-procurement duration information based on specified disaggregation attributes in
         the event log.
@@ -271,10 +262,7 @@ def get_authorization_to_procurement(el: pd.DataFrame, disaggregation_column: st
         """
 
     # filter on only happy path
-    variant = filter_between(el, 'Authorization', 'Procurement',
-                             activity_key='concept:name',
-                             case_id_key='case:concept:name',
-                             timestamp_key='time:timestamp')
+    variant = filter_between(el, 'Authorization', 'Procurement')
     # case duration of happy path in each legend value considering disaggregation_attribute
     subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(
         lambda x: get_all_case_durations(x))
