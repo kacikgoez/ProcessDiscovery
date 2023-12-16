@@ -5,6 +5,7 @@ from pm4py.statistics.end_activities.log.get import get_end_activities
 from pm4py.stats import get_all_case_durations
 from pm4py import discover_dfg
 
+from backend.src.dataclasses.charts import Edge, Node, Graph
 
 DE_JURE_VARIANT = ('Referral', 'Evaluation', 'Approach', 'Authorization', 'Procurement', 'Transplant')
 
@@ -125,7 +126,7 @@ def get_permuted_path(el: pd.DataFrame, disaggregation_column: str, legend_colum
     return {'legend': legend, 'axis': axis, 'value': value}
 
 
-def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | int]]]:
+def get_permuted_path_dfg(el: pd.DataFrame) -> Graph:
     """
     Generate a Process Mining DFG based on the given event log.
 
@@ -133,39 +134,22 @@ def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | in
         el (pd.DataFrame): The event log.
 
     Returns:
-        Dict[str, List[Dict[str, str | int]]]: A dictionary containing:
-            - 'nodes': A list of dictionaries representing nodes with activities.
-            - 'links': A list of dictionaries representing directly-following relationships.
+        (Graph): The DFG of the event log with absolute frequencies as edge values.
     """
 
     # find the directly-following graph
-    dfg, start_activities, end_activities = discover_dfg(el, case_id_key='case:concept:name',
-                                                        activity_key='concept:name', timestamp_key='time:timestamp')
+    dfg, start_activities, end_activities = discover_dfg(el)
 
-    act = set()
-    links = []
+    # transform into graph data structure
+    edges = [Edge(source=source, target=target, label=None, value=freq) for (source, target), freq in dfg.items()]
+    node_ids = set([edge.source for edge in edges] + [edge.target for edge in edges])
+    nodes = [Node(id=activity, label=activity, value=None) for activity in node_ids]
 
-    for pair, freq in dfg.items():
-        # find directly-following relations
-        links.append(
-            {
-                'source': pair[0],
-                'target': pair[1],
-                'absolute_frequency': freq
-            }
-        )
-        # find activities in the log
-        act.update([pair[0], pair[1]])
-
-    nodes = []
-    for value in act:
-        nodes.append(
-            {
-                'name': value
-            }
-        )
-
-    return {'nodes': nodes, 'links': links}
+    return Graph(
+        name='DFG',
+        edges=edges,
+        nodes=nodes,
+    )
 
 
 def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |

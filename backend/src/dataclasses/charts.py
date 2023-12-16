@@ -22,13 +22,13 @@ class Edge:
     Attributes:
         source (str): The source node.
         target (str): The target node.
-        label (str): The label of the edge.
-        value (float): The value of the edge.
+        label (str | None): The label of the edge.
+        value (float | None): The value of the edge.
     """
     source: str
     target: str
-    label: str
-    value: float
+    label: str | None
+    value: float | None
 
 
 @dataclass
@@ -39,11 +39,11 @@ class Node:
     Attributes:
         id (str): The id of the node.
         label (str): The label of the node.
-        value (float): The value of the node.
+        value (float | None): The value of the node.
     """
     id: str
     label: str
-    value: float
+    value: float | None
 
 
 @dataclass
