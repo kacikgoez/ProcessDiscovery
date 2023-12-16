@@ -2,7 +2,7 @@
   <div class="tile">
     <div class="tile-navbar">
       <div class="flex-[20] flex-shrink-0 ml-6" @mouseover="draggable(true)" @mouseleave="draggable(false)">
-        <h1>{{ props.title }}</h1>
+        <h1>{{ title }}</h1>
       </div>
       <div class="flex-1 mr-2">
         <span class="tile-btn material-symbols-outlined text-base cursor-pointer">
@@ -22,22 +22,20 @@
     </div>
     <div ref="tileContent" class="tile-content">
       <div class="overflow-y-auto overflow-x-hidden h-full">
-        <div>
-          <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width" :height="height"
-            @change="change"></component>
-        </div>
+        <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width" :height="height"
+          :request="requestRef" @change="change"></component>
       </div>
     </div>
     <div class="tile-footer">
     </div>
-    <EditModal v-model:visible="visible" :title="props.title">
+    <EditModal :id="props.i" v-model:visible="visible">
 
     </EditModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Charts, KPIActions, KPIChange } from '@/types';
+import { Charts, KPIActions, KPIChange, ServerRequest } from '@/types';
 import { useElementSize } from '@vueuse/core';
 import { useConfirm } from 'primevue/useconfirm';
 import {
@@ -45,16 +43,19 @@ import {
   defineAsyncComponent,
   defineEmits,
   defineProps,
+  onBeforeMount,
   ref,
   shallowRef,
+  toRef
 } from 'vue';
 import EditModal from '../modals/EditModal.vue';
 
 const tileContent = ref(null);
 const { width, height } = useElementSize(tileContent);
+const requestRef = ref<ServerRequest>();
 
 const confirm = useConfirm();
-const openPopup = (event: Event, i: number) => {
+const openPopup = (event: Event, i: string) => {
   confirm.require({
     target: event.currentTarget as HTMLElement,
     message: 'Are you sure you want to delete this tile?',
@@ -70,20 +71,28 @@ const openPopup = (event: Event, i: number) => {
 
 const props = defineProps({
   title: { type: String, required: true },
+  request: { type: Object as PropType<ServerRequest>, required: true },
   type: {
     type: String as PropType<Charts>,
     default: String,
   },
-  i: { type: Number, required: true },
+  i: { type: String, required: true },
 });
+
 
 const emits = defineEmits(['close', 'update:data', 'draggable', 'edit']);
 const visible = ref(false);
 let chart = shallowRef<Object>();
 // If this is changed, the chart component will be reloaded
-let changed = shallowRef(0);
+const changed = shallowRef(0);
 // Initalize chart if type is given
 let component = props.type !== undefined ? props.type : Charts.NewChart;
+
+const title = toRef(props, 'title');
+
+onBeforeMount(() => {
+  requestRef.value = props.request;
+});
 
 function show() {
   visible.value = true;

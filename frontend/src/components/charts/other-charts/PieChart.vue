@@ -1,22 +1,24 @@
 <template>
-  <BaseChart :width="width" :height="height" :option="option"></BaseChart>
+  <BaseChart :width="width" :height="height" :option="option" :request="request"></BaseChart>
 </template>
 
 <script setup lang="ts">
 
-defineProps({
+const props = defineProps({
+  request: { type: Object as PropType<ServerRequest>, required: true },
   width: { type: Number, required: true },
   height: { type: Number, required: true },
 });
 
 import BaseChart from '@/components/charts/BaseChart.vue';
+import { ServerRequest } from '@/types';
 import * as echarts from 'echarts';
+import { PropType, Ref, ref } from 'vue';
 
-let option: echarts.EChartsOption;
-
-option = {
+const option: Ref<echarts.EChartsOption> = ref({
   tooltip: {
     trigger: 'item',
+    appendToBody: true,
   },
   appendToBody: true,
   legend: {
@@ -31,13 +33,7 @@ option = {
       name: 'Access From',
       type: 'pie',
       radius: '50%',
-      data: [
-        { value: 1048, name: 'Search Engine' },
-        { value: 735, name: 'Direct' },
-        { value: 580, name: 'Email' },
-        { value: 484, name: 'Union Ads' },
-        { value: 300, name: 'Video Ads' },
-      ],
+      data: [],
       emphasis: {
         itemStyle: {
           shadowBlur: 10,
@@ -47,7 +43,7 @@ option = {
       },
     },
   ],
-};
+});
 
 
 </script>
