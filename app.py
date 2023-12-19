@@ -8,7 +8,7 @@ from flask_marshmallow import Marshmallow
 from waitress import serve
 from termcolor import colored
 
-from backend.src.flask.schemas.api_endpoint_schemas import GetVariantListSchema, KpiSchema, DistributionSchema
+from backend.src.flask.schemas.api_endpoint_schemas import GetVariantListSchema, KpiSchema, DistributionSchema, DfgSchema
 from backend.src.flask.services.process_mining_service import ProcessMiningService
 
 PROCESS_MINING_SERVICE = ProcessMiningService()
@@ -37,7 +37,7 @@ def serve_static_file(file):
 
 
 @app.route('/variants', methods=['POST'])
-def calculate():
+def variants():
     json_data = request.get_json(force=True)
     if not json_data:
         return jsonify({'message': 'No input data provided'}), 400
@@ -66,6 +66,23 @@ def distributions():
         return jsonify({"status": "error", "errors": errors}), 422
 
     distribution = PROCESS_MINING_SERVICE.get_attribute_distribution(request=schema.load(json_data))
+
+    return jsonify(distribution), 200
+
+
+@app.route('/dfg', methods=['POST'])
+def dfg():
+    json_data = request.get_json(force=True)
+    if not json_data:
+        return jsonify({'message': 'No input data provided'}), 400
+
+    # Validate and deserialize input
+    schema = DfgSchema()
+    errors = schema.validate(json_data)
+    if errors:
+        return jsonify({"status": "error", "errors": errors}), 422
+
+    distribution = PROCESS_MINING_SERVICE.get_dfg(request=schema.load(json_data))
 
     return jsonify(distribution), 200
 

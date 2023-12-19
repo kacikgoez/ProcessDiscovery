@@ -3,9 +3,6 @@ import pandas as pd
 from pm4py.filtering import filter_variants, filter_between
 from pm4py.statistics.end_activities.log.get import get_end_activities
 from pm4py.stats import get_all_case_durations
-from pm4py import discover_dfg
-
-from backend.src.dataclasses.charts import Edge, Node, Graph
 
 DE_JURE_VARIANT = ('Referral', 'Evaluation', 'Approach', 'Authorization', 'Procurement', 'Transplant')
 
@@ -77,8 +74,8 @@ def get_dropout(el: pd.DataFrame, disaggregation_column: str) -> Dict[str, List[
 
     value = {}
     for index, row in drop_quantity_nan.iterrows():
-        value[index] = row.tolist()
-        value[index + '_percentage'] = [x / total_case if total_case != 0 else 0 for x in row.tolist()]
+        value[str(index)] = row.tolist()
+        value[str(index) + '_percentage'] = [x / total_case if total_case != 0 else 0 for x in row.tolist()]
     legend = list(value.keys())
 
     return {'legend': legend, 'axis': axis, 'value': value}
@@ -124,32 +121,6 @@ def get_permuted_path(el: pd.DataFrame, disaggregation_column: str, legend_colum
     legend = list(value.keys())
 
     return {'legend': legend, 'axis': axis, 'value': value}
-
-
-def get_permuted_path_dfg(el: pd.DataFrame) -> Graph:
-    """
-    Generate a Process Mining DFG based on the given event log.
-
-    Args:
-        el (pd.DataFrame): The event log.
-
-    Returns:
-        (Graph): The DFG of the event log with absolute frequencies as edge values.
-    """
-
-    # find the directly-following graph
-    dfg, start_activities, end_activities = discover_dfg(el)
-
-    # transform into graph data structure
-    edges = [Edge(source=source, target=target, label=None, value=freq) for (source, target), freq in dfg.items()]
-    node_ids = set([edge.source for edge in edges] + [edge.target for edge in edges])
-    nodes = [Node(id=activity, label=activity, value=None) for activity in node_ids]
-
-    return Graph(
-        name='DFG',
-        edges=edges,
-        nodes=nodes,
-    )
 
 
 def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |

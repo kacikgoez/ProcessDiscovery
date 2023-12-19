@@ -40,8 +40,6 @@ class KpiType(enum.Enum):
     """The drop out KPI. The KPI measures the percentage of cases that drop out."""
     PERMUTED_PATH_ADHERENCE = 'permuted_path_adherence'
     """The permuted path adherence KPI. The KPI measures the percentage of cases that follow a permuted path."""
-    PERMUTED_PATH_DFG = 'permuted_path_dfg'
-    """The permuted path DFG KPI. This KPI measures the percentage of cases that follow a permuted path and the DFG of the permuted path."""
     BUREAUCRATIC_DURATION = 'bureaucratic_duration'
     """The bureaucratic duration KPI. This KPI measures the average bureaucratic duration."""
     EVALUATION_TO_APPROACH = 'evaluation_to_approach'
@@ -59,11 +57,11 @@ class KpiRequest(FilteredRequest):
     Attributes:
         filters (list[BaseFilter] | None): The filters of the request. Defaults to None.
         kpi (KpiType): The KPI to request.
-        disaggregation_attribute (DisaggregationAttribute | None): The attribute to disaggregate the KPI by. Defaults to None.
+        disaggregation_attribute (DisaggregationAttribute): The attribute to disaggregate the KPI by.
         legend_attribute (DisaggregationAttribute | None): The attribute to display the KPI in the legend by. Defaults to None.
     """
     kpi: KpiType
-    disaggregation_attribute: DisaggregationAttribute | None = None
+    disaggregation_attribute: DisaggregationAttribute
     legend_attribute: DisaggregationAttribute | None = None
 
 
@@ -78,3 +76,20 @@ class DistributionRequest(FilteredRequest):
         disaggregation_attribute (DisaggregationAttribute): The attribute to disaggregate the distribution by.
     """
     disaggregation_attribute: DisaggregationAttribute
+
+
+@dataclass
+class DfgRequest(FilteredRequest):
+    """
+    A request for a DFG. The graph will be calculated based on the given filters.The DFG will
+    be disaggregated by the given disaggregation attribute.
+
+    Attributes:
+        filters (list[BaseFilter] | None): The filters of the request. Defaults to None.
+        disaggregation_attribute (DisaggregationAttribute): The attribute to disaggregate the distribution by.
+    """
+    disaggregation_attribute: DisaggregationAttribute
+
+
+
+
