@@ -8,11 +8,8 @@ from flask_marshmallow import Marshmallow
 from waitress import serve
 from termcolor import colored
 
-from backend.src.flask.schemas.kpi_schema import KpiSchema
-from backend.src.flask.schemas.variant_list_schema import GetVariantListSchema
+from backend.src.flask.schemas.api_endpoint_schemas import GetVariantListSchema, KpiSchema, DistributionSchema, DfgSchema
 from backend.src.flask.services.process_mining_service import ProcessMiningService
-from backend.src.flask.schemas.filter_schema import FilterSchema
-from backend.src.flask.schemas.distribution_schema import DistributionSchema
 
 PROCESS_MINING_SERVICE = ProcessMiningService()
 app = Flask('ORCA')
@@ -40,7 +37,7 @@ def serve_static_file(file):
 
 
 @app.route('/variants', methods=['POST'])
-def variants():
+def calculate():
     json_data = request.get_json(force=True)
     if not json_data:
         return jsonify({'message': 'No input data provided'}), 400
@@ -51,9 +48,7 @@ def variants():
     if errors:
         return jsonify({"status": "error", "errors": errors}), 422
 
-    data = schema.load(json_data)
-
-    variants = PROCESS_MINING_SERVICE.get_variants(data['disaggregation_attribute'])
+    variants = PROCESS_MINING_SERVICE.get_variants(request=schema.load(json_data))
 
     return jsonify(variants), 200
 
@@ -70,9 +65,24 @@ def distributions():
     if errors:
         return jsonify({"status": "error", "errors": errors}), 422
 
-    data = schema.load(json_data)
+    distribution = PROCESS_MINING_SERVICE.get_attribute_distribution(request=schema.load(json_data))
 
-    distribution = PROCESS_MINING_SERVICE.get_attribute_distribution(data['disaggregation_attribute'])
+    return jsonify(distribution), 200
+
+
+@app.route('/dfg', methods=['POST'])
+def dfg():
+    json_data = request.get_json(force=True)
+    if not json_data:
+        return jsonify({'message': 'No input data provided'}), 400
+
+    # Validate and deserialize input
+    schema = DfgSchema()
+    errors = schema.validate(json_data)
+    if errors:
+        return jsonify({"status": "error", "errors": errors}), 422
+
+    distribution = PROCESS_MINING_SERVICE.get_dfg(request=schema.load(json_data))
 
     return jsonify(distribution), 200
 
@@ -89,27 +99,9 @@ def kpi():
     if errors:
         return jsonify({"status": "error", "errors": errors}), 422
 
-    kpi_data = PROCESS_MINING_SERVICE.get_kpi_data(kpi_request=schema.load(json_data))
+    kpi_data = PROCESS_MINING_SERVICE.get_kpi_data(request=schema.load(json_data))
 
     return jsonify(kpi_data), 200
-
-
-@app.route('/flog', methods=['POST'])
-def flog():
-    json_data = request.get_json(force=True)
-    if not json_data:
-        return jsonify({'message': 'No input data provided'}), 400
-
-    # Validate and deserialize input
-    schema = KpiSchema()
-    errors = schema.validate(json_data)
-    if errors:
-        return jsonify({"status": "error", "errors": errors}), 422
-
-    kpi_data = PROCESS_MINING_SERVICE.get_kpi_data(kpi_request=schema.load(json_data))
-
-    return jsonify(kpi_data), 200
-
 
 
 @app.route('/patient-attributes')

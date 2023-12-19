@@ -3,16 +3,18 @@ from typing import Collection
 import pandas as pd
 from pm4py.objects.log.util import pandas_numpy_variants
 
-from backend.src.dataclasses import Variant
+from backend.src.dataclasses.dataclasses import Variant
 
 
 def get_variants_with_case_ids(el: pd.DataFrame) -> dict[Collection[str], list[str]]:
     """
-    Returns a dictionary of variants and the case ids that belong to them.
-    The variants are tuples of activity names.
+    Returns a dictionary of variants (tuples of activity names) and the case ids that belong to them.
 
-    :param el: The event log
-    :return:
+    Attributes:
+        el (pd.DataFrame): The event log.
+
+    Returns:
+        A dictionary of variants and the case ids that belong to them.
     """
     # apply the pm4py function to get the variant per case
     _, cases = pandas_numpy_variants.apply(el, parameters={})
@@ -30,8 +32,14 @@ def get_variants_with_case_ids(el: pd.DataFrame) -> dict[Collection[str], list[s
 def get_variants_with_frequencies(el: pd.DataFrame, disaggregation_column: str) -> list[Variant]:
     """
     Returns a list of variants with their frequencies and distributions of the given disaggregation attribute.
+    The variants are sorted by their frequency in descending order.
 
-    :return:
+    Attributes:
+        el (pd.DataFrame): The event log.
+        disaggregation_column (str): The name of the column to disaggregate the variants.
+
+    Returns:
+        A list of variants with their frequencies and distributions of the given disaggregation attribute.
     """
     variants = get_variants_with_case_ids(el)
     total_case_count = el['case:concept:name'].nunique()
