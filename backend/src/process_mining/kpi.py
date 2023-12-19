@@ -11,11 +11,19 @@ DE_JURE_VARIANT = ('Referral', 'Evaluation', 'Approach', 'Authorization', 'Procu
 
 def get_happy_path_adherence(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any]]:
     """
-    :param legend_column:
-    :param el: The event log
-    :param disaggregation_column:
-    :return: A dictionary contains key-value pairs of attribute's value and a list of happy path proportions,
-            as well as key-value pair for legend and the x-axis values.
+    Calculate happy path adherence proportions for different attributes in the event log.
+
+    Args:
+        el (pd.DataFrame): The event log DataFrame.
+        disaggregation_column (str): The column used for disaggregation.
+        legend_column (str): The column used for legend.
+
+    Returns:
+        Dict[str, List[Any]]: A dictionary containing:
+            - 'legend': A list of legend values in the chart.
+            - 'axis': A list of axis values in the chart.
+            - 'value': A subdictionary with key-value pairs for happy path rate
+              considering the specified disaggregation attribute.
     """
 
     # get case number in each legend_column value considering disaggregation_attribute
@@ -24,16 +32,11 @@ def get_happy_path_adherence(el: pd.DataFrame, disaggregation_column: str, legen
         .unstack().fillna(0)
 
     # filter only happy path
-    variant = filter_variants(el,
-                              [DE_JURE_VARIANT],
-                              retain=True,
-                              activity_key='concept:name',
-                              case_id_key='case:concept:name',
-                              timestamp_key='time:timestamp')
+    variant = filter_variants(el, [DE_JURE_VARIANT], retain=True)
 
     # get number of happy path in legend_column value considering disaggregation_attribute
     legend_happy_proportion = variant.groupby([disaggregation_column, legend_column]) \
-                                .apply(lambda x: x['case:concept:name'].nunique()).unstack() / legend_case
+                                  .apply(lambda x: x['case:concept:name'].nunique()).unstack() / legend_case
     legend_happy_proportion_nan = legend_happy_proportion.fillna(0)
 
     axis = legend_happy_proportion.keys().tolist()
@@ -48,12 +51,18 @@ def get_happy_path_adherence(el: pd.DataFrame, disaggregation_column: str, legen
 
 def get_dropout(el: pd.DataFrame, disaggregation_column: str) -> Dict[str, List[Any] | Dict[str, List[Any]]]:
     """
-    :param el: The event log
-    :param disaggregation_attribute:
-    :return: A dictionary contains a key-value pair of legend in chart and its value,
-            a key-value pair of axis in chart and its value,
-            and a subdictionary with key-value pairs for dropout quanlity and dropout percentage
-            consindering disaggregation_attribute.
+    Calculate dropout information based on a specified disaggregation attribute in the event log.
+
+    Args:
+        el (pd.DataFrame): The event log.
+        disaggregation_column (str): The column used for disaggregation.
+
+    Returns:
+        Dict[str, List[Any] | Dict[str, List[Any]]]: A dictionary containing:
+            - 'legend': A key-value pair of legend in the chart and its value.
+            - 'axis': A key-value pair of axis in the chart and its value.
+            - 'value': A subdictionary with key-value pairs for dropout quality and dropout percentage
+              considering the specified disaggregation attribute.
     """
 
     # get the end actvitity of each case considering disaggregation_attribute
@@ -74,23 +83,29 @@ def get_dropout(el: pd.DataFrame, disaggregation_column: str) -> Dict[str, List[
     return {'legend': legend, 'axis': axis, 'value': value}
 
 
-def get_permuted_path(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] | Dict[str, List[Any]]]:
+def get_permuted_path(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |
+                                                                                                     Dict[str, List[
+                                                                                                         Any]]]:
     """
-    :param el: The event log
-    :param disaggregation_attribute:
-    :return: A dictionary contains a key-value pair of legend in chart and its value,
-            a key-value pair of axis in chart and its value,
-            and a subdictionary with key-value pairs for permuted path number
-            consindering disaggregation_attribute and year case number
+    Calculate permuted path information based on specified disaggregation attributes in the event log.
+
+    Args:
+        el (pd.DataFrame): The event log.
+        disaggregation_column (str): The column used for disaggregation.
+        legend_column (str): The column used for legend.
+
+    Returns:
+        Dict[str, List[Any] | Dict[str, List[Any]]]: A dictionary containing:
+            - 'legend': A key-value pair of legend in the chart and its value.
+            - 'axis': A key-value pair of axis in the chart and its value.
+            - 'value': A subdictionary with key-value pairs for permuted path number
+              considering the specified disaggregation attributes and year case number.
     """
 
     # filter out happy path
     variant = filter_variants(el,
                               [DE_JURE_VARIANT],
-                              retain=False,
-                              activity_key='concept:name',
-                              case_id_key='case:concept:name',
-                              timestamp_key='time:timestamp')
+                              retain=False)
 
     # get number of happy path in each year considering disaggregation_attribute
     permuted_path = variant.groupby([disaggregation_column, legend_column]).apply(
@@ -112,15 +127,20 @@ def get_permuted_path(el: pd.DataFrame, disaggregation_column: str, legend_colum
 
 def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | int]]]:
     """
-    :param el:The event log
-    :return: a dictionary composed of a list of dict containing nodes with activities and
-             another list of dict containing directly-following relationships.
+    Generate a Process Mining DFG based on the given event log.
+
+    Args:
+        el (pd.DataFrame): The event log.
+
+    Returns:
+        Dict[str, List[Dict[str, str | int]]]: A dictionary containing:
+            - 'nodes': A list of dictionaries representing nodes with activities.
+            - 'links': A list of dictionaries representing directly-following relationships.
     """
 
     # find the directly-following graph
     dfg, start_activities, end_activities = discover_dfg(el, case_id_key='case:concept:name',
                                                         activity_key='concept:name', timestamp_key='time:timestamp')
-
 
     act = set()
     links = []
@@ -135,7 +155,7 @@ def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | in
             }
         )
         # find activities in the log
-        act.update([pair[0],pair[1]])
+        act.update([pair[0], pair[1]])
 
     nodes = []
     for value in act:
@@ -149,26 +169,33 @@ def get_permuted_path_dfg(el: pd.DataFrame) -> Dict[str, List[Dict[str, str | in
 
 
 def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |
-                                                                                      Dict[str, List[Any]]]:
+                                                                                                             Dict[str,
+                                                                                                             List[
+                                                                                                                 Any]]]:
     """
-    :param el: The event log
-    :param disaggregation_attribute:
-    :return:  A dictionary contains a key-value pair of legend in chart and its value,
-            and a subdictionary with key-value pairs for list of vectors [refferal_year,
-            referral_to_procurement_duration] consindering disaggregation_attribute.
+    Calculate bureaucratic duration based on specified disaggregation attributes in the event log.
+
+    Args:
+        el (pd.DataFrame): The event log.
+        disaggregation_column (str): The column used for disaggregation.
+        legend_column (str): The column used for legend.
+
+    Returns:
+        Dict[str, List[Any] | Dict[str, List[Any]]]: A dictionary containing:
+            - 'legend': A key-value pair of legend in the chart and its value.
+            - 'value': A subdictionary with key-value pairs for a list of vectors [referral_year,
+              referral_to_procurement_duration] considering the specified disaggregation attributes.
     """
 
     # filter on only happy path
-    variant = filter_between(el, 'Referral', 'Procurement',
-                              activity_key='concept:name',
-                              case_id_key='case:concept:name',
-                              timestamp_key='time:timestamp')
+    variant = filter_between(el, 'Referral', 'Procurement')
     # case duration of happy path in each legend value considering disaggregation_attribute
-    subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(lambda x:  get_all_case_durations(x))
+    subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(
+        lambda x: get_all_case_durations(x))
     reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_column)
 
     # conmbine the legend value and duration in minuten as a vector
-    result = reshape.apply(lambda x: [x[legend_column], round(x[0]/60)], axis=1)
+    result = reshape.apply(lambda x: [x[legend_column], round(x[0] / 60)], axis=1)
     result = result.groupby(disaggregation_column).apply(list).to_dict()
 
     legend = list(result.keys())
@@ -176,26 +203,32 @@ def get_bureaucratic_duration(el: pd.DataFrame, disaggregation_column: str, lege
     return {'legend': legend, 'value': result}
 
 
-def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |
-                                                                                        Dict[str, List[Any]]]:
+def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[
+    str, List[Any] |
+         Dict[str, List[Any]]]:
     """
-    :param el: The event log
-    :param disaggregation_attribute:
-    :return: A dictionary contains a key-value pair of legend in chart and its value,
-            and a subdictionary with key-value pairs for list of vectors [refferal_year,
-            evaluation_to_approach_duration] consindering disaggregation_attribute.
-    """
+        Calculate evaluation-to-approach duration information based on specified disaggregation attributes in the
+        event log.
+
+        Args:
+            el (pd.DataFrame): The event log.
+            disaggregation_column (str): The column used for disaggregation.
+            legend_column (str): The column used for legend.
+
+        Returns:
+            Dict[str, List[Any] | Dict[str, List[Any]]]: A dictionary containing:
+                - 'legend': A key-value pair of legend in the chart and its value.
+                - 'value': A subdictionary with key-value pairs for a list of vectors
+                [legend value, evaluation_to_approach_duration] considering the specified disaggregation attributes.
+        """
 
     # Processing timestamp
     el['time:timestamp'] = pd.to_datetime(el['time:timestamp'], format='ISO8601')
     el = el.dropna(subset=['time:timestamp'])
 
     # filter on only happy path
-    variant = filter_between(el, 'Evaluation', 'Approach',
-                              activity_key='concept:name',
-                              case_id_key='case:concept:name',
-                              timestamp_key='time:timestamp')
-    # case duration of happy path in each year considering disaggregation_attribute
+    variant = filter_between(el, 'Evaluation', 'Approach')
+    # case duration of happy path in legend value considering disaggregation_attribute
     subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(
         lambda x: get_all_case_durations(x))
     reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_column)
@@ -209,22 +242,28 @@ def get_evaluation_to_approach(el: pd.DataFrame, disaggregation_column: str, leg
     return {'legend': legend, 'value': result}
 
 
-def get_authorization_to_procurement(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str, List[Any] |
-                                                                                              Dict[str, List[Any]]]:
+def get_authorization_to_procurement(el: pd.DataFrame, disaggregation_column: str, legend_column: str) -> Dict[str,
+List[Any] | Dict[str, List[Any]]]:
     """
-    :param el: The event log
-    :param disaggregation_attribute:
-    :return: A dictionary contains a key-value pair of legend in chart and its value,
-            and a subdictionary with key-value pairs for list of vectors [refferal_year,
-            authorization_to_procurement_duration] consindering disaggregation_attribute.
-    """
+        Calculate authorization-to-procurement duration information based on specified disaggregation attributes in
+        the event log.
+
+        Args:
+            el (pd.DataFrame): The event log.
+            disaggregation_column (str): The column used for disaggregation.
+            legend_column (str): The column used for legend.
+
+        Returns:
+            Dict[str, List[Any] | Dict[str, List[Any]]]: A dictionary containing:
+                - 'legend': A key-value pair of legend in the chart and its value.
+                - 'value': A subdictionary with key-value pairs for a list of vectors
+                 [legend value, authorization_to_procurement_duration] considering the specified
+                 disaggregation attributes.
+        """
 
     # filter on only happy path
-    variant = filter_between(el, 'Authorization', 'Procurement',
-                             activity_key='concept:name',
-                             case_id_key='case:concept:name',
-                             timestamp_key='time:timestamp')
-    # case duration of happy path in each year considering disaggregation_attribute
+    variant = filter_between(el, 'Authorization', 'Procurement')
+    # case duration of happy path in each legend value considering disaggregation_attribute
     subcase_duration = variant.groupby([disaggregation_column, legend_column]).apply(
         lambda x: get_all_case_durations(x))
     reshape = subcase_duration.explode().to_frame().reset_index().set_index(disaggregation_column)
@@ -235,5 +274,3 @@ def get_authorization_to_procurement(el: pd.DataFrame, disaggregation_column: st
 
     legend = list(result.keys())
     return {'legend': legend, 'value': result}
-
-

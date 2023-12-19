@@ -8,6 +8,8 @@ nav:
   - Process Mining:
     - Event Log: process_mining/event_log.md
     - Variants: process_mining/variants.md
+    - Distribution: process_mining/distribution.md
+    - KPIs: process_mining/kpi.md
   - Dataclasses: dataclasses.md
 
 theme:
