@@ -299,3 +299,33 @@ export const Endpoints = [
         ]
     }
 ];
+
+
+/* ------------- Filter Data Types ---------------- */
+export enum FilterOperators {
+    IS_EMPTY = 'IS_EMPTY',
+    IS_NOT_EMPTY = 'IS_NOT_EMPTY',
+    EQUALS = 'EQUALS',
+    NOT_EQUALS = 'NOT_EQUALS',
+    CONTAINS = 'CONTAINS',
+    NOT_CONTAINS = 'NOT_CONTAINS',
+    LESS_THAN = 'LESS_THAN',
+    LESS_THAN_OR_EQUAL = 'LESS_THAN_OR_EQUAL',
+    GREATER_THAN = 'GREATER_THAN',
+    GREATER_THAN_OR_EQUAL = 'GREATER_THAN_OR_EQUAL',
+}
+
+export type BaseFilter = {
+    attribute: PatientAttribute,
+    operator: FilterOperators,
+}
+
+export type CategoricalFilter = BaseFilter & {
+    values: string[] | null
+}
+
+export type NumericalFilter = BaseFilter & {
+    value: number | null
+}
+
+export type Filter = CategoricalFilter | NumericalFilter

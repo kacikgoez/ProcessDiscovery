@@ -1,34 +1,38 @@
 <template>
   <Toast></Toast>
   <ConfirmPopup></ConfirmPopup>
-  <div class="absolute h-full top-0 bottom-0 left-0 right-0">
-    <div class="flex flex-col">
-      <nav id="navigation-bar" style="border-bottom: 1px solid #efefef;">
-        <div id="navbar-left">
-          <button id="navbar-sidebar-btn"></button>
+  <div class='absolute h-full top-0 bottom-0 left-0 right-0'>
+    <div class='flex flex-col'>
+      <nav id='navigation-bar' style='border-bottom: 1px solid #efefef;'>
+        <div id='navbar-left'>
+          <button id='navbar-sidebar-btn'></button>
         </div>
-        <div id="navbar-center">
-          <h1 id="navbar-title">🐳 orca </h1>
+        <div id='navbar-center'>
+          <h1 id='navbar-title'>🐳 orca </h1>
         </div>
-        <div id="navbar-right">
-          <div v-if="isRenderDeployment" id="render-version">
+        <div id='navbar-right'>
+          <div v-if='isRenderDeployment' id='render-version'>
             <h1>{{ commit }} - {{ branch }}</h1>
           </div>
-          <Button icon="pi pi-plus" aria-label="Add tile" @click="addTile" class="float-right" />
-          <Button icon="pi pi-download" aria-label="Download event log" @click="downloadEventLog" class="float-right" />
+          <Button icon="pi pi-plus" aria-label="Add tile" class="float-right" @click="addTile" />
+          <Button icon="pi pi-download" aria-label="Download event log" class="float-right" @click="downloadEventLog" />
         </div>
       </nav>
-      <!-- <div class="bg-white p-3" style="border-bottom: 1px solid #efefef;">
-        input class="bg-gray-50 border-[#cecece] border-[0.5px] p-1 rounded-xl text-sm pl-2 pr-2" placeholder="Search" />
-    </div> -->
+      <div class='bg-white p-3' style='border-bottom: 1px solid #efefef;'>
+        <!-- <input class='bg-gray-50 border-[#cecece] border-[0.5px] p-1 rounded-xl text-sm pl-2 pr-2' placeholder='Search' /> -->
+        <div class='inline-flex'>
+          <Filters style="color: unset"></Filters>
+        </div>
+      </div>
     </div>
     <div style="max-width: 1500px; margin: auto;">
       <KPIGrid v-model:data="layout" class="mr-5 ml-5" @close="remove"></KPIGrid>
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script setup lang='ts'>
 
+import Filters from '@/components/input/Filters.vue';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 import KPIGrid from './components/grid/KPIGrid.vue';
@@ -44,7 +48,7 @@ const isRenderDeployment = ref(false)
 fetch('/render-config')
   .then(response => response.json())
   .then(data => {
-    // If data is not empty, look extract "commit" and "branch" from JSON
+    // If data is not empty, look extract 'commit' and 'branch' from JSON
     if (Object.keys(data).length > 0) {
       ('SHOWING DEPLOYMENT INFO')
       commit.value = `SHA: ${data.commit.slice(0, 5)}...`
