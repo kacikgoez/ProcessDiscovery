@@ -60,11 +60,6 @@ class TestKPI:
             disaggregation_attribute=DisaggregationAttribute('gender', AttributeType.CATEGORICAL),
             legend_attribute=DisaggregationAttribute('opo_id', AttributeType.CATEGORICAL))
 
-    @pytest.fixture
-    def permuted_dfg_request(self):
-        return KpiRequest(
-            filters=[],
-            kpi=KpiType.PERMUTED_PATH_DFG)
 
     def test_happypath(self, happy_request):
         assert process_mining_service().get_kpi_data(happy_request) == {
@@ -101,11 +96,3 @@ class TestKPI:
         assert process_mining_service().get_kpi_data(aut_request)['value'] == {
             'F': [['OPO1', 1]],
             'M': []}
-
-    def test_permuted_dfg(self, permuted_dfg_request):
-        assert process_mining_service().get_kpi_data(permuted_dfg_request)['links'] == [
-            {'absolute_frequency': 1, 'source': 'Approach', 'target': 'Authorization'},
-            {'absolute_frequency': 1, 'source': 'Authorization', 'target': 'Procurement'},
-            {'absolute_frequency': 1, 'source': 'Evaluation', 'target': 'Approach'},
-            {'absolute_frequency': 1, 'source': 'Procurement', 'target': 'Transplant'},
-            {'absolute_frequency': 2, 'source': 'Referral', 'target': 'Evaluation'}]

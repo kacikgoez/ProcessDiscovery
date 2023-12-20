@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, validates_schema, post_load, ValidationError, pre_load
 
-from backend.src.dataclasses.requests import VariantListRequest, KpiRequest, KpiType, DistributionRequest
+from backend.src.dataclasses.requests import VariantListRequest, KpiRequest, KpiType, DistributionRequest, DfgRequest
 from backend.src.flask.schemas.attributes_schema import DisaggregationAttributeSchema
 from backend.src.flask.schemas.filter_schemas import CategoryFilterSchema, NumericalFilterSchema
 
@@ -33,7 +33,7 @@ class GetVariantListSchema(FilteredRequestSchema):
 class KpiSchema(FilteredRequestSchema):
     kpi = fields.Enum(required=True, enum=KpiType)
     legend_attribute = fields.Nested(DisaggregationAttributeSchema, required=False)
-    disaggregation_attribute = fields.Nested(DisaggregationAttributeSchema, required=False)
+    disaggregation_attribute = fields.Nested(DisaggregationAttributeSchema, required=True)
 
     @validates_schema
     def ensure_different_attributes(self, data, **kwargs):
@@ -51,3 +51,12 @@ class DistributionSchema(FilteredRequestSchema):
     @post_load
     def make_distribution_request(self, data, **kwargs):
         return DistributionRequest(**data)
+
+
+class DfgSchema(FilteredRequestSchema):
+    disaggregation_attribute = fields.Nested(DisaggregationAttributeSchema, required=True)
+
+    @post_load
+    def make_dfg_request(self, data, **kwargs):
+        return DfgRequest(**data)
+

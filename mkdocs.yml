@@ -10,6 +10,7 @@ nav:
     - Variants: process_mining/variants.md
     - Distribution: process_mining/distribution.md
     - KPIs: process_mining/kpi.md
+    - DFG: process_mining/dfg.md
   - Dataclasses: dataclasses.md
 
 theme:
