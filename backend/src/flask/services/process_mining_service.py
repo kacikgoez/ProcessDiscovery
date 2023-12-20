@@ -3,7 +3,7 @@ from typing import Any
 import pandas as pd
 
 from backend.src.dataclasses.attributes import CategoricalAttribute, NumericalAttribute
-from backend.src.dataclasses.charts import DistributionDataItem, Graph
+from backend.src.dataclasses.charts import DistributionDataItem, Graph, MultiDataSeries
 from backend.src.dataclasses.dataclasses import Variant
 from backend.src.dataclasses.requests import KpiRequest, KpiType, VariantListRequest, DistributionRequest, DfgRequest
 from backend.src.process_mining.event_log import load_event_log, load_patient_attributes, create_bins, filter_log
@@ -38,14 +38,17 @@ class ProcessMiningService:
 
         return distribution.attribute_distribution(el, disaggregation_attribute_column)
 
-    def get_kpi_data(self, request: KpiRequest) -> dict[str, list[Any]]:
+    def get_kpi_data(self, request: KpiRequest) -> MultiDataSeries:
         el = filter_log(self.event_log, request.filters)
 
         disaggregation_attribute_column = 'disaggregation'
         el = create_bins(el, request.disaggregation_attribute, disaggregation_attribute_column)
 
-        legend_column = 'legend'
-        el = create_bins(el, request.legend_attribute, legend_column)
+        if request.legend_attribute is None:
+            legend_column = None
+        else:
+            legend_column = 'legend'
+            el = create_bins(el, request.legend_attribute, legend_column)
 
         match request.kpi:
             case KpiType.HAPPY_PATH_ADHERENCE:
