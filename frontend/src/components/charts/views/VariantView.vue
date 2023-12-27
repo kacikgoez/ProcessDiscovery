@@ -5,14 +5,16 @@
 
 <script setup lang="ts">
 import ChevronDiagram from '@/components/charts/other-charts/ChevronDiagram.vue';
-import { ServerRequest } from '@/types';
-import { PropType, onMounted, ref } from 'vue';
+import { constructJson, Filter, ServerRequest } from '@/types';
+import { onMounted, PropType, ref, toRefs, watch } from 'vue';
 
 const props = defineProps({
+    filters: { type: Array as () => Filter[], required: true },
     width: { type: Number, required: true },
     height: { type: Number, required: true },
     request: { type: Object as PropType<ServerRequest>, required: true },
 });
+const propRefs = toRefs(props);
 
 const variants = ref([])
 const update = ref(0);
@@ -21,6 +23,10 @@ onMounted(() => {
     fetchVariants();
 });
 
+watch(propRefs.filters, () => {
+    fetchVariants();
+}, { deep: true });
+
 function fetchVariants() {
     fetch('http://127.0.0.1:80/variants', {
         method: 'POST',
@@ -28,7 +34,12 @@ function fetchVariants() {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ disaggregation_attribute: props.request.disaggregation_attribute, }),
+        body: JSON.stringify({
+            ...constructJson(props.filters),
+            'disaggregation_attribute': {
+                'name': 'race'
+            },
+        }),
     }).then(response => response.json())
         .then(data => {
             variants.value = data;

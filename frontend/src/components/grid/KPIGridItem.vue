@@ -20,10 +20,13 @@
         </span>
       </div>
     </div>
+    <div>
+      <Filters v-model="filters"></Filters>
+    </div>
     <div ref="tileContent" class="tile-content">
       <div class="overflow-y-auto overflow-x-hidden h-full">
         <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width" :height="height"
-          :request="requestRef" @change="change"></component>
+          :filters="filters" :title="title" :request="requestRef" @change="change"></component>
       </div>
     </div>
     <div class="tile-footer">
@@ -48,6 +51,7 @@ import {
   shallowRef,
   toRef
 } from 'vue';
+import Filters from '../input/Filters.vue';
 import EditModal from '../modals/EditModal.vue';
 
 const tileContent = ref(null);
@@ -81,6 +85,7 @@ const props = defineProps({
   i: { type: String, required: true },
 });
 
+const filters = ref([]);
 
 const emits = defineEmits(['close', 'update:data', 'draggable', 'edit']);
 const visible = ref(false);

@@ -3,16 +3,16 @@ import {computed, onMounted, PropType, ref, toRefs, watch} from 'vue';
 import {Filter, FilterOperators} from '@/types';
 
 const props = defineProps({
-    filter: { type: Object as PropType<Filter>, required: true },
+  modelValue: { type: Object as PropType<Filter>, required: true },
 });
-const propRefs = toRefs(props);
+const emit = defineEmits(['update:modelValue']);
 
 const editOverlay = ref();
 const selectedOperator = ref<FilterOperators>(FilterOperators.IS_NOT_EMPTY);
 const filterValue = ref();
 
 const availableFilterOperators = computed(() => {
-  if (propRefs.filter?.value?.attribute?.type == 'categorical') {
+  if (props.modelValue?.attribute?.type == 'categorical') {
     return [
         FilterOperators.IS_NOT_EMPTY,
         FilterOperators.IS_EMPTY,
@@ -42,7 +42,7 @@ const inputType = computed(() => {
       return 'none';
     case FilterOperators.EQUALS:
     case FilterOperators.NOT_EQUALS:
-      return propRefs.filter?.value?.attribute?.type == 'categorical' ? 'dropdown' : 'number';
+      return props.modelValue?.attribute?.type == 'categorical' ? 'dropdown' : 'number';
     case FilterOperators.CONTAINS:
     case FilterOperators.NOT_CONTAINS:
       return 'multiselect';
@@ -115,20 +115,40 @@ const showEditOverlay = (event) => {
   console.log(event)
   editOverlay.value.toggle(event);
 }
+
+watch(selectedOperator, (newValue, oldValue) => {
+  if (newValue != oldValue) {
+    emitUpdate();
+  }
+})
+
+watch(filterValue, (newValue, oldValue) => {
+  if (newValue != oldValue) {
+    emitUpdate();
+  }
+})
+
+const emitUpdate = () => {
+  emit('update:modelValue', {
+    ...props.modelValue,
+    operator: selectedOperator.value,
+    value: filterValue.value,
+  });
+}
 </script>
 
 <template>
   <div>
     <Chip @click="showEditOverlay" removable>
-      <span class="font-semi-bold">{{ propRefs.filter?.value.attribute.name }}:</span>
+      <span class="font-semi-bold">{{ props.modelValue?.attribute.name }}:</span>
       <span class="ml-2">{{ printFilterOperator }}{{ printFilterValue }}</span>
     </Chip>
     <OverlayPanel ref="editOverlay" appendTo="body" showCloseIcon class="overlay">
       <Dropdown v-model="selectedOperator" :options="availableFilterOperators" placeholder="Select an operator" class="w-full md:w-14rem mb-2" />
-      <InputNumber v-if="inputType == 'number'" v-model="filterValue" class="w-full md:w-14rem" :min="propRefs.filter?.value.attribute.min" :max="propRefs.filter?.value.attribute.max" />
-      <Dropdown v-if="inputType == 'dropdown'" v-model="filterValue" :options="propRefs.filter?.value.attribute.values" filter
+      <InputNumber v-if="inputType == 'number'" v-model="filterValue" class="w-full md:w-14rem" :min="props.modelValue?.attribute.min" :max="props.modelValue?.attribute.max" />
+      <Dropdown v-if="inputType == 'dropdown'" v-model="filterValue" :options="props.modelValue?.attribute.values" filter
                 placeholder="Select a value" class="w-full md:w-14rem" />
-      <MultiSelect v-if="inputType == 'multiselect'" v-model="filterValue" :options="propRefs.filter?.value.attribute.values" filter placeholder="Select values"
+      <MultiSelect v-if="inputType == 'multiselect'" v-model="filterValue" :options="props.modelValue?.attribute.values" filter placeholder="Select values"
                    :maxSelectedLabels="3" class="w-full md:w-20rem" />
     </OverlayPanel>
   </div>

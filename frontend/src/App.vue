@@ -33,6 +33,7 @@
 <script setup lang='ts'>
 
 import Filters from '@/components/input/Filters.vue';
+import { patientAttributesStore } from '@/stores/PatientAttributesStore';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 import KPIGrid from './components/grid/KPIGrid.vue';
@@ -59,8 +60,16 @@ fetch('/render-config')
     // Not a render.com deployment (or something went wrong)
   })
 
+// Closes a KPI tile by its index
+// async function close(index: Number) {
+//   layout.value = layout.value!.filter((kpi) => kpi.i !== index)
+// }
+
+const patientAttributes = patientAttributesStore();
+patientAttributes.fetchAttributes();
+
 const globalLayout = layoutStore();
-const remove = globalLayout.remove;
+const remove = globalLayout.removeTile;
 const { layout } = storeToRefs(globalLayout)
 
 const defaultValue: KPITile[] = [
@@ -113,7 +122,7 @@ const defaultValue: KPITile[] = [
 ];
 
 if (localStorage.getItem('layout') === null) {
-  globalLayout.set(defaultValue);
+  globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
 } else {
   // globalLayout.set(JSON.parse(localStorage.getItem('layout')!))
   globalLayout.set(defaultValue);

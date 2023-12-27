@@ -38,6 +38,7 @@ export type KPITile = {
     // index for updates, just set this to 0
     changed: number,
     request: ServerRequest,
+    filters?: Filter[] | undefined,
 } & LayoutItem;
 
 
@@ -321,7 +322,7 @@ export type BaseFilter = {
 }
 
 export type CategoricalFilter = BaseFilter & {
-    values: string[] | null
+    value: string[] | null
 }
 
 export type NumericalFilter = BaseFilter & {
@@ -329,3 +330,31 @@ export type NumericalFilter = BaseFilter & {
 }
 
 export type Filter = CategoricalFilter | NumericalFilter
+
+export function constructJson(filters: Filter[]) {
+    if (filters === undefined || filters.length === 0) {
+        return {}
+    }
+    return {
+        categorical_filters: filters.filter((filter) => filter.attribute.type === 'categorical').map(mapFilter),
+        numerical_filters: filters.filter((filter) => filter.attribute.type === 'numerical').map(mapFilter),
+    }
+}
+
+function mapFilter(filter: Filter) {
+    if (filter.attribute.type === 'categorical') {
+        const {value} = filter as CategoricalFilter;
+        return {
+            attribute_name: filter.attribute.name,
+            operator: filter.operator,
+            values: value instanceof Array ? value : ( value === null ? null : [value] ),
+        }
+    } else {
+        const {value} = filter as NumericalFilter;
+        return {
+            attribute_name: filter.attribute.name,
+            operator: filter.operator,
+            value: value,
+        }
+    }
+}
