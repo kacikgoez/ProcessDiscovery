@@ -49,7 +49,8 @@ def get_variants_with_frequencies(el: pd.DataFrame, disaggregation_column: str) 
         distribution = el.loc[el['case:concept:name'].isin(case_ids)] \
             .groupby('case:concept:name') \
             .first()[disaggregation_column] \
-            .value_counts()
+            .value_counts(dropna=False)
+        distribution.index = distribution.index.fillna('None')
 
         result.append(Variant(
             activities=list(variant),
