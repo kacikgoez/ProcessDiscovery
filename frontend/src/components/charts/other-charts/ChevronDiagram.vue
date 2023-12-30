@@ -143,9 +143,20 @@ function generateDataArray() {
 const generateOptions: () => [echarts.EChartsOption, number] = () => {
   const total: number = propRefs.variants.value.length;
   const options: echarts.EChartsOption = {
+    title: {
+      text: 'Variant Diagram',
+    },
     tooltip: {
       show: true,
       appendToBody: true
+    },
+    toolbox: {
+      right: '10%',
+      feature: {
+        saveAsImage: {
+          type: 'svg',
+        }
+      }
     },
     series: []
   };
