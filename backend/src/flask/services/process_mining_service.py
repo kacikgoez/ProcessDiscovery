@@ -1,12 +1,21 @@
 import pandas as pd
 
-from backend.src.dataclasses.attributes import PatientAttribute
-from backend.src.dataclasses.charts import Graph, MultiDataSeries, DataSeries, Variant
-from backend.src.dataclasses.requests import KpiRequest, KpiType, VariantListRequest, DistributionRequest, DfgRequest
-from backend.src.process_mining.event_log import load_event_log, load_patient_attributes, create_bins, filter_log, \
-    load_filter_attributes
-from backend.src.process_mining import kpi, dfg
-from backend.src.process_mining import distribution
+from backend.src.dataclasses.attributes import (AttributeType,
+                                                CategoricalAttribute,
+                                                DisaggregationAttribute,
+                                                NumericalAttribute,
+                                                PatientAttribute)
+from backend.src.dataclasses.charts import (DataSeries, DistributionDataItem,
+                                            Graph, MultiDataSeries, Variant)
+from backend.src.dataclasses.requests import (DejureGraphRequest,
+                                              DejureStatisticType, DfgRequest,
+                                              DistributionRequest, KpiRequest,
+                                              KpiType, VariantListRequest)
+from backend.src.process_mining import dejure, dfg, distribution, kpi
+from backend.src.process_mining.event_log import (create_bins, filter_log,
+                                                  load_event_log,
+                                                  load_filter_attributes,
+                                                  load_patient_attributes)
 from backend.src.process_mining.variants import get_variants_with_frequencies
 from definitions import CLEAN_EVENT_LOG_PATH
 
@@ -58,5 +67,27 @@ class ProcessMiningService:
 
     def get_dfg(self, request: DfgRequest) -> Graph:
         el = filter_log(self.event_log, request.filters)
-
         return dfg.get_dfg(el)
+
+    def get_dejure_graph(self, request: DejureGraphRequest) -> Graph:
+        el = filter_log(self.event_log, request.filters)
+
+        disaggregation_attribute_column = 'disaggregation'
+        el = create_bins(el, request.disaggregation_attribute)
+
+        match request.statistic:
+            case DejureStatisticType.MIN:
+                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'min')
+            case DejureStatisticType.MAX:
+                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'max')
+            case DejureStatisticType.MEAN:
+                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'mean')
+            case DejureStatisticType.MEDIAN:
+                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'median')
+            case DejureStatisticType.REMAIN:
+                return dejure.get_dejure_remain_graph(el, disaggregation_attribute_column)
+            case DejureStatisticType.DROP:
+                return  dejure.get_dejure_drop_graph(el, disaggregation_attribute_column)
+            case _:
+                raise ValueError('The given statistic is not supported.')
+

@@ -9,7 +9,8 @@ from termcolor import colored
 from waitress import serve
 
 from backend.src.flask.schemas.api_endpoint_schemas import (
-    DfgSchema, DistributionSchema, GetVariantListSchema, KpiSchema)
+    DejureGraphSchema, DfgSchema, DistributionSchema, GetVariantListSchema,
+    KpiSchema)
 from backend.src.flask.services.process_mining_service import \
     ProcessMiningService
 from definitions import CLEAN_EVENT_LOG_PATH
@@ -113,6 +114,23 @@ def dfg():
     distribution = PROCESS_MINING_SERVICE.get_dfg(request=schema.load(json_data))
 
     return jsonify(distribution), 200
+
+
+@app.route('/dejure', methods=['POST'])
+def dejure_graph():
+    json_data = request.get_json(force=True)
+    if not json_data:
+        return jsonify({'message': 'No input data provided'}), 400
+
+    # Validate and deserialize input
+    schema = DejureGraphSchema()
+    errors = schema.validate(json_data)
+    if errors:
+        return jsonify({"status": "error", "errors": errors}), 422
+
+    kpi_data = PROCESS_MINING_SERVICE.get_dejure_graph(request=schema.load(json_data))
+
+    return jsonify(kpi_data), 200
 
 
 @app.route('/kpi', methods=['POST'])
