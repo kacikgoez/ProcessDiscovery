@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields, validates_schema, post_load, ValidationError, pre_load
 
-from backend.src.dataclasses.requests import VariantListRequest, KpiRequest, KpiType, DistributionRequest, DfgRequest
+from backend.src.dataclasses.requests import VariantListRequest, KpiRequest, KpiType, DistributionRequest, DfgRequest, \
+                                            DejureStatisticType, DejureGraphRequest
 from backend.src.flask.schemas.attributes_schema import DisaggregationAttributeSchema
 from backend.src.flask.schemas.filter_schemas import CategoryFilterSchema, NumericalFilterSchema
 
@@ -60,3 +61,11 @@ class DfgSchema(FilteredRequestSchema):
     def make_dfg_request(self, data, **kwargs):
         return DfgRequest(**data)
 
+
+class DejureGraphSchema(FilteredRequestSchema):
+    statistic = fields.Enum(required=True, enum=DejureStatisticType)
+    disaggregation_attribute = fields.Nested(DisaggregationAttributeSchema, required=True)
+
+    @post_load
+    def make_dejure_request(self, data, **kwargs):
+        return DejureGraphRequest(**data)

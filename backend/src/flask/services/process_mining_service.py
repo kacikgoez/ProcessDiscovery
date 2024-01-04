@@ -2,12 +2,13 @@ from typing import Any
 
 import pandas as pd
 
-from backend.src.dataclasses.attributes import CategoricalAttribute, NumericalAttribute
+from backend.src.dataclasses.attributes import CategoricalAttribute, NumericalAttribute, DisaggregationAttribute,AttributeType
 from backend.src.dataclasses.charts import DistributionDataItem, Graph, MultiDataSeries
 from backend.src.dataclasses.dataclasses import Variant
-from backend.src.dataclasses.requests import KpiRequest, KpiType, VariantListRequest, DistributionRequest, DfgRequest
+from backend.src.dataclasses.requests import KpiRequest, KpiType, VariantListRequest, DistributionRequest, DfgRequest, \
+                                            DejureGraphRequest, DejureStatisticType
 from backend.src.process_mining.event_log import load_event_log, load_patient_attributes, create_bins, filter_log
-from backend.src.process_mining import kpi, dfg
+from backend.src.process_mining import kpi, dfg, dejure
 from backend.src.process_mining import distribution
 from backend.src.process_mining.variants import get_variants_with_frequencies
 from definitions import CLEAN_EVENT_LOG_PATH
@@ -70,3 +71,26 @@ class ProcessMiningService:
         el = filter_log(self.event_log, request.filters)
 
         return dfg.get_permuted_path_dfg(el)
+
+    def get_dejure_graph(self, request: DejureGraphRequest) -> Graph:
+        el = filter_log(self.event_log, request.filters)
+
+        disaggregation_attribute_column = 'disaggregation'
+        el = create_bins(el, request.disaggregation_attribute, disaggregation_attribute_column)
+
+        match request.statistic:
+            case DejureStatisticType.MIN:
+                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'min')
+            case DejureStatisticType.MAX:
+                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'max')
+            case DejureStatisticType.MEAN:
+                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'mean')
+            case DejureStatisticType.MEDIAN:
+                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'median')
+            case DejureStatisticType.REMAIN:
+                return dejure.get_dejure_remain_graph(el, disaggregation_attribute_column)
+            case DejureStatisticType.DROP:
+                return  dejure.get_dejure_drop_graph(el, disaggregation_attribute_column)
+            case _:
+                raise ValueError('The given statistic is not supported.')
+

@@ -8,7 +8,8 @@ from flask_marshmallow import Marshmallow
 from waitress import serve
 from termcolor import colored
 
-from backend.src.flask.schemas.api_endpoint_schemas import GetVariantListSchema, KpiSchema, DistributionSchema, DfgSchema
+from backend.src.flask.schemas.api_endpoint_schemas import GetVariantListSchema, KpiSchema, DistributionSchema, DfgSchema, \
+                                                            DejureGraphSchema
 from backend.src.flask.services.process_mining_service import ProcessMiningService
 
 PROCESS_MINING_SERVICE = ProcessMiningService()
@@ -85,6 +86,23 @@ def dfg():
     distribution = PROCESS_MINING_SERVICE.get_dfg(request=schema.load(json_data))
 
     return jsonify(distribution), 200
+
+
+@app.route('/dejure', methods=['POST'])
+def dejure_graph():
+    json_data = request.get_json(force=True)
+    if not json_data:
+        return jsonify({'message': 'No input data provided'}), 400
+
+    # Validate and deserialize input
+    schema = DejureGraphSchema()
+    errors = schema.validate(json_data)
+    if errors:
+        return jsonify({"status": "error", "errors": errors}), 422
+
+    kpi_data = PROCESS_MINING_SERVICE.get_dejure_graph(request=schema.load(json_data))
+
+    return jsonify(kpi_data), 200
 
 
 @app.route('/kpi', methods=['POST'])

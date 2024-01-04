@@ -6,3 +6,7 @@
 **/*.pyc
 launch.json
 settings.json
+**/.DS_Store
+**/*.pyc
+launch.json
+settings.json

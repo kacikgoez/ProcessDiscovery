@@ -91,5 +91,39 @@ class DfgRequest(FilteredRequest):
     disaggregation_attribute: DisaggregationAttribute
 
 
+@enum.unique
+class DejureStatisticType(enum.Enum):
+    """
+    An enumeration of the metric types in dejure graph that can be requested.
+    """
+    MAX = 'max'
+    """The max duration between two events."""
+    MIN = 'min'
+    """The min duration between two events."""
+    MEDIAN = 'median'
+    """The median duration between two events."""
+    MEAN = 'mean'
+    """The mean duration between two events."""
+    REMAIN = 'remain'
+    """The percentage of activity that goes to the next activity. """
+    DROP = 'drop'
+    """The percentage of disaggregated patient that drop in each activity. """
+
+
+@dataclass
+class DejureGraphRequest(FilteredRequest):
+    """
+    A request for a dejure graph. The graph will be calculated based on the given filters. The graph will be disaggregated by the
+    given disaggregation attribute. The graph will show the given merics.
+
+    Attributes:
+        filters (list[BaseFilter] | None): The filters of the request. Defaults to None.
+        statistic (DejureStatisticType): The metric to request.
+        disaggregation_attribute (DisaggregationAttribute): The attribute to disaggregate the graph by.
+    """
+    statistic: DejureStatisticType
+    disaggregation_attribute: DisaggregationAttribute
+
+
 
 
