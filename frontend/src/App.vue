@@ -14,9 +14,8 @@
           <div v-if="isRenderDeployment" id="render-version">
             <h1>{{ commit }} - {{ branch }}</h1>
           </div>
-          <Button icon="pi pi-download" aria-label="Download" @click="downloadEventLog" />
-          <span class="tile-btn material-symbols-outlined cursor-pointer text-xxl p-3 mt-1 float-right"
-            @click="addTile">add</span>
+          <Button icon="pi pi-plus" aria-label="Add tile" @click="addTile" class="float-right" />
+          <Button icon="pi pi-download" aria-label="Download event log" @click="downloadEventLog" class="float-right" />
         </div>
       </nav>
       <!-- <div class="bg-white p-3" style="border-bottom: 1px solid #efefef;">
