@@ -6579,9 +6579,9 @@ pretty-error@^4.0.0:
     renderkid "^3.0.0"
 
 primevue@^3.42.0:
-  version "3.43.0"
-  resolved "https://registry.yarnpkg.com/primevue/-/primevue-3.43.0.tgz#bee115cd9a8324106d0a66078eb82c37b9118693"
-  integrity sha512-iW2gEbM79v5RzRYIrg010fN1DRr5CIRdMsVMG3pBUCq0rzUGnm/hlzJ9ThDZyJrA0/tEKByAo/Pra56s5PnvqQ==
+  version "3.45.0"
+  resolved "https://registry.yarnpkg.com/primevue/-/primevue-3.45.0.tgz#f7d4761a4c044dd58874459e81fea0de3642d6ed"
+  integrity sha512-qtA2YDi6SSBkGRb33lUXL2WnzMd7VZd4IC/YLXiUZLnxCGxqtB4iYj+jGqINNDcIFVqIYYMrc1UhiX+C68GQEQ==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"

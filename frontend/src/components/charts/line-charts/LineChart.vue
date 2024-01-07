@@ -5,24 +5,29 @@
 <script setup lang="ts">
 
 import * as echarts from 'echarts';
+import { Ref, ref } from 'vue';
 import BaseChart from '../BaseChart.vue';
 
-let option: echarts.EChartsOption;
 
 defineProps({
   width: { type: Number, required: true },
   height: { type: Number, required: true }
 })
 
-
-option = {
+const option: Ref<echarts.EChartsOption> = ref({
   grid: {
     top: '10%',
+    left: '15%',
+    right: '5%',
     bottom: '10%'
+  },
+  tooltip: {
+    trigger: 'axis',
+    appendToBody: true,
   },
   xAxis: {
     type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    data: [],
     axisLine: {
       lineStyle: {
         color: '#AAA'
@@ -36,33 +41,33 @@ option = {
       lineStyle: {
         color: '#AAA'
       }
-    }
+    },
   },
   series: [
     {
-      data: [820, 932, 901, 934, 1290, 1330, 1320],
+      data: [],
       type: 'line',
       smooth: true,
-      areaStyle: {
-        color: {
-          type: 'linear',
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 1,
-          colorStops: [
-            {
-              offset: 0, color: '#409EFF'
-            },
-            {
-              offset: 0.9, color: '#8975CB11'
-            }
-          ]
-        }
-      }
+      // areaStyle: {
+      //   color: {
+      //     type: 'linear',
+      //     x: 0,
+      //     y: 0,
+      //     x2: 0,
+      //     y2: 1,
+      //     colorStops: [
+      //       {
+      //         offset: 0, color: '#409EFF'
+      //       },
+      //       {
+      //         offset: 0.9, color: '#8975CB11'
+      //       }
+      //     ]
+      //   }
+      // }
     }
   ]
-};
+});
 
 
 </script>

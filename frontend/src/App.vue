@@ -14,44 +14,31 @@
           <div v-if="isRenderDeployment" id="render-version">
             <h1>{{ commit }} - {{ branch }}</h1>
           </div>
+          <span class="tile-btn material-symbols-outlined cursor-pointer text-xxl p-3 mt-1 float-right"
+            @click="addTile">add</span>
         </div>
       </nav>
-      <div class="bg-white p-3" style="border-bottom: 1px solid #efefef;">
-        <!-- <input class="bg-gray-50 border-[#cecece] border-[0.5px] p-1 rounded-xl text-sm pl-2 pr-2" placeholder="Search" /> -->
-        <div class="inline-flex">
-          <MultiSelect v-model="gender" :options="genders" option-label="name" placeholder="Gender"
-            :max-selected-labels="3" class="w-[200px]" />
-          <div class="block m<l-5">
-            <span>Ages: {{ ageRange }}</span>
-            <Slider v-model="ageRange" range class="w-[200px]" />
-          </div>
-        </div>
-      </div>
+      <!-- <div class="bg-white p-3" style="border-bottom: 1px solid #efefef;">
+        input class="bg-gray-50 border-[#cecece] border-[0.5px] p-1 rounded-xl text-sm pl-2 pr-2" placeholder="Search" />
+    </div> -->
     </div>
     <div style="max-width: 1500px; margin: auto;">
-      <KPIGrid v-model:data="layout" class="mr-5 ml-5" @close="close"></KPIGrid>
+      <KPIGrid v-model:data="layout" class="mr-5 ml-5" @close="remove"></KPIGrid>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 
-import MultiSelect from 'primevue/multiselect';
-import Slider from 'primevue/slider';
-import { Ref, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
 import KPIGrid from './components/grid/KPIGrid.vue';
-import { Charts, KPITile } from './types';
+import { layoutStore } from './stores/LayoutStore';
+import { Charts, EndpointURI, KPITile } from './types';
 
 const commit = ref()
 const branch = ref()
 const isRenderDeployment = ref(false)
 
-const gender = ref(null)
-const genders = ref([
-  { name: 'Male', code: 'male' },
-  { name: 'Female', code: 'female' },
-  { name: 'Other', code: 'other' },
-]);
-const ageRange = ref([20, 80])
 
 // Checks if a render.com deployment, if so, show version info top right
 fetch('/render-config')
@@ -68,22 +55,90 @@ fetch('/render-config')
     // Not a render.com deployment (or something went wrong)
   })
 
-// Closes a KPI tile by its index
-async function close(index: Number) {
-  layout.value = layout.value!.filter((kpi) => kpi.i !== index)
-}
+const globalLayout = layoutStore();
+const remove = globalLayout.remove;
+const { layout } = storeToRefs(globalLayout)
 
-// This is the layout which is passed down to KPIGrid, which is then synced back up
-let layout: Ref<KPITile[]> = ref<KPITile[]>([]);
-
-layout.value = [
-  { title: 'A Pie Chart', type: Charts.PieChart, endpoint: 'google.com', x: 0, y: 0, w: 4, h: 10, i: 0 },
-  { title: 'A Line Chart', type: Charts.LineChart, endpoint: 'google.com', x: 4, y: 0, w: 4, h: 10, i: 1 },
-  { title: 'A Horizontal Bar Chart', type: Charts.HorizontalBarChart, endpoint: 'google.com', x: 4, y: 0, w: 4, h: 10, i: 2 },
-  { title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, endpoint: 'google.com', x: 0, y: 0, w: 4, h: 10, i: 24 },
-  { title: 'Add New KPI', type: Charts.NewChart, endpoint: 'google.com', x: 8, y: 0, w: 4, h: 10, i: 3 },
+const defaultValue: KPITile[] = [
+  {
+    title: 'A Pie Chart', type: Charts.PieChart, x: 0, y: 0, w: 4, h: 10, i: '0', changed: 0, request: {
+      endpoint: EndpointURI.DISTRIBUTION,
+      method: 'POST',
+      disaggregation_attribute: {
+        name: 'gender'
+      }
+    },
+  },
+  {
+    title: 'A Line Chart', type: Charts.LineChart, x: 4, y: 0, w: 4, h: 10, i: '1', changed: 0, request: {
+      endpoint: EndpointURI.KPI,
+      method: 'POST',
+      kpi: ['PERMUTED_PATH_ADHERENCE', 'BUREAUCRATIC_DURATION'],
+      disaggregation_attribute: {
+        name: 'gender'
+      }
+    }
+  },
+  {
+    title: 'A Horizontal Bar Chart', type: Charts.HorizontalBarChart, x: 4, y: 0, w: 4, h: 10, i: '2', changed: 0, request: {
+      endpoint: EndpointURI.DISTRIBUTION,
+      method: 'POST',
+      disaggregation_attribute: {
+        name: 'gender'
+      }
+    }
+  },
+  {
+    title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, x: 0, y: 0, w: 4, h: 10, i: '3', changed: 0, request: {
+      endpoint: EndpointURI.VARIANT,
+      method: 'POST',
+      disaggregation_attribute: {
+        name: 'gender'
+      }
+    }
+  },
+  {
+    title: 'New Tile', type: Charts.NewChart, x: 8, y: 0, w: 4, h: 10, i: '4', changed: 0, request: {
+      endpoint: EndpointURI.DISTRIBUTION,
+      method: 'POST',
+      disaggregation_attribute: {
+        name: 'gender'
+      }
+    }
+  },
 ];
 
+if (localStorage.getItem('layout') === null) {
+  globalLayout.set(defaultValue);
+} else {
+  // globalLayout.set(JSON.parse(localStorage.getItem('layout')!))
+  globalLayout.set(defaultValue);
+}
+
+const addTile = () => {
+  globalLayout.add({
+    title: 'New Tile',
+    type: Charts.NewChart,
+    changed: 0,
+    request: {
+      endpoint: EndpointURI.DISTRIBUTION,
+      method: 'POST',
+      disaggregation_attribute: {
+        name: 'gender'
+      }
+    },
+    x: 8,
+    y: 20,
+    w: 4,
+    h: 10,
+    i: (layout.value.length + 1).toString(),
+  });
+};
+
+
+window.addEventListener('beforeunload', () => {
+  localStorage.setItem('layout', JSON.stringify(layout.value))
+})
 
 </script>
 <style>
@@ -123,6 +178,19 @@ SCROLLBAR DESIGN
   /* Set the color of the track */
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
 /* Firefox */
 /* Note: scrollbar-color and scrollbar-width are not yet standard and may change in the future */
 /* So, use with caution and check for browser updates */
@@ -146,6 +214,7 @@ html {
 
 body {
   background-color: #000;
+  overscroll-behavior-x: none;
 }
 
 #app {
@@ -234,11 +303,15 @@ div.p-listbox.p-focus {
 
 input.p-listbox-filter.p-inputtext {
   padding: 0.25rem;
-  border: 1px solid #ccc;
+  border: 1px solid #888;
+}
+
+.p-inputtext {
+  padding: 0.5rem;
 }
 
 .p-listbox {
-  border: 1px solid #ccc;
+  padding-top: 1rem;
 }
 
 .p-button {
@@ -256,15 +329,17 @@ input.p-listbox-filter.p-inputtext {
 }
 
 .p-dialog-footer {
-  padding: 0 1rem 1rem 1rem;
+  padding: 1rem 1rem 1rem 1rem;
+  border-top: 1px solid #eee;
 }
 
 .p-dialog .p-dialog-header {
   padding: 1rem 1rem 0.5rem 1rem;
+  border-bottom: 1px solid #eee;
 }
 
 .p-dialog .p-dialog-content {
-  padding: 0 1rem 1rem 1rem;
+  padding: 0 1rem 0.5rem 1rem;
 }
 
 .p-multiselect-label {
@@ -297,6 +372,22 @@ input.p-listbox-filter.p-inputtext {
 
 .p-confirm-popup-footer {
   padding: 0.5rem;
+}
+
+.p-dialog-header-icon {
+  margin-top: -25px;
+  margin-right: -10px;
+  scale: 0.8;
+}
+
+.p-listbox-item-group {
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.p-listbox-item-group:first-child {
+  border-top: 0;
+  border-bottom: 1px solid #eee;
 }
 
 * {
