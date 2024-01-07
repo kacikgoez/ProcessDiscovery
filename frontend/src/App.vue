@@ -14,8 +14,8 @@
           <div v-if="isRenderDeployment" id="render-version">
             <h1>{{ commit }} - {{ branch }}</h1>
           </div>
-          <span class="tile-btn material-symbols-outlined cursor-pointer text-xxl p-3 mt-1 float-right"
-            @click="addTile">add</span>
+          <Button icon="pi pi-plus" aria-label="Add tile" @click="addTile" class="float-right" />
+          <Button icon="pi pi-download" aria-label="Download event log" @click="downloadEventLog" class="float-right" />
         </div>
       </nav>
       <!-- <div class="bg-white p-3" style="border-bottom: 1px solid #efefef;">
@@ -139,6 +139,10 @@ const addTile = () => {
 window.addEventListener('beforeunload', () => {
   localStorage.setItem('layout', JSON.stringify(layout.value))
 })
+
+function downloadEventLog() {
+  window.open('/event-log', '_blank');
+}
 
 </script>
 <style>
@@ -317,7 +321,6 @@ input.p-listbox-filter.p-inputtext {
 .p-button {
   padding: 0.5rem 0.75rem;
   margin: 0.25rem;
-  color: #fff;
 }
 
 .p-button.primary {

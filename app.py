@@ -11,6 +11,8 @@ from termcolor import colored
 from backend.src.flask.schemas.api_endpoint_schemas import GetVariantListSchema, KpiSchema, DistributionSchema, DfgSchema
 from backend.src.flask.services.process_mining_service import ProcessMiningService
 
+from definitions import CLEAN_EVENT_LOG_PATH
+
 PROCESS_MINING_SERVICE = ProcessMiningService()
 app = Flask('ORCA')
 ma = Marshmallow(app)
@@ -29,11 +31,6 @@ def render_sha_available():
         return jsonify({'branch': os.environ['RENDER_GIT_BRANCH'], 'commit': os.environ['RENDER_GIT_COMMIT']})
     else:
         return jsonify({})
-
-
-@app.route('/<path:file>')
-def serve_static_file(file):
-    return send_from_directory('frontend/dist/', file)
 
 
 @app.route('/variants', methods=['POST'])
@@ -107,6 +104,19 @@ def kpi():
 @app.route('/patient-attributes')
 def get_patient_attributes():
     return jsonify(PROCESS_MINING_SERVICE.get_patient_attributes())
+
+
+@app.route('/event-log')
+def download_event_log():
+    # split the path into directory and filename
+    path = os.path.split(CLEAN_EVENT_LOG_PATH)
+    # send the file as an attachment
+    return send_from_directory(path[0], path[1], as_attachment=True)
+
+
+@app.route('/<path:file>')
+def serve_static_file(file):
+    return send_from_directory('frontend/dist/', file)
 
 
 if __name__ == '__main__':

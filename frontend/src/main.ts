@@ -2,6 +2,7 @@ import { createPinia } from 'pinia';
 import PrimeVue from 'primevue/config';
 import ConfirmationService from 'primevue/confirmationservice';
 import 'primevue/resources/themes/lara-light-cyan/theme.css';
+import 'primeicons/primeicons.css'
 import ToastService from 'primevue/toastservice';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
