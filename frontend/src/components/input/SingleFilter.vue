@@ -1,6 +1,6 @@
 <script setup lang='ts'>
-import {computed, onMounted, PropType, ref, toRefs, watch} from 'vue';
-import {Filter, FilterOperators} from '@/types';
+import { Filter, FilterOperators } from '@/types';
+import { PropType, computed, ref, watch } from 'vue';
 
 const props = defineProps({
   modelValue: { type: Object as PropType<Filter>, required: true },
@@ -14,23 +14,23 @@ const filterValue = ref();
 const availableFilterOperators = computed(() => {
   if (props.modelValue?.attribute?.type == 'categorical') {
     return [
-        FilterOperators.IS_NOT_EMPTY,
-        FilterOperators.IS_EMPTY,
-        FilterOperators.EQUALS,
-        FilterOperators.NOT_EQUALS,
-        FilterOperators.CONTAINS,
-        FilterOperators.NOT_CONTAINS,
+      FilterOperators.IS_NOT_EMPTY,
+      FilterOperators.IS_EMPTY,
+      FilterOperators.EQUALS,
+      FilterOperators.NOT_EQUALS,
+      FilterOperators.CONTAINS,
+      FilterOperators.NOT_CONTAINS,
     ]
   } else {
     return [
-        FilterOperators.IS_NOT_EMPTY,
-        FilterOperators.IS_EMPTY,
-        FilterOperators.EQUALS,
-        FilterOperators.NOT_EQUALS,
-        FilterOperators.GREATER_THAN,
-        FilterOperators.GREATER_THAN_OR_EQUAL,
-        FilterOperators.LESS_THAN,
-        FilterOperators.LESS_THAN_OR_EQUAL,
+      FilterOperators.IS_NOT_EMPTY,
+      FilterOperators.IS_EMPTY,
+      FilterOperators.EQUALS,
+      FilterOperators.NOT_EQUALS,
+      FilterOperators.GREATER_THAN,
+      FilterOperators.GREATER_THAN_OR_EQUAL,
+      FilterOperators.LESS_THAN,
+      FilterOperators.LESS_THAN_OR_EQUAL,
     ]
   }
 })
@@ -117,13 +117,13 @@ const showEditOverlay = (event) => {
 }
 
 watch(selectedOperator, (newValue, oldValue) => {
-  if (newValue != oldValue) {
+  if (newValue != oldValue && inputType.value == 'none') {
     emitUpdate();
   }
 })
 
 watch(filterValue, (newValue, oldValue) => {
-  if (newValue != oldValue) {
+  if (newValue != oldValue && newValue != '') {
     emitUpdate();
   }
 })
@@ -132,28 +132,37 @@ const emitUpdate = () => {
   emit('update:modelValue', {
     ...props.modelValue,
     operator: selectedOperator.value,
-    value: filterValue.value,
+    value: filterValue.value + '',
+  });
+}
+
+const removal = (event) => {
+  event.stopPropagation();
+  emit('update:modelValue', {
+    ...props.modelValue,
+    operator: FilterOperators.NONE,
+    value: null,
   });
 }
 </script>
 
 <template>
   <div>
-    <Chip @click="showEditOverlay" removable>
+    <Chip removable @click="showEditOverlay" @remove="removal">
       <span class="font-semi-bold">{{ props.modelValue?.attribute.name }}:</span>
       <span class="ml-2">{{ printFilterOperator }}{{ printFilterValue }}</span>
     </Chip>
-    <OverlayPanel ref="editOverlay" appendTo="body" showCloseIcon class="overlay">
-      <Dropdown v-model="selectedOperator" :options="availableFilterOperators" placeholder="Select an operator" class="w-full md:w-14rem mb-2" />
-      <InputNumber v-if="inputType == 'number'" v-model="filterValue" class="w-full md:w-14rem" :min="props.modelValue?.attribute.min" :max="props.modelValue?.attribute.max" />
+    <OverlayPanel ref="editOverlay" append-to="body" show-close-icon class="overlay">
+      <Dropdown v-model="selectedOperator" :options="availableFilterOperators" placeholder="Select an operator"
+        class="w-full md:w-14rem mb-2" />
+      <InputNumber v-if="inputType == 'number'" v-model="filterValue" class="w-full md:w-14rem"
+        :min="props.modelValue?.attribute.min" :max="props.modelValue?.attribute.max" />
       <Dropdown v-if="inputType == 'dropdown'" v-model="filterValue" :options="props.modelValue?.attribute.values" filter
-                placeholder="Select a value" class="w-full md:w-14rem" />
-      <MultiSelect v-if="inputType == 'multiselect'" v-model="filterValue" :options="props.modelValue?.attribute.values" filter placeholder="Select values"
-                   :maxSelectedLabels="3" class="w-full md:w-20rem" />
+        placeholder="Select a value" class="w-full md:w-14rem" />
+      <MultiSelect v-if="inputType == 'multiselect'" v-model="filterValue" :options="props.modelValue?.attribute.values"
+        filter placeholder="Select values" :max-selected-labels="3" class="w-full md:w-20rem" />
     </OverlayPanel>
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

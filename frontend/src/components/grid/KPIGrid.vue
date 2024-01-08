@@ -15,7 +15,7 @@ import KPIGridItem from '@/components/grid/KPIGridItem.vue';
 import { layoutStore } from '@/stores/LayoutStore';
 import type { Charts } from '@/types';
 import { storeToRefs } from 'pinia';
-import { defineEmits, ref } from 'vue';
+import { defineEmits, ref, watch } from 'vue';
 import { GridItem, GridLayout } from 'vue3-grid-layout-next';
 
 // Min width of the items
@@ -29,6 +29,11 @@ const globalLayout = layoutStore();
 const { layout } = storeToRefs(globalLayout)
 
 const emits = defineEmits(['close', 'edit'])
+
+watch(layout, (newVal) => {
+    /* eslint-disable no-debugger */
+    layout.value = newVal
+})
 
 function exit(index: Number): void {
     emits('close', index)

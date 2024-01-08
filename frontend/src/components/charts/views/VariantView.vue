@@ -1,5 +1,6 @@
 <template>
-    <ChevronDiagram :key="update" :width="width" :height="height" :variants="variants" :request="request">
+    <ChevronDiagram :key="update" :width="width" :height="height" :variants="variants" :request="request"
+        :filters="filters">
     </ChevronDiagram>
 </template>
 

@@ -14,11 +14,11 @@
 
 <script setup lang="ts">
 import { theme } from '@/theme.js';
-import {DataSeries, EndpointURI, ServerRequest, formatDataSeries, downloadVisualizationBusKey} from '@/types';
+import { DataSeries, EndpointURI, ServerRequest, downloadVisualizationBusKey, formatDataSeries } from '@/types';
 import { capitalizeWords } from '@/util';
+import { useEventBus } from '@vueuse/core';
 import * as echarts from 'echarts';
 import { PropType, defineProps, onBeforeMount, onMounted, ref, toRefs, watch } from 'vue';
-import {useEventBus} from '@vueuse/core';
 
 const props = defineProps({
     id: { type: String, required: true },
@@ -28,6 +28,7 @@ const props = defineProps({
     minWidth: { type: Number, default: -1 },
     request: { type: Object as PropType<ServerRequest>, required: true },
     option: { type: Object as PropType<echarts.EChartsOption>, required: true },
+    filters: { type: Array as () => Filter[], required: true },
 });
 
 const loaded = ref(false);
@@ -92,14 +93,14 @@ onMounted(() => {
 
     // Download the chart
     downloadBus.on((event) => {
-      if (event.id === props.id) {
-          const base64 = myChart.getDataURL();
-          const link = document.createElement('a');
-          link.href = base64;
-          link.download = event.title + '.png';
-          link.click();
-      }
-  });
+        if (event.id === props.id) {
+            const base64 = myChart.getDataURL();
+            const link = document.createElement('a');
+            link.href = base64;
+            link.download = event.title + '.png';
+            link.click();
+        }
+    });
 });
 
 async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.SeriesOption, index: number = 0) {
@@ -112,8 +113,10 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify({ ...constructJson(propRefs.filters.value), ...requestBody }),
         });
+
+        console.log('YO', constructJson(propRefs.filters.value))
 
         const responseData = await response.json();
         console.debug(responseData)
@@ -145,7 +148,7 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
         switch (props.request.endpoint) {
             case EndpointURI.DISTRIBUTION: {
                 const data = (responseData as DataSeries).data.map((item) => {
-                  return { name: item.x, value: item.y };
+                    return { name: item.x, value: item.y };
                 });
                 Object.assign(propRefs.option.value.series[index], { name: capitalizeWords(responseData.name), data: data });
                 break;

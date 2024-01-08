@@ -21,12 +21,12 @@
       </div>
     </div>
     <div>
-      <Filters v-model="filters"></Filters>
+      <Filters :id="props.i" v-model="filters"></Filters>
     </div>
     <div ref="tileContent" class="tile-content">
       <div class="overflow-y-auto overflow-x-hidden h-full">
         <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width" :height="height"
-          :filters="filters" :title="title" :request="requestRef" @change="change"></component>
+          :filters="filterCleared" :title="title" :request="requestRef" @change="change"></component>
       </div>
     </div>
     <div class="tile-footer">
@@ -38,18 +38,20 @@
 </template>
 
 <script setup lang="ts">
-import {Charts, downloadVisualizationBusKey, KPIActions, KPIChange, ServerRequest} from '@/types';
-import {useElementSize, useEventBus} from '@vueuse/core';
+import { Charts, downloadVisualizationBusKey, KPIActions, KPIChange, ServerRequest } from '@/types';
+import { useElementSize, useEventBus } from '@vueuse/core';
 import { useConfirm } from 'primevue/useconfirm';
 import {
-  PropType,
+  computed,
   defineAsyncComponent,
   defineEmits,
   defineProps,
   onBeforeMount,
+  PropType,
   ref,
   shallowRef,
-  toRef
+  toRef,
+  watch
 } from 'vue';
 import Filters from '../input/Filters.vue';
 import EditModal from '../modals/EditModal.vue';
@@ -85,10 +87,21 @@ const props = defineProps({
   i: { type: String, required: true },
 });
 
-const filters = ref([]);
-
 const emits = defineEmits(['close', 'update:data', 'draggable', 'edit']);
+
+// Filter component 
+const filters = ref(props.request.filters ?? []);
+
+// Clean of deleted filters
+const filterCleared = computed(() => {
+  return (filters.value as Filter[]).filter((filter) => filter.operator !== FilterOperators.NONE)
+});
+
+// Needed for deep watch, otherwise old val = new val
+const filterString = computed(() => JSON.stringify(filters.value));
+const globalLayout = layoutStore();
 const visible = ref(false);
+
 let chart = shallowRef<Object>();
 // If this is changed, the chart component will be reloaded
 const changed = shallowRef(0);
@@ -99,6 +112,14 @@ const title = toRef(props, 'title');
 
 onBeforeMount(() => {
   requestRef.value = props.request;
+
+  watch(filterString, (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      console.log(filterCleared.value)
+      globalLayout.updateFilter(props.i, filterCleared.value);
+      changed.value++;
+    }
+  }, { deep: true });
 });
 
 function show() {
