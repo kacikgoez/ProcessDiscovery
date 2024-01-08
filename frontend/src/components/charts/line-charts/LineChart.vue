@@ -1,9 +1,10 @@
 <template>
-  <BaseChart :width="width" :height="height" :option="option"></BaseChart>
+  <BaseChart :width="width" :height="height" :option="option" :filters="filters"></BaseChart>
 </template>
 
 <script setup lang="ts">
 
+import { Filter } from '@/types';
 import * as echarts from 'echarts';
 import { Ref, ref } from 'vue';
 import BaseChart from '../BaseChart.vue';
@@ -11,7 +12,8 @@ import BaseChart from '../BaseChart.vue';
 
 defineProps({
   width: { type: Number, required: true },
-  height: { type: Number, required: true }
+  height: { type: Number, required: true },
+  filters: { type: Array as () => Filter[], required: true },
 })
 
 const option: Ref<echarts.EChartsOption> = ref({

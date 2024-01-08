@@ -14,14 +14,12 @@
 
 <script setup lang="ts">
 import { theme } from '@/theme.js';
-import { DataSeries, EndpointURI, Filter, ServerRequest, constructJson, downloadVisualizationBusKey, formatDataSeries } from '@/types';
+import { DataSeries, EndpointURI, Filter, ServerRequest, constructJson, formatDataSeries } from '@/types';
 import { capitalizeWords } from '@/util';
-import { useEventBus } from '@vueuse/core';
 import * as echarts from 'echarts';
 import { PropType, defineProps, onBeforeMount, onMounted, ref, toRefs, watch } from 'vue';
 
 const props = defineProps({
-    id: { type: String, required: true },
     width: { type: Number, required: true },
     height: { type: Number, required: true },
     maxWidth: { type: Number, default: -1 },
@@ -34,7 +32,6 @@ const props = defineProps({
 const loaded = ref(false);
 const propRefs = toRefs(props);
 const chartDom = ref(null);
-const downloadBus = useEventBus(downloadVisualizationBusKey);
 
 onBeforeMount(async () => {
     /* eslint-disable no-debugger */
@@ -87,18 +84,6 @@ onMounted(() => {
         if (propRefs.maxWidth.value > 0 && newWidth > propRefs.maxWidth.value) return;
         if (propRefs.minWidth.value > 0 && newWidth < propRefs.minWidth.value) return;
         myChart.resize({ width: newWidth, height: newHeight });
-
-    });
-
-    // Download the chart
-    downloadBus.on((event) => {
-        if (event.id === props.id) {
-            const base64 = myChart.getDataURL();
-            const link = document.createElement('a');
-            link.href = base64;
-            link.download = event.title + '.png';
-            link.click();
-        }
     });
 });
 
@@ -119,7 +104,7 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
 
         let data = [];
 
-        let legend = (responseData.series ? responseData.series[0].data : responseData.data)
+        let legend = (responseData.series ? responseData.series[0].data : responseData)
         legend = legend.filter((item: any) => item.name !== undefined || item.x !== undefined);
         legend = legend.map((item: any) => item.name || item.x);
 
@@ -139,17 +124,13 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
 
         // Add a new series item to the option if multiple (besides first item, already passed by options)
         if (index > 0) propRefs.option.value.series.push(JSON.parse(JSON.stringify(baseDataItem)));
-        index = propRefs.option.value.series.length - 1;
 
         // Assign the data to the series depending on endpoint
         switch (props.request.endpoint) {
-            case EndpointURI.DISTRIBUTION: {
-                const data = (responseData as DataSeries).data.map((item) => {
-                    return { name: item.x, value: item.y };
-                });
-                Object.assign(propRefs.option.value.series[index], { name: capitalizeWords(responseData.name), data: data });
+            case EndpointURI.DISTRIBUTION:
+                propRefs.option.value.series[index].name = ''
+                propRefs.option.value.series[index].data = responseData;
                 break;
-            }
             case EndpointURI.KPI: {
                 data = responseData;
                 const formatted = formatDataSeries(data.series[0] as DataSeries);

@@ -74,62 +74,74 @@ const { layout } = storeToRefs(globalLayout)
 
 const defaultValue: KPITile[] = [
   {
-    title: 'A Pie Chart', type: Charts.PieChart, x: 0, y: 0, w: 4, h: 10, i: '0', changed: 0, request: {
+    title: 'A Pie Chart', type: Charts.PieChart, x: 0, y: 0, w: 4, h: 10, i: '0',
+    changed: 0,
+    request: {
       endpoint: EndpointURI.DISTRIBUTION,
       method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
-      }
+      },
+      filters: [],
     },
   },
   {
-    title: 'A Line Chart', type: Charts.LineChart, x: 4, y: 0, w: 4, h: 10, i: '1', changed: 0, request: {
+    title: 'A Line Chart', type: Charts.HorizontalBarChart, x: 4, y: 0, w: 4, h: 10, i: '1',
+    changed: 0,
+    request: {
       endpoint: EndpointURI.KPI,
-      method: 'POST',
-      kpi: ['PERMUTED_PATH_ADHERENCE', 'BUREAUCRATIC_DURATION'],
+      method: 'GET',
+      kpi: ['HAPPY_PATH_ADHERENCE'],
       disaggregation_attribute: {
         name: 'gender'
-      }
+      },
+      filters: [],
     }
   },
   {
-    title: 'A Horizontal Bar Chart', type: Charts.HorizontalBarChart, x: 4, y: 0, w: 4, h: 10, i: '2', changed: 0, request: {
+    title: 'A Horizontal Bar Chart', type: Charts.HorizontalBarChart, x: 4, y: 0, w: 4, h: 10, i: '2', changed: 0,
+    request: {
       endpoint: EndpointURI.DISTRIBUTION,
       method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
-      }
+      },
+      filters: []
     }
   },
   {
-    title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, x: 0, y: 0, w: 4, h: 10, i: '3', changed: 0, request: {
+    title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, x: 0, y: 0, w: 4, h: 10, i: '3', changed: 0,
+    request: {
       endpoint: EndpointURI.VARIANT,
       method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
-      }
+      },
+      filters: [],
     }
   },
   {
-    title: 'New Tile', type: Charts.NewChart, x: 8, y: 0, w: 4, h: 10, i: '4', changed: 0, request: {
+    title: 'New Tile', type: Charts.NewChart, x: 8, y: 0, w: 4, h: 10, i: '4', changed: 0,
+    request: {
       endpoint: EndpointURI.DISTRIBUTION,
       method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
-      }
-    }
+      },
+      filters: [],
+    },
   },
 ];
 
 if (localStorage.getItem('layout') === null) {
   globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
 } else {
-  // globalLayout.set(JSON.parse(localStorage.getItem('layout')!))
-  globalLayout.set(defaultValue);
+  globalLayout.$patch(JSON.parse(localStorage.getItem('layout')!));
+  // globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
 }
 
 const addTile = () => {
-  globalLayout.add({
+  globalLayout.addTile({
     title: 'New Tile',
     type: Charts.NewChart,
     changed: 0,
@@ -138,7 +150,8 @@ const addTile = () => {
       method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
-      }
+      },
+      filters: [],
     },
     x: 8,
     y: 20,
@@ -150,7 +163,7 @@ const addTile = () => {
 
 
 window.addEventListener('beforeunload', () => {
-  localStorage.setItem('layout', JSON.stringify(layout.value))
+  localStorage.setItem('layout', JSON.stringify(globalLayout.$state))
 })
 
 function downloadEventLog() {

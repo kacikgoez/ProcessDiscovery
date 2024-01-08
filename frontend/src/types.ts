@@ -1,9 +1,9 @@
 /*
 * Central file for all the relevant types. 
 */
+import { EventBusKey } from '@vueuse/core';
 import { Ref } from 'vue';
 import { LayoutItem } from 'vue3-grid-layout-next/dist/helpers/utils';
-import {EventBusKey} from '@vueuse/core';
 
 // Chart must be named like file in /charts, so PieChart.vue -> PieChart
 export enum Charts {
@@ -38,9 +38,7 @@ export type KPITile = {
     // index for updates, just set this to 0
     changed: number,
     request: ServerRequest,
-    filters?: Filter[] | undefined,
 } & LayoutItem;
-
 
 /* ------------- Modal ---------------- */
 
@@ -67,7 +65,7 @@ export interface IDictionary<TValue> {
     [id: string]: TValue;
 }
 
-export const ServerAttributes : PatientAttribute[] = await fetch('http://127.0.0.1:80/patient-attributes',
+export const ServerAttributes : PatientAttribute[] = await fetch(`//${window.location.hostname}:80/patient-attributes`,
     {
         method: 'GET',
         headers: {
@@ -225,27 +223,32 @@ export enum EndpointURI {
     VARIANT = '/variants',
 }
 
-export type BodyKPI = {
+type BaseBody = {
+    endpoint: EndpointURI,
+    method: 'GET' | 'POST',
+    disaggregation_attribute: DisaggregationAttribute,
+    filters?: Filter[],
+}
+
+type BodyKPI = BaseBody & {
     endpoint: EndpointURI.KPI,
-    method: 'GET',
     kpi: string[],
-    legend_attribute: DisaggregationAttribute,
-    disaggregation_attribute: DisaggregationAttribute
+    legend_attribute?: DisaggregationAttribute,
 }
 
-export type BodyDistribution = {
+type BodyDistribution = BaseBody & {
     endpoint: EndpointURI.DISTRIBUTION,
-    method: 'POST',
-    disaggregation_attribute: DisaggregationAttribute
 }
 
-export type BodyVariant = {
+type BodyVariant = BaseBody & {
     endpoint: EndpointURI.VARIANT,
-    method: 'POST',
-    disaggregation_attribute: DisaggregationAttribute
 }
 
-export type ServerRequest = BodyKPI | BodyDistribution | BodyVariant
+type CommonBody = BaseBody & {
+    endpoint: EndpointURI,
+}
+
+export type ServerRequest = CommonBody | BodyKPI | BodyDistribution | BodyVariant
 
 export type EditModalEntry = {
     value: string,
@@ -314,6 +317,7 @@ export enum FilterOperators {
     LESS_THAN_OR_EQUAL = 'LESS_THAN_OR_EQUAL',
     GREATER_THAN = 'GREATER_THAN',
     GREATER_THAN_OR_EQUAL = 'GREATER_THAN_OR_EQUAL',
+    NONE = 'NONE',
 }
 
 export type BaseFilter = {

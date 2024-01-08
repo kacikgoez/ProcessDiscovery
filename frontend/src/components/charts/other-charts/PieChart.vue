@@ -1,5 +1,5 @@
 <template>
-  <BaseChart :width="width" :height="height" :option="option" :request="request"></BaseChart>
+  <BaseChart :width="width" :height="height" :option="option" :request="request" :filters="filters"></BaseChart>
 </template>
 
 <script setup lang="ts">
@@ -8,10 +8,11 @@ const props = defineProps({
   request: { type: Object as PropType<ServerRequest>, required: true },
   width: { type: Number, required: true },
   height: { type: Number, required: true },
+  filters: { type: Array as () => Filter[], required: true },
 });
 
 import BaseChart from '@/components/charts/BaseChart.vue';
-import { ServerRequest } from '@/types';
+import { Filter, ServerRequest } from '@/types';
 import * as echarts from 'echarts';
 import { PropType, Ref, ref } from 'vue';
 

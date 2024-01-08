@@ -1,5 +1,5 @@
-import {PatientAttribute} from '@/types';
-import {defineStore} from 'pinia';
+import { PatientAttribute } from '@/types';
+import { defineStore } from 'pinia';
 
 const patientAttributesStore = defineStore('patient-attributes', {
     state: () => ({
@@ -8,7 +8,7 @@ const patientAttributesStore = defineStore('patient-attributes', {
     actions: {
         async fetchAttributes() {
             console.debug('Fetching patient attributes')
-            const response = await fetch('http://127.0.0.1:80/patient-attributes', {
+            const response = await fetch(`//${window.location.hostname}/patient-attributes`, {
                 headers: {
                   'Accept': 'application/json',
                   'Content-Type': 'application/json',

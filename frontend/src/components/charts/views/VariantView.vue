@@ -1,5 +1,6 @@
 <template>
-    <ChevronDiagram :key="update" :width="width" :height="height" :variants="variants" :request="request">
+    <ChevronDiagram :key="update" :width="width" :height="height" :variants="variants" :request="request"
+        :filters="filters">
     </ChevronDiagram>
 </template>
 
@@ -28,7 +29,7 @@ watch(propRefs.filters, () => {
 }, { deep: true });
 
 function fetchVariants() {
-    fetch('http://127.0.0.1:80/variants', {
+    fetch(`//${window.location.hostname}/variants`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
