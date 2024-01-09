@@ -65,7 +65,7 @@ export interface IDictionary<TValue> {
     [id: string]: TValue;
 }
 
-export const ServerAttributes : PatientAttribute[] = await fetch('http://127.0.0.1:80/patient-attributes',
+export const ServerAttributes : PatientAttribute[] = await fetch(`//${window.location.hostname}/patient-attributes`,
     {
         method: 'GET',
         headers: {

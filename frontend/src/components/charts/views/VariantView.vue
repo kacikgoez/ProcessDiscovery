@@ -29,7 +29,7 @@ watch(propRefs.filters, () => {
 }, { deep: true });
 
 function fetchVariants() {
-    fetch('http://127.0.0.1:80/variants', {
+    fetch(`//${window.location.hostname}/variants`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
