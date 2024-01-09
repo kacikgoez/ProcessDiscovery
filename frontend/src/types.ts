@@ -70,13 +70,6 @@ export const ServerAttributes : PatientAttribute[] = await fetch('http://127.0.0
 
 /* ------------- Chart Data Types ---------------- */
 
-export type Distribution = {
-    data: {
-        name: string,
-        value: number
-    }[]
-}
-
 export type Graph = {
     name: string,
     edges: Edge[],
@@ -111,23 +104,16 @@ export type MultiDataSeries = {
     data: DataSeries[]
 }
 
-export type DataType = Distribution | Graph | DataSeries | MultiDataSeries
+export type DataType = Graph | DataSeries | MultiDataSeries
 
 // Formats the data from the server to ECharts format
-export function formatDataSeries(p_data: DataSeries | Distribution) {
+export function formatDataSeries(p_data: DataSeries) {
     const label: string[] = [];
     const data: number[] = [];
 
     p_data.data.forEach((item) => {
-        if ('name' in item) {
-            // Type: { name: string; value: number; }
-            label.push(item.name);
-            data.push(+(item.value).toFixed(3));
-        } else if ('x' in item && 'y' in item) {
-            // Type: { x: string | number; y: number; }
-            label.push(String(item.x));
-            data.push(+(item.y).toFixed(3));
-        }
+        label.push(String(item.x));
+        data.push(+(item.y).toFixed(3));
     });
 
     return { label: label, data: data };

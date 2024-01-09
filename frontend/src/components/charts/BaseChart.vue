@@ -102,10 +102,11 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
         });
 
         const responseData = await response.json();
+        console.debug(responseData)
 
         let data = [];
 
-        let legend = (responseData.series ? responseData.series[0].data : responseData)
+        let legend = (responseData.series ? responseData.series[0].data : responseData.data)
         legend = legend.filter((item: any) => item.name !== undefined || item.x !== undefined);
         legend = legend.map((item: any) => item.name || item.x);
 
@@ -128,10 +129,13 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
 
         // Assign the data to the series depending on endpoint
         switch (props.request.endpoint) {
-            case EndpointURI.DISTRIBUTION:
-                propRefs.option.value.series[index].name = ''
-                propRefs.option.value.series[index].data = responseData;
+            case EndpointURI.DISTRIBUTION: {
+                const data = (responseData as DataSeries).data.map((item) => {
+                  return { name: item.x, value: item.y };
+                });
+                Object.assign(propRefs.option.value.series[index], { name: capitalizeWords(responseData.name), data: data });
                 break;
+            }
             case EndpointURI.KPI: {
                 data = responseData;
                 const formatted = formatDataSeries(data.series[0] as DataSeries);
