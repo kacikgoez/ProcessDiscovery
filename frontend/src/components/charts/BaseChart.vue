@@ -14,12 +14,14 @@
 
 <script setup lang="ts">
 import { theme } from '@/theme.js';
-import { DataSeries, EndpointURI, ServerRequest, formatDataSeries } from '@/types';
+import {DataSeries, EndpointURI, ServerRequest, formatDataSeries, downloadVisualizationBusKey} from '@/types';
 import { capitalizeWords } from '@/util';
 import * as echarts from 'echarts';
 import { PropType, defineProps, onBeforeMount, onMounted, ref, toRefs, watch } from 'vue';
+import {useEventBus} from '@vueuse/core';
 
 const props = defineProps({
+    id: { type: String, required: true },
     width: { type: Number, required: true },
     height: { type: Number, required: true },
     maxWidth: { type: Number, default: -1 },
@@ -31,6 +33,7 @@ const props = defineProps({
 const loaded = ref(false);
 const propRefs = toRefs(props);
 const chartDom = ref(null);
+const downloadBus = useEventBus(downloadVisualizationBusKey);
 
 onBeforeMount(async () => {
     /* eslint-disable no-debugger */
@@ -86,6 +89,17 @@ onMounted(() => {
         myChart.resize({ width: newWidth, height: newHeight });
 
     });
+
+    // Download the chart
+    downloadBus.on((event) => {
+      if (event.id === props.id) {
+          const base64 = myChart.getDataURL();
+          const link = document.createElement('a');
+          link.href = base64;
+          link.download = event.title + '.png';
+          link.click();
+      }
+  });
 });
 
 async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.SeriesOption, index: number = 0) {

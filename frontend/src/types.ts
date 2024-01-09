@@ -3,6 +3,7 @@
 */
 import { Ref } from 'vue';
 import { LayoutItem } from 'vue3-grid-layout-next/dist/helpers/utils';
+import {EventBusKey} from '@vueuse/core';
 
 // Chart must be named like file in /charts, so PieChart.vue -> PieChart
 export enum Charts {
@@ -51,6 +52,13 @@ export interface EditModal {
     name: string,
     chart: Charts
 }
+
+/* ------------- Events ---------------- */
+export interface DownloadVisualizationEvent {
+    id: string,
+    title: string,
+}
+export const downloadVisualizationBusKey: EventBusKey<DownloadVisualizationEvent> = Symbol('downloadVisualizationBusKey');
 
 /* ------------- General Types ---------------- */
 

@@ -5,8 +5,8 @@
         <h1>{{ title }}</h1>
       </div>
       <div class="flex-1 mr-2">
-        <span class="tile-btn material-symbols-outlined text-base cursor-pointer">
-          info
+        <span class="tile-btn material-symbols-outlined text-base cursor-pointer" @click="downloadVisualization">
+          download
         </span>
       </div>
       <div class="flex-1 mr-2">
@@ -35,8 +35,8 @@
 </template>
 
 <script setup lang="ts">
-import { Charts, KPIActions, KPIChange, ServerRequest } from '@/types';
-import { useElementSize } from '@vueuse/core';
+import {Charts, downloadVisualizationBusKey, KPIActions, KPIChange, ServerRequest} from '@/types';
+import {useElementSize, useEventBus} from '@vueuse/core';
 import { useConfirm } from 'primevue/useconfirm';
 import {
   PropType,
@@ -53,6 +53,8 @@ import EditModal from '../modals/EditModal.vue';
 const tileContent = ref(null);
 const { width, height } = useElementSize(tileContent);
 const requestRef = ref<ServerRequest>();
+
+const downloadBus = useEventBus(downloadVisualizationBusKey);
 
 const confirm = useConfirm();
 const openPopup = (event: Event, i: string) => {
@@ -119,6 +121,13 @@ async function change(data: KPIChange) {
       changed.value++;
       break;
   }
+}
+
+function downloadVisualization() {
+  downloadBus.emit({
+    id: props.i,
+    title: props.title,
+  });
 }
 
 change({ action: KPIActions.ChangeComponent, component: component });
