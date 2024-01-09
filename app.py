@@ -5,6 +5,7 @@ import threading as thread
 
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
+from flask_caching import Cache
 from waitress import serve
 from termcolor import colored
 
@@ -14,9 +15,32 @@ from backend.src.flask.services.process_mining_service import ProcessMiningServi
 from definitions import CLEAN_EVENT_LOG_PATH
 
 PROCESS_MINING_SERVICE = ProcessMiningService()
+
+config = {
+    # Flask-Caching related configs
+    "CACHE_TYPE": "SimpleCache",
+    "CACHE_DEFAULT_TIMEOUT": 3600,  # 1 hour
+    "CACHE_THRESHOLD": 1000,
+}
+
 app = Flask('ORCA')
+app.config.from_mapping(config)
+
 ma = Marshmallow(app)
 CORS(app)
+cache = Cache(app)
+
+
+def make_cache_key() -> str:
+    """
+    Used to generate a cache key for caching the results of a request.
+    This is based on the json body of the request.
+
+    Returns:
+        str: The cache key
+    """
+    data = request.get_json()
+    return str(hash(str(data)))
 
 
 @app.route('/')
@@ -34,6 +58,7 @@ def render_sha_available():
 
 
 @app.route('/variants', methods=['POST'])
+@cache.cached(timeout=3600, make_cache_key=make_cache_key)
 def variants():
     json_data = request.get_json(force=True)
     if not json_data:
@@ -51,6 +76,7 @@ def variants():
 
 
 @app.route('/distributions', methods=['POST'])
+@cache.cached(timeout=3600, make_cache_key=make_cache_key)
 def distributions():
     json_data = request.get_json(force=True)
     if not json_data:
@@ -68,6 +94,7 @@ def distributions():
 
 
 @app.route('/dfg', methods=['POST'])
+@cache.cached(timeout=3600, make_cache_key=make_cache_key)
 def dfg():
     json_data = request.get_json(force=True)
     if not json_data:
@@ -85,6 +112,7 @@ def dfg():
 
 
 @app.route('/kpi', methods=['POST'])
+@cache.cached(timeout=3600, make_cache_key=make_cache_key)
 def kpi():
     json_data = request.get_json(force=True)
     if not json_data:
@@ -102,6 +130,7 @@ def kpi():
 
 
 @app.route('/patient-attributes')
+@cache.cached(timeout=3600)
 def get_patient_attributes():
     return jsonify(PROCESS_MINING_SERVICE.get_patient_attributes())
 
