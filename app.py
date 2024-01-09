@@ -39,8 +39,12 @@ def make_cache_key() -> str:
     Returns:
         str: The cache key
     """
+    request_path = request.path
+
     data = request.get_json()
-    return str(hash(str(data)))
+    hashed_data = hash(str(data))
+
+    return f'{request_path}_{hashed_data}'
 
 
 @app.route('/')
