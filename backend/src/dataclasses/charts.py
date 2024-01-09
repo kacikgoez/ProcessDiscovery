@@ -2,18 +2,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-
-@dataclass
-class DistributionDataItem:
-    """
-    A data item of a distribution.
-
-    Attributes:
-        name (str): The name of the data item.
-        value (float): The value of the data item.
-    """
-    name: str
-    value: float
+from definitions import SORT_ORDERS
 
 
 @dataclass
@@ -103,18 +92,27 @@ class DataSeries:
     data: list[DataItem]
 
     @classmethod
-    def from_dict(cls, name: str, data: dict[str | int | float, float]) -> "DataSeries":
+    def from_dict(cls, name: str, data: dict[str | int | float, float], sort_by: str | None = None) -> "DataSeries":
         """
         Create a data series from a dictionary. The keys of the dictionary will be used as x values and the values of
-        the dictionary will be used as y values.
+        the dictionary will be used as y values. The data will be sorted by the x values. If the sort_by parameter is
+        given and a sort order is defined for the given key, the data will be sorted by the sort order.
 
         Args:
             name (str): The name of the data series.
             data (dict[str | int | float, float]): The data of the data series.
+            sort_by (str | None): The key to sort the data by.
 
         Returns:
             DataSeries: The data series.
         """
+
+        # sort the data by the x values
+        if sort_by in SORT_ORDERS:
+            data = dict(sorted(data.items(), key=lambda item: SORT_ORDERS[sort_by].index(item[0])))
+        else:
+            data = dict(sorted(data.items(), key=lambda item: item[0]))
+
         return DataSeries(name=name, data=[DataItem(x=x, y=y) for x, y in data.items()])
 
 
@@ -148,13 +146,15 @@ class MultiDataSeries:
         if df.index.nlevels == 1:
             series.append(DataSeries.from_dict(
                 name=name,
-                data=df.to_dict()
+                data=df.to_dict(),
+                sort_by=df.index.name
             ))
         elif df.index.nlevels == 2:
             for index, row in df.unstack().iterrows():
                 series.append(DataSeries.from_dict(
                     name=str(index),
-                    data=row.to_dict()
+                    data=row.to_dict(),
+                    sort_by=df.index.names[1]
                 ))
         else:
             raise ValueError('The index has more than two levels.')

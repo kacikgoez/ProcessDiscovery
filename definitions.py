@@ -26,3 +26,7 @@ PATIENT_ATTRIBUTES = {
     'outcome_lung_right': AttributeType.CATEGORICAL,
     'outcome_pancreas': AttributeType.CATEGORICAL,
 }
+
+SORT_ORDERS = {
+    'referral_day_of_week': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+}

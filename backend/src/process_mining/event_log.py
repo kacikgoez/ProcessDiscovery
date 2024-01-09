@@ -53,33 +53,34 @@ def load_patient_attributes(event_log: pd.DataFrame) -> list[PatientAttribute]:
     return attributes
 
 
-def create_bins(el: pd.DataFrame, disaggregation_attribute: DisaggregationAttribute | None = None,
-                temporary_column_name='temp') -> pd.DataFrame:
+def create_bins(el: pd.DataFrame, disaggregation_attribute: DisaggregationAttribute | None = None) \
+        -> tuple[pd.DataFrame, str | None]:
     """
     Create bins for the given data frame. The bins will be created based on the given disaggregation attribute.
     If no disaggregation attribute or a categorical disaggregation attribute is given, the data frame will not be
-    modified. If a numerical disaggregation attribute is given, the data frame will be modified by adding a temporary
-    column containing the bin labels. The bin labels will be created based on the bins of the disaggregation attribute.
+    modified. If a numerical disaggregation attribute is given, the data frame will be binned based on the bins of the
+    disaggregation attribute. The bins will be represented by the bin labels of the disaggregation attribute.
 
     Args:
         el (pd.DataFrame): The data frame.
         disaggregation_attribute (DisaggregationAttribute, optional): The disaggregation attribute. Defaults to None.
-        temporary_column_name (str, optional): The name of the temporary column. Defaults to 'temp'.
 
     Returns:
-        (pd.DataFrame): The data frame with the temporary column containing the bin labels.
+        (pd.DataFrame): The data frame.
+        (str): The name of the column containing the disaggregation attribute.
     """
     # copy the column of the disaggregation attribute to a temporary column to avoid modifying the original data frame
     if disaggregation_attribute is not None:
-        el[temporary_column_name] = el[disaggregation_attribute.name]
+        # copy the dataframe to avoid modifying the original data frame
+        el = el.copy()
 
         if disaggregation_attribute.type == AttributeType.NUMERICAL:
             # bin the numerical values
-            el[temporary_column_name] = pd.cut(el[temporary_column_name],
-                                               bins=disaggregation_attribute.get_bins(),
-                                               labels=disaggregation_attribute.get_bin_labels())
+            el[disaggregation_attribute.name] = pd.cut(el[disaggregation_attribute.name],
+                                                       bins=disaggregation_attribute.get_bins(),
+                                                       labels=disaggregation_attribute.get_bin_labels())
 
-    return el
+    return el, disaggregation_attribute.name if disaggregation_attribute is not None else None
 
 
 def filter_log(el: pd.DataFrame, filters: list[BaseFilter]) -> pd.DataFrame:

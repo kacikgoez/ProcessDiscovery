@@ -3,7 +3,7 @@ from typing import Any
 import pandas as pd
 
 from backend.src.dataclasses.attributes import CategoricalAttribute, NumericalAttribute
-from backend.src.dataclasses.charts import DistributionDataItem, Graph, MultiDataSeries
+from backend.src.dataclasses.charts import Graph, MultiDataSeries, DataSeries
 from backend.src.dataclasses.dataclasses import Variant
 from backend.src.dataclasses.requests import KpiRequest, KpiType, VariantListRequest, DistributionRequest, DfgRequest
 from backend.src.process_mining.event_log import load_event_log, load_patient_attributes, create_bins, filter_log
@@ -24,45 +24,34 @@ class ProcessMiningService:
 
     def get_variants(self, request: VariantListRequest) -> list[Variant]:
         el = filter_log(self.event_log, request.filters)
+        el, dac = create_bins(el, request.disaggregation_attribute)
 
-        disaggregation_attribute_column = 'disaggregation'
-        el = create_bins(el, request.disaggregation_attribute, disaggregation_attribute_column)
+        return get_variants_with_frequencies(el, dac)
 
-        return get_variants_with_frequencies(el, disaggregation_attribute_column)
-
-    def get_attribute_distribution(self, request: DistributionRequest) -> list[DistributionDataItem]:
+    def get_attribute_distribution(self, request: DistributionRequest) -> DataSeries:
         el = filter_log(self.event_log, request.filters)
+        el, dac = create_bins(el, request.disaggregation_attribute)
 
-        disaggregation_attribute_column = 'disaggregation'
-        el = create_bins(el, request.disaggregation_attribute, disaggregation_attribute_column)
-
-        return distribution.attribute_distribution(el, disaggregation_attribute_column)
+        return distribution.attribute_distribution(el, dac)
 
     def get_kpi_data(self, request: KpiRequest) -> MultiDataSeries:
         el = filter_log(self.event_log, request.filters)
-
-        disaggregation_attribute_column = 'disaggregation'
-        el = create_bins(el, request.disaggregation_attribute, disaggregation_attribute_column)
-
-        if request.legend_attribute is None:
-            legend_column = None
-        else:
-            legend_column = 'legend'
-            el = create_bins(el, request.legend_attribute, legend_column)
+        el, dac = create_bins(el, request.disaggregation_attribute)
+        el, lac = create_bins(el, request.legend_attribute)
 
         match request.kpi:
             case KpiType.HAPPY_PATH_ADHERENCE:
-                return kpi.get_happy_path_adherence(el, disaggregation_attribute_column, legend_column)
+                return kpi.get_happy_path_adherence(el, dac, lac)
             case KpiType.DROP_OUT:
-                return kpi.get_dropout(el, disaggregation_attribute_column)
+                return kpi.get_dropout(el, dac)
             case KpiType.PERMUTED_PATH_ADHERENCE:
-                return kpi.get_permuted_path(el, disaggregation_attribute_column, legend_column)
+                return kpi.get_permuted_path(el, dac, lac)
             case KpiType.BUREAUCRATIC_DURATION:
-                return kpi.get_bureaucratic_duration(el, disaggregation_attribute_column, legend_column)
+                return kpi.get_bureaucratic_duration(el, dac, lac)
             case KpiType.EVALUATION_TO_APPROACH:
-                return kpi.get_evaluation_to_approach(el, disaggregation_attribute_column, legend_column)
+                return kpi.get_evaluation_to_approach(el, dac, lac)
             case KpiType.AUTHORIZATION_TO_PROCUREMENT:
-                return kpi.get_authorization_to_procurement(el, disaggregation_attribute_column, legend_column)
+                return kpi.get_authorization_to_procurement(el, dac, lac)
             case _:
                 raise ValueError('The given KPI is not supported.')
 

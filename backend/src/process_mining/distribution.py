@@ -1,9 +1,9 @@
 import pandas as pd
 
-from backend.src.dataclasses.charts import DistributionDataItem
+from backend.src.dataclasses.charts import DataSeries
 
 
-def attribute_distribution(el: pd.DataFrame, attribute: str) -> list[DistributionDataItem]:
+def attribute_distribution(el: pd.DataFrame, attribute: str) -> DataSeries:
     """
     Calculate the distribution of each value for a specified attribute in the event log. NaN values are represented
     by 'None' in the result.
@@ -13,7 +13,7 @@ def attribute_distribution(el: pd.DataFrame, attribute: str) -> list[Distributio
         attribute (str): The attribute in the event log for which the distribution is calculated.
 
     Returns:
-        (list[DistributionDataItem]): The distribution of the attribute.
+        DataSeries: The distribution of the attribute.
     """
 
     # get first row of each case
@@ -23,7 +23,8 @@ def attribute_distribution(el: pd.DataFrame, attribute: str) -> list[Distributio
     # rename nan in index to None
     column_distribution.index = column_distribution.index.map(lambda x: "None" if pd.isna(x) else x)
 
-    column_distribution_list = [DistributionDataItem(name=key, value=value) for key, value in
-                                column_distribution.to_dict().items() if key is not None]
-
-    return column_distribution_list
+    return DataSeries.from_dict(
+        name=attribute,
+        data=column_distribution.to_dict(),
+        sort_by=attribute
+    )
