@@ -67,7 +67,6 @@ onMounted(() => {
     const myChart = echarts.init(chartDom.value, { renderer: 'canvas' });
 
     // Render the inital chart
-    if (props.option.name) debugger;
     myChart.setOption(props.option);
     myChart.resize({ width: propRefs.width.value, height: propRefs.height.value });
 
@@ -100,8 +99,6 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
             },
             body: JSON.stringify({ ...constructJson(propRefs.filters.value), ...requestBody }),
         });
-
-        console.log('YO', constructJson(propRefs.filters.value))
 
         const responseData = await response.json();
 

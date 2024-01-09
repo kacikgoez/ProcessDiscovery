@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { theme } from '@/theme.js';
-import { DataSeries, EndpointURI, ServerRequest, downloadVisualizationBusKey, formatDataSeries } from '@/types';
+import { DataSeries, EndpointURI, Filter, ServerRequest, constructJson, downloadVisualizationBusKey, formatDataSeries } from '@/types';
 import { capitalizeWords } from '@/util';
 import { useEventBus } from '@vueuse/core';
 import * as echarts from 'echarts';
@@ -70,7 +70,6 @@ onMounted(() => {
     const myChart = echarts.init(chartDom.value, { renderer: 'canvas' });
 
     // Render the inital chart
-    if (props.option.name) debugger;
     myChart.setOption(props.option);
     myChart.resize({ width: propRefs.width.value, height: propRefs.height.value });
 
@@ -116,10 +115,7 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
             body: JSON.stringify({ ...constructJson(propRefs.filters.value), ...requestBody }),
         });
 
-        console.log('YO', constructJson(propRefs.filters.value))
-
         const responseData = await response.json();
-        console.debug(responseData)
 
         let data = [];
 
@@ -143,6 +139,7 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
 
         // Add a new series item to the option if multiple (besides first item, already passed by options)
         if (index > 0) propRefs.option.value.series.push(JSON.parse(JSON.stringify(baseDataItem)));
+        index = propRefs.option.value.series.length - 1;
 
         // Assign the data to the series depending on endpoint
         switch (props.request.endpoint) {

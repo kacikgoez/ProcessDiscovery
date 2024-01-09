@@ -136,8 +136,8 @@ const defaultValue: KPITile[] = [
 if (localStorage.getItem('layout') === null) {
   globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
 } else {
-  // globalLayout.$patch(JSON.parse(localStorage.getItem('layout')!));
-  globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
+  globalLayout.$patch(JSON.parse(localStorage.getItem('layout')!));
+  // globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
 }
 
 const addTile = () => {

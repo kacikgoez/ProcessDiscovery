@@ -38,7 +38,8 @@
 </template>
 
 <script setup lang="ts">
-import { Charts, downloadVisualizationBusKey, KPIActions, KPIChange, ServerRequest } from '@/types';
+import { layoutStore } from '@/stores/LayoutStore';
+import { Charts, downloadVisualizationBusKey, Filter, FilterOperators, KPIActions, KPIChange, ServerRequest } from '@/types';
 import { useElementSize, useEventBus } from '@vueuse/core';
 import { useConfirm } from 'primevue/useconfirm';
 import {
