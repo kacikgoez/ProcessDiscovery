@@ -1,10 +1,10 @@
-name: check docs validity
+name: Test code and generate coverage
 on:
   pull_request:
     branches:
       - main
 jobs:
-  check-docs:
+  test:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
@@ -41,6 +41,20 @@ jobs:
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --with test --no-interaction --no-root
+      #----------------------------------------------
+      # load raw dataset from secrets
+      #----------------------------------------------
+      - name: Load raw dataset
+        run: |
+          mkdir -p backend/data/raw
+          echo "${{ secrets.RAW_DATASET }}" > backend/data/raw/opd.csv
+      #----------------------------------------------
+      # extract the event log from the raw dataset
+      #----------------------------------------------
+      - name: Extract event log
+        run: |
+          source .venv/bin/activate
+          python backend/src/data/extract.py
       #----------------------------------------------
       # run pytest to run tests and generate coverage
       #----------------------------------------------
