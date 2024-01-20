@@ -76,6 +76,16 @@ export const ServerAttributes : PatientAttribute[] = await fetch(`//${window.loc
     })
     .then(response => response.json());
 
+export const FilterAttributes : PatientAttribute[] = await fetch('http://127.0.0.1:80/filter-attributes',
+    {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json());
+
 /* ------------- Chart Data Types ---------------- */
 
 export type Graph = {

@@ -3,10 +3,12 @@ from marshmallow.validate import OneOf
 
 from backend.src.dataclasses.filters import NumericalFilter, CategoricalFilter, FilterOperator
 from backend.src.dataclasses.attributes import AttributeType
-from definitions import PATIENT_ATTRIBUTES
+from definitions import PATIENT_ATTRIBUTES, FILTER_ATTRIBUTES
 
 CATEGORICAL_ATTRIBUTES = [k for k, v in PATIENT_ATTRIBUTES.items() if v == AttributeType.CATEGORICAL]
+CATEGORICAL_ATTRIBUTES += [k for k, v in FILTER_ATTRIBUTES.items() if v == AttributeType.CATEGORICAL]
 NUMERICAL_ATTRIBUTES = [k for k, v in PATIENT_ATTRIBUTES.items() if v == AttributeType.NUMERICAL]
+NUMERICAL_ATTRIBUTES += [k for k, v in FILTER_ATTRIBUTES.items() if v == AttributeType.NUMERICAL]
 
 
 def validate_operator_value_count(operator: FilterOperator, values: list[any] | None):

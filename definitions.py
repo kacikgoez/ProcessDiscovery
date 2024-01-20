@@ -27,6 +27,14 @@ PATIENT_ATTRIBUTES = {
     'outcome_pancreas': AttributeType.CATEGORICAL,
 }
 
+FILTER_ATTRIBUTES = {
+    'variant': AttributeType.CATEGORICAL,
+    'start_activity': AttributeType.CATEGORICAL,
+    'end_activity': AttributeType.CATEGORICAL,
+    'case_size': AttributeType.NUMERICAL,
+    'case_duration': AttributeType.NUMERICAL,
+}
+
 SORT_ORDERS = {
     'referral_day_of_week': ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
 }
