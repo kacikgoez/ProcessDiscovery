@@ -113,7 +113,9 @@ class DataSeries:
         else:
             data = dict(sorted(data.items(), key=lambda item: item[0]))
 
-        return DataSeries(name=name, data=[DataItem(x=x, y=y) for x, y in data.items()])
+        return DataSeries(
+            name=name,
+            data=[DataItem(x=x, y=0 if pd.isna(y) else y) for x, y in data.items()])
 
 
 @dataclass
