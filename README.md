@@ -130,6 +130,9 @@ Depending on the operator, you must enter none, one, or multiple values. For exa
 
 You can add multiple filters. The event log will be filtered for all filters. The filters are combined with the logical operator "AND".
 
+### Downloading Visualizations
+You can download each visualization as a PNG file by clicking on the download icon in the top right corner of the tile.
+
 ## Troubleshooting
 
 ## Glossary
