@@ -47,7 +47,7 @@ Listed below are the attributes that are available for each patient. For more in
 | `outcome_lung_right`     | Outcome for the right lung organ.                                        |
 | `outcome_pancreas`       | Outcome for the pancreas organ.                                          |
 
-### Extracting the Event Log
+### Extraction of the Event Log
 The raw dataset contains one row for each patient. The row contains information about the patient and process data (flags that indicate if the patient was approached, authorized, etc. and timestamps for these events).
 To analyze the process, we need to extract an event log from the raw dataset. The event log contains one row for each event. The row contains information about the patient and the event (e.g., timestamp, event type).
 We use the patient id as the case id and the event type as the activity name. We rename the columns to match the standard format of an event log.
@@ -64,6 +64,9 @@ However, the raw dataset contains no timestamps for the events "Evaluation" and 
 Therefore, we assume that these events happen one minute after the previous event. This is a simplification, but it is sufficient for our purposes, and ensures that the events are in the correct order.
 If timestamps for the other events are missing, we filter out the corresponding cases. This is because we cannot determine the correct order of the events if timestamps are missing.
 This attributes to roughly 3000 cases that are filtered out.
+
+The event log will be automatically extracted when you run the dashboard for the first time. After that, the event log will be stored in the folder `backend/data/processed/`.
+You can also download the event log on the [dashboard](#download-the-event-log). The event log will be downloaded as a CSV file.
 
 ## Installation
 ### Prerequisites
@@ -96,6 +99,13 @@ docker-compose up --build
 This will build the docker images and run the dashboard. You can access the dashboard on http://localhost:80.
 
 ## User Interface
+### Overview
+#### Download the Event Log
+You can download the event log as a CSV file by clicking on the button "Download Event Log" in the top right corner of the dashboard. The event log will be downloaded as a CSV file.
+The event log contains a row for each event. The row contains information about the patient and the event (e.g., timestamp, event type). See [here](#extraction-of-the-event-log) for more information.
+You can use the event log to analyze the process using other tools such as ProM or PM4Py.
+
+### Tiles
 
 ## Features and Functions
 
