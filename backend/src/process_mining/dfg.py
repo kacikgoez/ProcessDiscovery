@@ -4,7 +4,7 @@ from pm4py import discover_dfg
 from backend.src.dataclasses.charts import Graph, Edge, Node
 
 
-def get_permuted_path_dfg(el: pd.DataFrame) -> Graph:
+def get_dfg(el: pd.DataFrame) -> Graph:
     """
     Generate a Process Mining DFG based on the given event log.
 
