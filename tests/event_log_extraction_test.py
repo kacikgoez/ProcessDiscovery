@@ -1,8 +1,8 @@
 import pandas as pd
 import pytest
 
-from definitions import CLEAN_EVENT_LOG_PATH, ROOT_DIR
-from backend.src.data.extract import PATIENT_DATA_MAPPING, RAW_DATASET, extract
+from definitions import ROOT_DIR
+from backend.src.data.extract import PATIENT_DATA_MAPPING, RAW_DATASET
 
 
 class TestEventLogExtraction:
@@ -10,10 +10,6 @@ class TestEventLogExtraction:
     def raw_data(self):
         path = f'{ROOT_DIR}/backend/data/raw/{RAW_DATASET}'
         return pd.read_csv(path)
-
-    @pytest.fixture(scope='class')
-    def event_log(self):
-        return pd.read_csv(CLEAN_EVENT_LOG_PATH)
 
     def test_event_log_exists(self, event_log):
         assert not event_log.empty

@@ -1,19 +1,10 @@
 import pytest
 
 from backend.src.dataclasses.attributes import DisaggregationAttribute, AttributeType
-from backend.src.flask.services.process_mining_service import ProcessMiningService
 from backend.src.process_mining.event_log import create_bins
 
 
 class TestPatientAttributes:
-    @pytest.fixture(scope='class')
-    def process_mining_service(self):
-        return ProcessMiningService()
-
-    @pytest.fixture(scope='class')
-    def event_log(self, process_mining_service):
-        return process_mining_service.event_log
-
     @pytest.fixture
     def categorical_disaggregation_attribute(self):
         return DisaggregationAttribute(

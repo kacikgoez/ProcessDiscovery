@@ -1,25 +1,9 @@
-import os
-
 import pytest
 from backend.src.dataclasses.attributes import DisaggregationAttribute, AttributeType
 from backend.src.dataclasses.requests import KpiRequest, KpiType
-from backend.src.process_mining.event_log import load_event_log, load_patient_attributes
-from backend.src.flask.services.process_mining_service import ProcessMiningService
-from definitions import ROOT_DIR
 
 
 class TestKPI:
-    @pytest.fixture(scope='class')
-    def process_mining_service(self):
-        pms = ProcessMiningService()
-        pms.event_log = load_event_log(os.path.join(ROOT_DIR, 'tests', 'test_sample.csv'))
-        pms.patient_attributes = load_patient_attributes(pms.event_log)
-        return pms
-
-    @pytest.fixture(scope='class')
-    def event_log(self, process_mining_service):
-        return process_mining_service.event_log
-
     @pytest.fixture
     def happy_request(self):
         return KpiRequest(
@@ -67,15 +51,15 @@ class TestKPI:
             disaggregation_attribute=DisaggregationAttribute('gender', AttributeType.CATEGORICAL),
             legend_attribute=DisaggregationAttribute('opo_id', AttributeType.CATEGORICAL))
 
-    def test_happypath(self, happy_request):
-        assert process_mining_service().get_kpi_data(happy_request) == {
+    def test_happypath(self, test_process_mining_service, happy_request):
+        assert test_process_mining_service.get_kpi_data(happy_request) == {
             'axis': [2018, 2019],
             'legend': ['F', 'M'],
             'value': {'F': [0.0, 1.0],
                       'M': [0.0, 0.0]}}
 
-    def test_drop(self, drop_request):
-        assert process_mining_service().get_kpi_data(drop_request) == {
+    def test_drop(self, test_process_mining_service, drop_request):
+        assert test_process_mining_service.get_kpi_data(drop_request) == {
             'axis': ['Evaluation', 'Transplant'],
             'legend': ['0 - 20', '0 - 20_percentage', '20 - 40', '20 - 40_percentage'],
             'value': {'0 - 20': [1.0, 0.0],
@@ -83,22 +67,22 @@ class TestKPI:
                       '20 - 40': [0.0, 1.0],
                       '20 - 40_percentage': [0.0, 0.5]}}
 
-    def test_permuted(self, permuted_request):
-        assert process_mining_service().get_kpi_data(permuted_request) == {
+    def test_permuted(self, test_process_mining_service, permuted_request):
+        assert test_process_mining_service.get_kpi_data(permuted_request) == {
             'axis': ['Hispanic'],
             'legend': ['total_cases', False],
             'value': {False: [1],
                       'total_cases': [1, 1]}}
 
-    def test_bureaucratic(self, bureaucratic_request):
-        assert process_mining_service().get_kpi_data(bureaucratic_request) == {
+    def test_bureaucratic(self, test_process_mining_service, bureaucratic_request):
+        assert test_process_mining_service.get_kpi_data(bureaucratic_request) == {
             'legend': ['Head Trauma'],
             'value': {'Head Trauma': [['F', 4]]}}
 
-    def test_eva(self, eva_request):
-        assert process_mining_service().get_kpi_data(eva_request)['value']['MVA'] == [['F', 1]]
+    def test_eva(self, test_process_mining_service, eva_request):
+        assert test_process_mining_service.get_kpi_data(eva_request)['value']['MVA'] == [['F', 1]]
 
-    def test_aut(self, aut_request):
-        assert process_mining_service().get_kpi_data(aut_request)['value'] == {
+    def test_aut(self, test_process_mining_service, aut_request):
+        assert test_process_mining_service.get_kpi_data(aut_request)['value'] == {
             'F': [['OPO1', 1]],
             'M': []}

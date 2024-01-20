@@ -6,14 +6,6 @@ from definitions import PATIENT_ATTRIBUTES
 
 
 class TestPatientAttributes:
-    @pytest.fixture(scope='class')
-    def process_mining_service(self):
-        return ProcessMiningService()
-
-    @pytest.fixture(scope='class')
-    def patient_attributes(self, process_mining_service):
-        return process_mining_service.get_patient_attributes()
-
     def test_correct_types(self, patient_attributes):
         assert isinstance(patient_attributes, list)
         assert all(isinstance(attribute, (CategoricalAttribute, NumericalAttribute)) for attribute in patient_attributes)
