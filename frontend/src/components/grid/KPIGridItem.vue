@@ -21,7 +21,6 @@
       </div>
     </div>
     <div>
-      <Filters :id="props.i" v-model="filters"></Filters>
     </div>
     <div ref="tileContent" class="tile-content">
       <div class="overflow-y-auto overflow-x-hidden h-full">
@@ -30,6 +29,7 @@
       </div>
     </div>
     <div class="tile-footer">
+      <Filters :id="props.i" v-model="filters"></Filters>
     </div>
     <EditModal :id="props.i" v-model:visible="visible">
 
@@ -197,7 +197,7 @@ change({ action: KPIActions.ChangeComponent, component: component });
   flex-grow: 9;
   width: 100%;
   height: 100%;
-  padding: 0px 8px 16px 8px;
+  padding: 0px 8px 0px 8px;
   margin: 0;
   background-color: #ffffff;
   overflow-y: auto;
@@ -222,7 +222,7 @@ change({ action: KPIActions.ChangeComponent, component: component });
 
 .tile-footer {
   flex-grow: 1;
-  padding-top: 0.8rem;
+  padding-top: 0;
 }
 
 .exit-button {

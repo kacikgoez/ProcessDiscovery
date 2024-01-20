@@ -32,16 +32,18 @@ const addFilter = (attribute: PatientAttribute) => {
 </script>
 
 <template>
-  <div class="flex flex-row items-center justify-center gap-1">
-    <div v-for="(filter, i) in filters" :key="i">
-      <SingleFilter v-model="filters[i]" />
+  <div class="outer-container overflow-x-auto">
+    <div class="inner-container inline-flex justify-content-center">
+      <Button class="inline-block overflow-visible flex-shrink-0" label="Add filter" icon="pi pi-plus"
+        severity="secondary" outlined aria-haspopup="true" aria-controls="overlay_panel" @click="showSelectAttribute" />
+      <div v-for="(filter, i) in filters" :key="i" class="inline-block flex-shrink-0 m-3">
+        <SingleFilter v-model="filters[i]" class="overflow-visible flex-shrink-0" />
+      </div>
+      <OverlayPanel ref="selectAttributeOverlay" append-to="body" show-close-icon class="inline-block overlay">
+        <Listbox :options="attributes" filter option-label="name" class="w-full md:w-14rem"
+          @update:model-value="addFilter" />
+      </OverlayPanel>
     </div>
-    <Button label='Add filter' icon='pi pi-plus' severity="secondary" outlined aria-haspopup="true"
-      aria-controls="overlay_panel" @click='showSelectAttribute' />
-    <OverlayPanel ref="selectAttributeOverlay" append-to="body" show-close-icon class="overlay">
-      <Listbox :options="attributes" filter option-label="name" class="w-full md:w-14rem"
-        @update:model-value="addFilter" />
-    </OverlayPanel>
   </div>
 </template>
 
