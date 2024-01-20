@@ -2,6 +2,7 @@ import os
 
 import pytest
 
+from backend.src.dataclasses.attributes import DisaggregationAttribute, AttributeType
 from backend.src.flask.services.process_mining_service import ProcessMiningService
 from backend.src.process_mining.event_log import load_event_log, load_patient_attributes
 from definitions import ROOT_DIR
@@ -33,3 +34,18 @@ def patient_attributes(process_mining_service):
 @pytest.fixture(scope='module')
 def event_log(process_mining_service):
     return process_mining_service.event_log
+
+
+@pytest.fixture
+def categorical_disaggregation_attribute():
+    return DisaggregationAttribute(
+        name='gender',
+        type=AttributeType.CATEGORICAL)
+
+
+@pytest.fixture
+def numerical_disaggregation_attribute():
+    return DisaggregationAttribute(
+        name='age',
+        type=AttributeType.NUMERICAL,
+        bins=[0, 30, 60, 90])

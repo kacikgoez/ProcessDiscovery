@@ -18,8 +18,8 @@ class Edge:
     """
     source: str
     target: str
-    label: str | None
-    value: float | None
+    label: str | None = None
+    value: float | None = None
 
 
 @dataclass
@@ -34,7 +34,7 @@ class Node:
     """
     id: str
     label: str
-    value: float | None
+    value: float | None = None
 
 
 @dataclass

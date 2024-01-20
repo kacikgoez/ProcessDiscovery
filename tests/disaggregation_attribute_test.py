@@ -5,19 +5,6 @@ from backend.src.process_mining.event_log import create_bins
 
 
 class TestPatientAttributes:
-    @pytest.fixture
-    def categorical_disaggregation_attribute(self):
-        return DisaggregationAttribute(
-            name='gender',
-            type=AttributeType.CATEGORICAL)
-
-    @pytest.fixture
-    def numerical_disaggregation_attribute(self):
-        return DisaggregationAttribute(
-            name='age',
-            type=AttributeType.NUMERICAL,
-            bins=[0, 30, 60, 90])
-
     def test_bins_only_for_numerical_attributes(self, categorical_disaggregation_attribute):
         with pytest.raises(ValueError):
             categorical_disaggregation_attribute.get_bins()

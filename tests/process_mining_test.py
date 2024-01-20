@@ -1,6 +1,38 @@
 import pytest
 from backend.src.dataclasses.attributes import DisaggregationAttribute, AttributeType
-from backend.src.dataclasses.requests import KpiRequest, KpiType
+from backend.src.dataclasses.charts import DataSeries
+from backend.src.dataclasses.requests import KpiRequest, KpiType, DistributionRequest
+
+
+class TestDistribution:
+    def test_categorical_distribution(self, test_process_mining_service, categorical_disaggregation_attribute):
+        request = DistributionRequest(
+            filters=[],
+            disaggregation_attribute=categorical_disaggregation_attribute)
+
+        result = test_process_mining_service.get_attribute_distribution(request)
+
+        expected = DataSeries.from_dict(data={
+            'F': 1,
+            'M': 1
+        }, name='gender')
+
+        assert result == expected
+
+    def test_numerical_distribution(self, test_process_mining_service, numerical_disaggregation_attribute):
+        request = DistributionRequest(
+            filters=[],
+            disaggregation_attribute=numerical_disaggregation_attribute)
+
+        result = test_process_mining_service.get_attribute_distribution(request)
+
+        expected = DataSeries.from_dict(data={
+            '0 - 30': 1,
+            '30 - 60': 1,
+            '60 - 90': 0
+        }, name='age')
+
+        assert result == expected
 
 
 class TestKPI:
