@@ -1,4 +1,27 @@
 # ORCA: Organ Retrieval and (Information) Collection Analytics
+## Table of Contents
+<!-- TOC -->
+* [ORCA: Organ Retrieval and (Information) Collection Analytics](#orca-organ-retrieval-and-information-collection-analytics)
+  * [Table of Contents](#table-of-contents)
+  * [Introduction: Analyzing and Visualizing the Organ Donation Process](#introduction-analyzing-and-visualizing-the-organ-donation-process)
+    * [The Dataset](#the-dataset)
+    * [Extraction of the Event Log](#extraction-of-the-event-log)
+  * [Installation](#installation)
+    * [Prerequisites](#prerequisites)
+    * [Acquire the raw dataset](#acquire-the-raw-dataset)
+    * [Build and run the dashboard](#build-and-run-the-dashboard)
+  * [User Interface](#user-interface)
+    * [Overview](#overview)
+      * [Download the Event Log](#download-the-event-log)
+    * [Tiles](#tiles)
+  * [Features and Functions](#features-and-functions)
+    * [Filtering](#filtering)
+    * [Downloading Visualizations](#downloading-visualizations)
+  * [Troubleshooting](#troubleshooting)
+  * [Glossary](#glossary)
+  * [References](#references)
+<!-- TOC -->
+
 ## Introduction: Analyzing and Visualizing the Organ Donation Process
 This is a web-based dashboard for a M.Sc. student project at RWTH university. It is a dashboard written in VueJS and Flask that shows KPIs for Organ Donation Process. 
 The dataset **"Organ Retrieval and Collection of Health Information for Donation" (ORCHID, Adam. H et. al.)** is supplied by PhysioNet and accessible on https://physionet.org/content/orchid/1.0.0/.
