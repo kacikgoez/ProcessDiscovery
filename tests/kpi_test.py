@@ -1,18 +1,25 @@
+import os
+
 import pytest
 from backend.src.dataclasses.attributes import DisaggregationAttribute, AttributeType
 from backend.src.dataclasses.requests import KpiRequest, KpiType
 from backend.src.process_mining.event_log import load_event_log, load_patient_attributes
 from backend.src.flask.services.process_mining_service import ProcessMiningService
-
-
-def process_mining_service():
-    process = ProcessMiningService()
-    process.event_log = load_event_log('test_sample.csv')
-    process.patient_attributes = load_patient_attributes(process.event_log)
-    return process
+from definitions import ROOT_DIR
 
 
 class TestKPI:
+    @pytest.fixture(scope='class')
+    def process_mining_service(self):
+        pms = ProcessMiningService()
+        pms.event_log = load_event_log(os.path.join(ROOT_DIR, 'tests', 'test_sample.csv'))
+        pms.patient_attributes = load_patient_attributes(pms.event_log)
+        return pms
+
+    @pytest.fixture(scope='class')
+    def event_log(self, process_mining_service):
+        return process_mining_service.event_log
+
     @pytest.fixture
     def happy_request(self):
         return KpiRequest(
@@ -59,7 +66,6 @@ class TestKPI:
             kpi=KpiType.AUTHORIZATION_TO_PROCUREMENT,
             disaggregation_attribute=DisaggregationAttribute('gender', AttributeType.CATEGORICAL),
             legend_attribute=DisaggregationAttribute('opo_id', AttributeType.CATEGORICAL))
-
 
     def test_happypath(self, happy_request):
         assert process_mining_service().get_kpi_data(happy_request) == {

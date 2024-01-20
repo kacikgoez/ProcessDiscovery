@@ -1,16 +1,16 @@
 import pytest
 
 from backend.src.dataclasses.attributes import CategoricalAttribute, NumericalAttribute
+from backend.src.flask.services.process_mining_service import ProcessMiningService
 from definitions import PATIENT_ATTRIBUTES
 
 
 class TestPatientAttributes:
-    @pytest.fixture
+    @pytest.fixture(scope='class')
     def process_mining_service(self):
-        from backend.src.flask.services.process_mining_service import ProcessMiningService
         return ProcessMiningService()
 
-    @pytest.fixture
+    @pytest.fixture(scope='class')
     def patient_attributes(self, process_mining_service):
         return process_mining_service.get_patient_attributes()
 

@@ -6,11 +6,11 @@ from backend.src.process_mining.event_log import create_bins
 
 
 class TestPatientAttributes:
-    @pytest.fixture
+    @pytest.fixture(scope='class')
     def process_mining_service(self):
         return ProcessMiningService()
 
-    @pytest.fixture
+    @pytest.fixture(scope='class')
     def event_log(self, process_mining_service):
         return process_mining_service.event_log
 

@@ -9,14 +9,14 @@ from definitions import ROOT_DIR
 
 
 class TestEventLogFiltering:
-    @pytest.fixture
+    @pytest.fixture(scope='class')
     def process_mining_service(self):
         pms = ProcessMiningService()
         pms.event_log = load_event_log(os.path.join(ROOT_DIR, 'tests', 'test_sample.csv'))
         pms.patient_attributes = load_patient_attributes(pms.event_log)
         return pms
 
-    @pytest.fixture
+    @pytest.fixture(scope='class')
     def event_log(self, process_mining_service):
         return process_mining_service.event_log
 
