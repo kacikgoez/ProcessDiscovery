@@ -1,7 +1,7 @@
 This script is used to extract an event log from the original data.
 We use the Organ Retrieval and Collection of Health Information for Donation (ORCHID) [dataset](https://doi.org/10.13026/eytj-4f29) for this purpose.
 As the dataset is not publicly available, we cannot provide the data here.
-You can request access to the data and place the `opd.csv` file in the `data/raw` folder.
+You can request access to the data and place the `opd.csv` file in the `backend/data/raw` folder.
 
 ### Events
 The dataset contains the following events:
