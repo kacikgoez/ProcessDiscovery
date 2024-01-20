@@ -59,25 +59,27 @@ class TestPatientAttributes:
         ]
 
     def test_binning_without_disaggregation_attribute(self, event_log):
-        assert event_log.equals(create_bins(event_log))
+        el, _ = create_bins(event_log)
+        assert event_log.equals(el)
 
     def test_binning_for_categorical_attribute(self, event_log, categorical_disaggregation_attribute):
-        el = create_bins(event_log, categorical_disaggregation_attribute)
+        original_event_log = event_log.copy()
+
+        el, column = create_bins(event_log, categorical_disaggregation_attribute)
 
         # original event log should not be modified
-        assert el[categorical_disaggregation_attribute.name].equals(event_log[categorical_disaggregation_attribute.name])
-        # new column should be added
-        assert 'temp' in el.columns
-        # new column should be equal to the original column
-        assert el['temp'].equals(el[categorical_disaggregation_attribute.name])
+        assert event_log.equals(original_event_log)
+
+        # as the disaggregation attribute is categorical, the event log should not be modified at all
+        assert event_log.equals(el)
 
     def test_binning_for_numerical_attribute(self, event_log, numerical_disaggregation_attribute):
-        el = create_bins(event_log, numerical_disaggregation_attribute)
+        original_event_log = event_log.copy()
+
+        el, column = create_bins(event_log, numerical_disaggregation_attribute)
 
         # original event log should not be modified
-        assert el[numerical_disaggregation_attribute.name].equals(event_log[numerical_disaggregation_attribute.name])
-        # new column should be added
-        assert 'temp' in el.columns
+        assert event_log.equals(original_event_log)
 
         # new column should only contain the bin labels or NaN (if the value does not fit into any bin)
-        assert el['temp'].dropna().isin(numerical_disaggregation_attribute.get_bin_labels()).all()
+        assert el[column].isin(numerical_disaggregation_attribute.get_bin_labels() + [None]).all()
