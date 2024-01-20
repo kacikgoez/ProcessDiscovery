@@ -17,6 +17,8 @@
   * [Features and Functions](#features-and-functions)
     * [Filtering](#filtering)
     * [Downloading Visualizations](#downloading-visualizations)
+    * [Available Visualizations](#available-visualizations)
+      * [Variants](#variants)
   * [Troubleshooting](#troubleshooting)
   * [Glossary](#glossary)
   * [References](#references)
@@ -155,6 +157,19 @@ You can add multiple filters. The event log will be filtered for all filters. Th
 
 ### Downloading Visualizations
 You can download each visualization as a PNG file by clicking on the download icon in the top right corner of the tile.
+
+### Available Visualizations
+#### Variants
+You can get an overview of the variants of the process by using the "Variants" visualization.
+This visualization lists all variants of the process. A variant is a sequence of events that occurred in the process.
+![](./images/variant_list.png "Variant List")
+
+Each variant is represented by a chevron diagram. The chevron diagram shows the sequence of events for each variant.
+The activity names are abbreviated to fit the diagram. You can hover over the diagram to see the full activity name.
+On the right side of the diagram, you can see a pie chart that shows the number of cases for each variant based on the selected disaggregation attribute.
+If you hover over a pie chart, you can see the number of cases for each variant for the corresponding disaggregation attribute value.
+In addition, in the middle of the pie chart the overall percentage how often the variant occurs is shown.
+Note that the variants are sorted in descending order based on the overall percentage how often the variant occurs.
 
 ## Troubleshooting
 
