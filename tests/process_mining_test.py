@@ -1,8 +1,8 @@
 import pytest
 from backend.src.dataclasses.attributes import DisaggregationAttribute, AttributeType
-from backend.src.dataclasses.charts import DataSeries, MultiDataSeries, DataItem
+from backend.src.dataclasses.charts import DataSeries, MultiDataSeries, DataItem, Graph, Node, Edge
 from backend.src.dataclasses.dataclasses import Variant
-from backend.src.dataclasses.requests import KpiRequest, KpiType, DistributionRequest, VariantListRequest
+from backend.src.dataclasses.requests import KpiRequest, KpiType, DistributionRequest, VariantListRequest, DfgRequest
 from backend.src.process_mining.variants import get_variants_with_case_ids
 
 
@@ -188,3 +188,40 @@ class TestKPI:
         result = test_process_mining_service.get_kpi_data(aut_request)
 
         assert result == expected
+
+
+class TestDFG:
+    @pytest.fixture
+    def dfg_request(self, categorical_disaggregation_attribute):
+        return DfgRequest(
+            filters=[],
+            disaggregation_attribute=categorical_disaggregation_attribute,
+        )
+
+    def test_dfg(self, test_process_mining_service, dfg_request):
+        result = test_process_mining_service.get_dfg(dfg_request)
+
+        expected = Graph(
+            name='DFG',
+            nodes=[
+                Node(id='Referral', label='Referral', value=None),
+                Node(id='Evaluation', label='Evaluation', value=None),
+                Node(id='Approach', label='Approach', value=None),
+                Node(id='Authorization', label='Authorization', value=None),
+                Node(id='Procurement', label='Procurement', value=None),
+                Node(id='Transplant', label='Transplant', value=None),
+            ],
+            edges=[
+                Edge(source='Referral', target='Evaluation', label=None, value=2),
+                Edge(source='Evaluation', target='Approach', label=None, value=1),
+                Edge(source='Approach', target='Authorization', label=None, value=1),
+                Edge(source='Authorization', target='Procurement', label=None, value=1),
+                Edge(source='Procurement', target='Transplant', label=None, value=1),
+            ]
+        )
+
+        # compare the nodes without order
+        assert sorted(result.nodes, key=lambda node: node.id) == sorted(expected.nodes, key=lambda node: node.id)
+
+        # compare the edges without order
+        assert sorted(result.edges, key=lambda edge: (edge.source, edge.target)) == sorted(expected.edges, key=lambda edge: (edge.source, edge.target))
