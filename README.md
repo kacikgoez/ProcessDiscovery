@@ -142,18 +142,18 @@ You can filter the event log for each visualization individually. By default, th
 Here you can add one or more filters. Each filter consists of an attribute, an operator, and a value. For the attribute, you can choose from the attributes that are available for each patient (see [here](#the-dataset) for more information). 
 Note that we treat all attributes except the patients age as categorical attributes. For the operator, you can choose from the following operators (depending on the attribute type):
 
-| Operator       | Attribute Type | Value    | Description                                          |
-|----------------|----------------|----------|------------------------------------------------------|
-| IS EMPTY       | Both           | None     | The attribute is empty.                              |
-| IS NOT EMPTY   | Both           | None     | The attribute is not empty.                          |
-| EQUALS         | Both           | Single   | The attribute equals the value.                      |
-| NOT EQUALS     | Both           | Single   | The attribute does not equal the value.              |
-| CONTAINS       | Categorical    | Multiple | The attribute contains the value.                    |
-| NOT CONTAINS   | Categorical    | Multiple | The attribute does not contain the value.            |
-| LESS THAN      | Numerical      | Single   | The attribute is less than the value.                |
-| LESS EQUALS    | Numerical      | Single   | The attribute is less than or equal to the value.    |
-| GREATER THAN   | Numerical      | Single   | The attribute is greater than the value.             |
-| GREATER EQUALS | Numerical      | Single   | The attribute is greater than or equal to the value. |
+| Operator               | Attribute Type | Value    | Description                                          |
+|------------------------|----------------|----------|------------------------------------------------------|
+| IS EMPTY               | Both           | None     | The attribute is empty.                              |
+| IS NOT EMPTY           | Both           | None     | The attribute is not empty.                          |
+| EQUALS                 | Both           | Single   | The attribute equals the value.                      |
+| NOT EQUALS             | Both           | Single   | The attribute does not equal the value.              |
+| CONTAINS               | Categorical    | Multiple | The attribute contains the value.                    |
+| NOT CONTAINS           | Categorical    | Multiple | The attribute does not contain the value.            |
+| LESS THAN              | Numerical      | Single   | The attribute is less than the value.                |
+| LESS THAN OR EQUALS    | Numerical      | Single   | The attribute is less than or equal to the value.    |
+| GREATER THAN           | Numerical      | Single   | The attribute is greater than the value.             |
+| GREATER THAN OR EQUALS | Numerical      | Single   | The attribute is greater than or equal to the value. |
 
 Depending on the operator, you must enter none, one, or multiple values. For example, if you choose the operator "CONTAINS", you must enter multiple values.
 
