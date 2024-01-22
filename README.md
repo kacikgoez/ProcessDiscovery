@@ -176,14 +176,20 @@ In addition, in the middle of the pie chart the overall percentage how often the
 Note that the variants are sorted in descending order based on the overall percentage how often the variant occurs.
 
 #### Distribution
+You can select a disaggregation attribute and then select a pie chart to view the distribution of the attribute across all cases.
 ![](./images/distribution.png "Variant List")
 
 #### KPIs
+You can select a disaggregation attribute and a kpi under the kpi module. 
+By clicking multiple KPIs, you can also add them to a tile. 
 
 #### DFG
+You can select this visualization to see the paths for all cases, including happy paths and permuted paths. 
+The nodes in the graph represent activities and the edges give the number of the directly following relation.
 
 #### De-Jure Process
-
+For the dejure process, you can select the visualization using different performance statistics for a disaggregation attribute. 
+The nodes in the graph represent activities and the edges give information such as drop out rate, maximum duration, etc.
 ## Troubleshooting
 
 ## Glossary
