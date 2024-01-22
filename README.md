@@ -200,6 +200,14 @@ You can select a disaggregation attribute and then select a pie chart to view th
 You can select a disaggregation attribute and a kpi under the kpi module. 
 By clicking multiple KPIs, you can also add them to a tile. 
 
+| KPIs                         | Description                                                        |
+|------------------------------|--------------------------------------------------------------------|
+| Happy Path Adherence         | Calculate the proportion of patients following the de-jure process |
+| Dropout Rate                 | Calculate how many patients drop out at each stage                 |
+| Permuted Path Adherence      | Calculate how many cases differ from the dejure process pathway    |
+| Bureaucratic Duration        | Measure the duration from referral to procurement in minute        |
+| Evaluation to Approach       | Measure the duration from evaluation to approach in minute         |
+| Authorization to Procurement | Measure the duration from authorization to procurement in minute   |
 #### DFG
 You can select this visualization to see the paths for all cases, including happy paths and permuted paths. 
 The nodes in the graph represent activities and the edges give the number of the directly following relation.
