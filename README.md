@@ -19,6 +19,10 @@
     * [Downloading Visualizations](#downloading-visualizations)
     * [Available Visualizations](#available-visualizations)
       * [Variants](#variants)
+      * [Distribution](#distribution)
+      * [KPIs](#kpis)
+      * [DFG](#dfg)
+      * [De-Jure Process](#de-jure-process)
   * [Troubleshooting](#troubleshooting)
   * [Glossary](#glossary)
   * [References](#references)
@@ -170,6 +174,15 @@ On the right side of the diagram, you can see a pie chart that shows the number 
 If you hover over a pie chart, you can see the number of cases for each variant for the corresponding disaggregation attribute value.
 In addition, in the middle of the pie chart the overall percentage how often the variant occurs is shown.
 Note that the variants are sorted in descending order based on the overall percentage how often the variant occurs.
+
+#### Distribution
+![](./images/distribution.png "Variant List")
+
+#### KPIs
+
+#### DFG
+
+#### De-Jure Process
 
 ## Troubleshooting
 
