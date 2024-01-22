@@ -155,8 +155,22 @@ You can use the event log to analyze the process using other tools such as ProM 
 
 ## Features and Functions
 ### Filtering
-You can filter the event log for each visualization individually. By default, the event log is not filtered. You can filter the event log by clicking on the filter icon in the top right corner of the visualization.
-Here you can add one or more filters. Each filter consists of an attribute, an operator, and a value. For the attribute, you can choose from the attributes that are available for each patient (see [here](#the-dataset) for more information). 
+The dashboard supports two types of filters: global filters and individual filters.
+The global filters are applied to all visualizations. The individual filters are only applied to the corresponding visualization (in addition to the global filters).
+Multiple filters are combined with the logical operator "AND".
+
+You can add a global filter by clicking on the filter icon in the top right corner of the dashboard. Individual filters can be added by clicking on the filter icon in the top right corner of the tile of the corresponding visualization.
+Each filter consists of an attribute, an operator, and a value. For the attribute, you can choose from the attributes that are available for each patient (see [here](#the-dataset) for more information)
+or from the following process attributes:
+
+| Attribute      | Attribute Type | Description                                                     |
+|----------------|----------------|-----------------------------------------------------------------|
+| Start activity | Categorical    | The first activity of the case.                                 |
+| End activity   | Categorical    | The last activity of the case.                                  |
+| Variant        | Categorical    | The variant of the case (sequence of activities).               |
+| Case duration  | Numerical      | The duration of the case from first to last event (in seconds). |
+| Case size      | Numerical      | The number of events in the case.                               |
+
 Note that we treat all attributes except the patients age as categorical attributes. For the operator, you can choose from the following operators (depending on the attribute type):
 
 | Operator               | Attribute Type | Value    | Description                                          |
@@ -173,8 +187,7 @@ Note that we treat all attributes except the patients age as categorical attribu
 | GREATER THAN OR EQUALS | Numerical      | Single   | The attribute is greater than or equal to the value. |
 
 Depending on the operator, you must enter none, one, or multiple values. For example, if you choose the operator "CONTAINS", you must enter multiple values.
-
-You can add multiple filters. The event log will be filtered for all filters. The filters are combined with the logical operator "AND".
+For categorical attributes, you can select the value(s) via a dropdown menu. For numerical attributes, you must enter the value manually.
 
 ### Downloading Visualizations
 You can download each visualization as a PNG file by clicking on the download icon in the top right corner of the tile.
