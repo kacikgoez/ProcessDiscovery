@@ -32,6 +32,23 @@
 This is a web-based dashboard for a M.Sc. student project at RWTH university. It is a dashboard written in VueJS and Flask that shows KPIs for Organ Donation Process. 
 The dataset **"Organ Retrieval and Collection of Health Information for Donation" (ORCHID, Adam. H et. al.)** is supplied by PhysioNet and accessible on https://physionet.org/content/orchid/1.0.0/.
 
+### Background
+Organ donation is a life-saving procedure that involves the removal of organs from a deceased or living donor and their transplantation into a recipient.
+For patients with end-stage organ failure, organ transplantation is often the only treatment option.
+However, the demand for organs far exceeds the supply.
+Prior research has focused on designing better allocation policies to distribute organs to patients on the waiting list.
+Yet, the organ shortage remains a significant problem, with over 100,000 patients on the waiting list in the United States alone.
+To address this problem, researchers have recently started to examine the process by which organs are procured from deceased donors.
+Currently, the organ donation process is complex and involves many stakeholders, including hospitals, organ procurement organizations (OPOs), and transplant centers.
+The process is also highly variable, with significant differences in the number of organs procured across OPOs.
+In addition, there are well-documented inefficiencies in the process, such as the high rate of consent refusal by next-of-kin (NOK).
+This leads to a large number of missed opportunities for procuring transplant-viable organs.
+Procurement deficiencies have a disproportionate impact on Black, Indigenous, or people of color (BIPOC) individuals due to the higher prevalence of diseases requiring transplantation within these communities. 
+In addition, certain Organ Procurement Organizations (OPOs) face specific challenges in obtaining organs from BIPOC donors, which contributes to inequities since these organs are more likely to be medically compatible for BIPOC patients awaiting transplants. 
+The improvement of organ procurement is a significant public health concern. Each year, approximately 28,000 organs go untransplanted, resulting in the tragic loss of over 10,000 patients who are waiting for suitable transplants.
+
+Understanding the organ donation process is a crucial first step towards improving the process. However, until now, there has been no publicly available dataset that provides a comprehensive view of the organ donation process.
+
 ### The Dataset
 The ORCHID dataset contains information about the organ donation process.
 It covers ten years of clinical, financial, and administrative information from six organ procurement organizations (OPOs) in the United States.
