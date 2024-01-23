@@ -21,7 +21,7 @@
       <div class='bg-white p-3' style='border-bottom: 1px solid #efefef;'>
         <!-- <input class='bg-gray-50 border-[#cecece] border-[0.5px] p-1 rounded-xl text-sm pl-2 pr-2' placeholder='Search' /> -->
         <div class='inline-flex'>
-          <Filters style="color: unset"></Filters>
+          <Filters style="color: unset" v-model="filters"></Filters>
         </div>
       </div>
     </div>
@@ -35,10 +35,11 @@
 import Filters from '@/components/input/Filters.vue';
 import { patientAttributesStore } from '@/stores/PatientAttributesStore';
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import KPIGrid from './components/grid/KPIGrid.vue';
 import { layoutStore } from './stores/LayoutStore';
 import { Charts, EndpointURI, KPITile } from './types';
+import {globalFiltersStore} from '@/stores/GlobalFiltersStore';
 
 const commit = ref()
 const branch = ref()
@@ -60,84 +61,20 @@ fetch('/render-config')
     // Not a render.com deployment (or something went wrong)
   })
 
-// Closes a KPI tile by its index
-// async function close(index: Number) {
-//   layout.value = layout.value!.filter((kpi) => kpi.i !== index)
-// }
-
 const patientAttributes = patientAttributesStore();
 patientAttributes.fetchAttributes();
+
+const globalFilters = globalFiltersStore();
+const filters = computed(
+    {
+        get: () => globalFilters.filters,
+        set: (value) => globalFilters.filters = value,
+    }
+)
 
 const globalLayout = layoutStore();
 const remove = globalLayout.removeTile;
 const { layout } = storeToRefs(globalLayout)
-
-const defaultValue: KPITile[] = [
-  {
-    title: 'A Pie Chart', type: Charts.PieChart, x: 0, y: 0, w: 4, h: 10, i: '0',
-    changed: 0,
-    request: {
-      endpoint: EndpointURI.DISTRIBUTION,
-      method: 'POST',
-      disaggregation_attribute: {
-        name: 'gender'
-      },
-      filters: [],
-    },
-  },
-  {
-    title: 'A Graph', type: Charts.Graph, x: 4, y: 0, w: 4, h: 10, i: '1',
-    changed: 0,
-    request: {
-      endpoint: EndpointURI.DFG,
-      method: 'POST',
-      disaggregation_attribute: {
-        name: 'gender'
-      },
-      filters: [],
-    }
-  },
-  {
-    title: 'A Horizontal Bar Chart', type: Charts.HorizontalBarChart, x: 4, y: 0, w: 4, h: 10, i: '2', changed: 0,
-    request: {
-      endpoint: EndpointURI.DISTRIBUTION,
-      method: 'POST',
-      disaggregation_attribute: {
-        name: 'gender'
-      },
-      filters: []
-    }
-  },
-  {
-    title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, x: 0, y: 0, w: 4, h: 10, i: '3', changed: 0,
-    request: {
-      endpoint: EndpointURI.VARIANT,
-      method: 'POST',
-      disaggregation_attribute: {
-        name: 'gender'
-      },
-      filters: [],
-    }
-  },
-  {
-    title: 'New Tile', type: Charts.NewChart, x: 8, y: 0, w: 4, h: 10, i: '4', changed: 0,
-    request: {
-      endpoint: EndpointURI.DISTRIBUTION,
-      method: 'POST',
-      disaggregation_attribute: {
-        name: 'gender'
-      },
-      filters: [],
-    },
-  },
-];
-
-if (localStorage.getItem('layout') === null || location.hash === '#reset') {
-  globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
-} else {
-  globalLayout.$patch(JSON.parse(localStorage.getItem('layout')!));
-  // globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
-}
 
 const addTile = () => {
   globalLayout.addTile({
@@ -159,11 +96,6 @@ const addTile = () => {
     i: (new Date().getTime()).toString(),
   });
 };
-
-
-window.addEventListener('beforeunload', () => {
-  localStorage.setItem('layout', JSON.stringify(globalLayout.$state))
-})
 
 function downloadEventLog() {
   window.open('/event-log', '_blank');

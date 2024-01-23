@@ -29,6 +29,12 @@ const addFilter = (attribute: PatientAttribute) => {
   }]);
 }
 
+const removeFilter = (index: number) => {
+  const newFilters = [...filters.value];
+  newFilters.splice(index, 1);
+  emit('update:modelValue', newFilters);
+}
+
 </script>
 
 <template>
@@ -37,7 +43,7 @@ const addFilter = (attribute: PatientAttribute) => {
       <Button class="inline-block overflow-visible flex-shrink-0" label="Add filter" icon="pi pi-plus"
         severity="secondary" outlined aria-haspopup="true" aria-controls="overlay_panel" @click="showSelectAttribute" />
       <div v-for="(filter, i) in filters" :key="i" class="inline-block flex-shrink-0 m-3">
-        <SingleFilter v-model="filters[i]" class="overflow-visible flex-shrink-0" />
+        <SingleFilter v-model="filters[i]" @remove="removeFilter(i)" class="overflow-visible flex-shrink-0" />
       </div>
       <OverlayPanel ref="selectAttributeOverlay" append-to="body" show-close-icon class="inline-block overlay">
         <Listbox :options="attributes" filter option-label="name" class="w-full md:w-14rem"
