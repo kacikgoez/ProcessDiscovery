@@ -1,0 +1,99 @@
+name: Test code and generate coverage
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      #----------------------------------------------
+      #       check-out repo and set-up python
+      #----------------------------------------------
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up python
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      #----------------------------------------------
+      #           install & configure poetry
+      #----------------------------------------------
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      #----------------------------------------------
+      #       load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-test-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      #----------------------------------------------
+      # install dependencies if cache does not exist
+      #----------------------------------------------
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --with test --no-interaction --no-root
+      #----------------------------------------------
+      # load raw dataset from cache
+      #----------------------------------------------
+      - name: Load raw dataset from cache
+        id: load-raw-dataset
+        uses: actions/cache@v3
+        with:
+          path: backend/data/raw/opd.csv
+          key: raw-dataset-${{ runner.os }}
+      #----------------------------------------------
+      # download raw dataset from physionet
+      #----------------------------------------------
+      - name: Download raw dataset from physionet
+        if: steps.load-raw-dataset.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p backend/data/raw
+          wget -N -c --user kacikgoez --password "${{ secrets.PHYSIO_PASSWORD }}" https://physionet.org/files/orchid/1.0.0/opd.csv
+          mv opd.csv backend/data/raw
+      #----------------------------------------------
+      # set python path variable to current directory
+      #----------------------------------------------
+      - name: Set working directory as python path variable
+        run: |
+          echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
+      #----------------------------------------------
+      # load extracted event log from cache
+      #----------------------------------------------
+      - name: Load extracted event log from cache
+        id: load-extracted-event-log
+        uses: actions/cache@v3
+        with:
+          path: backend/data/processed/orchid_event_log.csv
+          key: extracted-event-log-${{ runner.os }}
+      #----------------------------------------------
+      # extract the event log from the raw dataset
+      #----------------------------------------------
+      - name: Extract event log
+        if: steps.load-extracted-event-log.outputs.cache-hit != 'true'
+        run: |
+          source .venv/bin/activate
+          python backend/src/data/extract.py
+      #----------------------------------------------
+      # run pytest to run tests and generate coverage
+      #----------------------------------------------
+      - name: Activate venv and run pytest
+        run: |
+          source .venv/bin/activate
+          pytest
+      #----------------------------------------------
+      # store coverage report as artifact
+      #----------------------------------------------
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml

@@ -58,4 +58,4 @@ class ProcessMiningService:
     def get_dfg(self, request: DfgRequest) -> Graph:
         el = filter_log(self.event_log, request.filters)
 
-        return dfg.get_permuted_path_dfg(el)
+        return dfg.get_dfg(el)

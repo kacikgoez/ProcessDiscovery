@@ -16,8 +16,15 @@ waitress = "^2.1.2"
 termcolor = "^2.4.0"
 flask-caching = "^2.1.0"
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
 pytest = "^7.4.3"
+pytest-cov = "^4.1.0"
+
+[tool.pytest.ini_options]
+addopts = "--cov=backend/src --cov-report xml"
 
 [tool.poetry.group.docs]
 optional = true
