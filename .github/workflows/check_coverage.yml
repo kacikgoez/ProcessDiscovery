@@ -42,16 +42,43 @@ jobs:
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --with test --no-interaction --no-root
       #----------------------------------------------
-      # load raw dataset from secrets
+      # load raw dataset from cache
       #----------------------------------------------
-      - name: Load raw dataset
+      - name: Load raw dataset from cache
+        id: load-raw-dataset
+        uses: actions/cache@v3
+        with:
+          path: backend/data/raw/opd.csv
+          key: raw-dataset-${{ runner.os }}
+      #----------------------------------------------
+      # download raw dataset from physionet
+      #----------------------------------------------
+      - name: Download raw dataset from physionet
+        if: steps.load-raw-dataset.outputs.cache-hit != 'true'
         run: |
           mkdir -p backend/data/raw
-          echo "${{ secrets.RAW_DATASET }}" > backend/data/raw/opd.csv
+          wget -N -c --user hannoma --password "${{ secrets.RAW_DATA_PASSWORD }}" https://physionet.org/files/orchid/1.0.0/opd.csv
+          mv opd.csv backend/data/raw
+      #----------------------------------------------
+      # set python path variable to current directory
+      #----------------------------------------------
+      - name: Set working directory as python path variable
+        run: |
+          echo "::set-env name=PYTHONPATH::${{ github.workspace }}"
+      #----------------------------------------------
+      # load extracted event log from cache
+      #----------------------------------------------
+      - name: Load extracted event log from cache
+        id: load-extracted-event-log
+        uses: actions/cache@v3
+        with:
+          path: backend/data/processed/orchid_event_log.csv
+          key: extracted-event-log-${{ runner.os }}
       #----------------------------------------------
       # extract the event log from the raw dataset
       #----------------------------------------------
       - name: Extract event log
+        if: steps.load-extracted-event-log.outputs.cache-hit != 'true'
         run: |
           source .venv/bin/activate
           python backend/src/data/extract.py
