@@ -86,10 +86,16 @@ function confirm() {
     switch (selectedChart.value![0].endpoint) {
         case EndpointURI.KPI:
             Object.assign(editObj.request, { kpi: selectedChart.value!.map(item => item.value) });
+            /* eslint-disable no-debugger */
+            debugger;
             Object.assign(editObj, { type: Charts.HorizontalBarChart });
-            console.log(editObj)
+            break;
+        case EndpointURI.DFG:
+            Object.assign(editObj, { type: Charts.Graph });
             break;
         case EndpointURI.DISTRIBUTION:
+            /* eslint-disable no-debugger */
+            debugger;
             Object.assign(editObj, { type: selectedChart.value![0].value });
             break;
         case EndpointURI.VARIANT:

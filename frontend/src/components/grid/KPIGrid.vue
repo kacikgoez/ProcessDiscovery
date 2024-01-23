@@ -18,6 +18,7 @@ import { storeToRefs } from 'pinia';
 import { defineEmits, ref, watch } from 'vue';
 import { GridItem, GridLayout } from 'vue3-grid-layout-next';
 
+
 // Min width of the items
 const minWidth = ref(3);
 

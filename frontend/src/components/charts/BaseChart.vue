@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { theme } from '@/theme.js';
-import { DataSeries, EndpointURI, Filter, ServerRequest, constructJson, downloadVisualizationBusKey, formatDataSeries } from '@/types';
+import { DataSeries, EndpointURI, Filter, ServerRequest, constructJson, downloadVisualizationBusKey, formatDataSeries, hashColor } from '@/types';
 import { capitalizeWords } from '@/util';
 import { useEventBus } from '@vueuse/core';
 import * as echarts from 'echarts';
@@ -29,16 +29,16 @@ const props = defineProps({
     request: { type: Object as PropType<ServerRequest>, required: true },
     option: { type: Object as PropType<echarts.EChartsOption>, required: true },
     filters: { type: Array as () => Filter[], required: true },
+    kpi: { type: String, required: false, default: null },
 });
 
 const loaded = ref(false);
 const propRefs = toRefs(props);
 const chartDom = ref(null);
 const downloadBus = useEventBus(downloadVisualizationBusKey);
+let currentKPI: string | null = null;
 
 onBeforeMount(async () => {
-    /* eslint-disable no-debugger */
-    // debugger
     const requestBody: ServerRequest = {} as ServerRequest;
 
     if (props.request.disaggregation_attribute) requestBody['disaggregation_attribute'] = props.request.disaggregation_attribute;
@@ -50,16 +50,15 @@ onBeforeMount(async () => {
 
     const baseDataItem = propRefs.option.value.series[0]
 
-    if (props.request.endpoint === EndpointURI.KPI && props.request.kpi) {
-        let promiseList = [];
-        for (let i = 0; i < props.request.kpi.length; i++) {
-            Object.assign(requestBody, { kpi: props.request.kpi[i] });
-            promiseList.push(fetchEndpoint(requestBody, baseDataItem, i));
-        }
-        await Promise.all(promiseList);
-    } else {
-        await fetchEndpoint(requestBody, baseDataItem);
+    if (propRefs.kpi.value !== null) {
+        Object.assign(requestBody, { kpi: propRefs.kpi.value })
+        currentKPI = propRefs.kpi.value;
+    } else if (Array.isArray(propRefs.request.value.kpi)) {
+        Object.assign(requestBody, { kpi: propRefs.request.value.kpi[0] })
+        currentKPI = propRefs.request.value.kpi[0];
     }
+
+    await fetchEndpoint(requestBody, baseDataItem);
 
     loaded.value = true;
 });
@@ -115,7 +114,8 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
             body: JSON.stringify({ ...constructJson(propRefs.filters.value), ...requestBody }),
         });
 
-        const responseData = await response.json();
+        const textResponse: string = await response.text();
+        const responseData = JSON.parse(textResponse.replaceAll('NaN', '0'))
 
         let data = [];
 
@@ -145,20 +145,28 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
         switch (props.request.endpoint) {
             case EndpointURI.DISTRIBUTION: {
                 const data = (responseData as DataSeries).data.map((item) => {
-                    return { name: item.x, value: item.y };
+                    return { name: item.x, value: item.y, itemStyle: { color: hashColor(item.x + '') } };
                 });
                 Object.assign(propRefs.option.value.series[index], { name: capitalizeWords(responseData.name), data: data });
                 break;
             }
             case EndpointURI.KPI: {
+                // copy baseItem & replace with empty array
                 data = responseData;
-                const formatted = formatDataSeries(data.series[0] as DataSeries);
-                Object.assign(propRefs.option.value.series[index], { name: capitalizeWords(data.name), data: formatted.data });
+                let colors = [];
+                const multi = currentKPI === 'DROP_OUT';
+                const baseItem = Object.assign({}, propRefs.option.value.series[index]);
+                propRefs.option.value.series = [] as any;
+                for (const dataItem in data.series) {
+                    const copyItem = Object.assign({}, baseItem);
+                    const formatted = formatDataSeries(data.series[dataItem] as DataSeries, multi);
+                    Object.assign(copyItem, { name: capitalizeWords(data.series[dataItem].name), data: formatted.data });
+                    if (multi) colors.push(formatted.colors[0]);
+                    propRefs.option.value.series.push(copyItem);
+                }
+                Object.assign(propRefs.option.value, { color: colors });
                 break;
             }
-            default:
-                data = responseData;
-                break;
         }
     } catch (error) {
         console.error('ERROR', error);

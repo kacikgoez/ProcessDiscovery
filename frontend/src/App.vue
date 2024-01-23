@@ -86,12 +86,11 @@ const defaultValue: KPITile[] = [
     },
   },
   {
-    title: 'A Line Chart', type: Charts.HorizontalBarChart, x: 4, y: 0, w: 4, h: 10, i: '1',
+    title: 'A Graph', type: Charts.Graph, x: 4, y: 0, w: 4, h: 10, i: '1',
     changed: 0,
     request: {
-      endpoint: EndpointURI.KPI,
-      method: 'GET',
-      kpi: ['HAPPY_PATH_ADHERENCE'],
+      endpoint: EndpointURI.DFG,
+      method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
       },
@@ -133,7 +132,7 @@ const defaultValue: KPITile[] = [
   },
 ];
 
-if (localStorage.getItem('layout') === null) {
+if (localStorage.getItem('layout') === null || location.hash === '#reset') {
   globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
 } else {
   globalLayout.$patch(JSON.parse(localStorage.getItem('layout')!));
@@ -157,7 +156,7 @@ const addTile = () => {
     y: 20,
     w: 4,
     h: 10,
-    i: (layout.value.length + 1).toString(),
+    i: (new Date().getTime()).toString(),
   });
 };
 

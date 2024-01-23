@@ -8,6 +8,7 @@ import { LayoutItem } from 'vue3-grid-layout-next/dist/helpers/utils';
 // Chart must be named like file in /charts, so PieChart.vue -> PieChart
 export enum Charts {
     PieChart = 'other-charts/PieChart',
+    Graph = 'other-charts/GraphChart',
     LineChart = 'line-charts/LineChart',
     HorizontalBarChart = 'bar-charts/HorizontalBarChart',
     ChevronDiagram = 'other-charts/ChevronDiagram',
@@ -113,17 +114,55 @@ export type MultiDataSeries = {
 
 export type DataType = Graph | DataSeries | MultiDataSeries
 
+const colors: string[] = [
+    '#5470c6', '#91cc75', '#fac858', '#ee6666',
+    '#73c0de', '#3ba272', '#fc8452', '#9a60b4',
+    '#ea7ccc', '#7baaf7', '#276749', '#cbb142',
+    '#ff6b6b', '#a0d8ef', '#008080', '#cc5500',
+    '#b57edc', '#fddde6',
+    '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728',
+    '#9467bd', '#8c564b', '#e377c2', '#7f7f7f',
+    '#bcbd22', '#17becf', '#393b79', '#e14e41',
+    '#ffb14e', '#5e77ff', '#ffaae3', '#55c667',
+    '#7b3b3b', '#b8892e', '#4ea3c3', '#b42f5b',
+    '#ff7e45', '#736ced', '#bd63c1', '#3cb44b',
+    '#ffe119', '#4363d8', '#f58231', '#e6194B',
+    '#911eb4', '#42d4f4', '#fabebe', '#469990',
+    '#800000', '#aaffc3', '#e6beff', '#a9a9a9',
+    '#fffac8', '#4b0082', '#f032e6', '#808000',
+    '#ffd8b1', '#000075', '#808080', '#000000'
+    // Add more colors as needed
+];
+
+export function hashColor(key : string) {
+    // Hash function: sum of character codes modulated by the colors array length
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) {
+        hash = (hash + key.charCodeAt(i) + 3) % colors.length;
+    }
+    return colors[hash];
+}
+
 // Formats the data from the server to ECharts format
-export function formatDataSeries(p_data: DataSeries) {
+export function formatDataSeries(p_data: DataSeries, multi = false) {
     const label: string[] = [];
-    const data: number[] = [];
+    const colors: string[] = [];
+    const alreadyAdded: string[] = [];
+    const data: Object[] = [];
 
     p_data.data.forEach((item) => {
+        const identifier = multi ? p_data.name + '' :  item.x + '';
+        const newItem = { value: +(item.y).toFixed(3) };
+        if(!multi) Object.assign(newItem, { itemStyle: { color: hashColor(identifier) } });
         label.push(String(item.x));
-        data.push(+(item.y).toFixed(3));
+        data.push(newItem);
+        if(!alreadyAdded.includes(identifier)){ 
+            alreadyAdded.push(identifier);
+            colors.push(hashColor(identifier))
+        }
     });
 
-    return { label: label, data: data };
+    return { label: label, data: data, colors: colors};
 }
 
 
@@ -221,6 +260,7 @@ export enum EndpointURI {
     KPI = '/kpi',
     DISTRIBUTION = '/distributions',
     VARIANT = '/variants',
+    DFG = '/dfg',
 }
 
 type BaseBody = {
@@ -231,7 +271,7 @@ type BaseBody = {
 }
 
 type BodyKPI = BaseBody & {
-    endpoint: EndpointURI.KPI,
+    endpoint: EndpointURI.KPI | EndpointURI.DFG,
     kpi: string[],
     legend_attribute?: DisaggregationAttribute,
 }
@@ -268,7 +308,7 @@ export const KPI : EditModalEntryInt = {
     HAPPY_PATH_ADHERENCE: { value: 'HAPPY_PATH_ADHERENCE', label: 'Happy Path Adherence', endpoint: EndpointURI.KPI, pairable: 0  },
     DROP_OUT: { value: 'DROP_OUT', label: 'Drop Out', endpoint: EndpointURI.KPI, pairable: 1},
     PERMUTED_PATH_ADHERENCE: { value: 'PERMUTED_PATH_ADHERENCE', label: 'Permuted Path Adherence', endpoint: EndpointURI.KPI, pairable: 0} ,
-    PERMUTED_PATH_DFG: { value: 'PERMUTED_PATH_DFG', label: 'Permuted Path DFG', endpoint: EndpointURI.KPI, pairable: 2},
+    PERMUTED_PATH_DFG: { value: 'PERMUTED_PATH_DFG', label: 'Permuted Path DFG', endpoint: EndpointURI.DFG, pairable: 2},
     BUREAUCRATIC_DURATION: { value: 'BUREAUCRATIC_DURATION', label: 'Bureaucratic Duration', endpoint: EndpointURI.KPI, pairable: 0 },
     EVALUATION_TO_APPROACH: { value: 'EVALUATION_TO_APPROACH', label: 'Evaluation to Approach', endpoint: EndpointURI.KPI, pairable: 0},
     AUTHORIZATION_TO_PROCUREMENT: { value: 'AUTHORIZATION_TO_PROCUREMENT', label: 'Authorization to Procurement', endpoint: EndpointURI.KPI, pairable: 0}

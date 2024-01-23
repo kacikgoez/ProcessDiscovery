@@ -23,7 +23,18 @@
     <div>
     </div>
     <div ref="tileContent" class="tile-content">
-      <div class="overflow-y-auto overflow-x-hidden h-full">
+      <Carousel v-if="isMultiKPI" class="overflow-y-auto overflow-x-hidden h-full" :value="requestRef.kpi"
+        :num-visible="1" :num-scroll="1">
+        <template #item="{ data }">
+          <div class="overflow-y-auto overflow-x-hidden h-full">
+            <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width * 0.9"
+              :height="height * 0.9" :filters="filterCleared" :title="title" :request="requestRef" :kpi="data"
+              @change="change">
+            </component>
+          </div>
+        </template>
+      </Carousel>
+      <div v-else class="overflow-y-auto overflow-x-hidden h-full">
         <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width" :height="height"
           :filters="filterCleared" :title="title" :request="requestRef" @change="change"></component>
       </div>
@@ -39,7 +50,7 @@
 
 <script setup lang="ts">
 import { layoutStore } from '@/stores/LayoutStore';
-import { Charts, downloadVisualizationBusKey, Filter, FilterOperators, KPIActions, KPIChange, ServerRequest } from '@/types';
+import { Charts, downloadVisualizationBusKey, EndpointURI, Filter, FilterOperators, KPIActions, KPIChange, ServerRequest } from '@/types';
 import { useElementSize, useEventBus } from '@vueuse/core';
 import { useConfirm } from 'primevue/useconfirm';
 import {
@@ -90,12 +101,16 @@ const props = defineProps({
 
 const emits = defineEmits(['close', 'update:data', 'draggable', 'edit']);
 
-// Filter component 
+// Filter component
 const filters = ref(props.request.filters ?? []);
 
 // Clean of deleted filters
 const filterCleared = computed(() => {
   return (filters.value as Filter[]).filter((filter) => filter.operator !== FilterOperators.NONE)
+});
+
+const isMultiKPI = computed(() => {
+  return requestRef.value?.endpoint === EndpointURI.KPI && Array.isArray(requestRef.value?.kpi) && requestRef.value?.kpi.length > 1;
 });
 
 // Needed for deep watch, otherwise old val = new val
@@ -116,7 +131,6 @@ onBeforeMount(() => {
 
   watch(filterString, (newVal, oldVal) => {
     if (newVal !== oldVal) {
-      console.log(filterCleared.value)
       globalLayout.updateFilter(props.i, filterCleared.value);
       changed.value++;
     }
@@ -153,7 +167,7 @@ async function change(data: KPIChange) {
 function downloadVisualization() {
   downloadBus.emit({
     id: props.i,
-    title: props.title,
+    title: props.title
   });
 }
 

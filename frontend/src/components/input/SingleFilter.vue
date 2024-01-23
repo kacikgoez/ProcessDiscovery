@@ -5,11 +5,12 @@ import { PropType, computed, ref, watch } from 'vue';
 const props = defineProps({
   modelValue: { type: Object as PropType<Filter>, required: true },
 });
+
 const emit = defineEmits(['update:modelValue']);
 
 const editOverlay = ref();
-const selectedOperator = ref<FilterOperators>(FilterOperators.IS_NOT_EMPTY);
-const filterValue = ref();
+const selectedOperator = ref<FilterOperators>(props.modelValue?.operator ?? FilterOperators.IS_NOT_EMPTY);
+const filterValue = ref(props.modelValue?.value ?? null);
 
 const availableFilterOperators = computed(() => {
   if (props.modelValue?.attribute?.type == 'categorical') {
@@ -96,7 +97,7 @@ const printFilterValue = computed(() => {
       return filterValue.value;
     case FilterOperators.CONTAINS:
     case FilterOperators.NOT_CONTAINS:
-      return trimString(filterValue.value.join(', '));
+      return trimString(Array.isArray(filterValue.value) ? filterValue.value.join(', ') : filterValue.value);
     default:
       return '';
   }
@@ -123,16 +124,26 @@ watch(selectedOperator, (newValue, oldValue) => {
 })
 
 watch(filterValue, (newValue, oldValue) => {
+  newValue = newValue == 'null' ? null : newValue;
   if (newValue != oldValue && newValue != '') {
     emitUpdate();
   }
+})
+
+
+const formattedValue = computed(() => {
+  if (filterValue.value == null || filterValue.value == 'null' || filterValue.value == '') return null
+  if (Array.isArray(filterValue.value)) {
+    return filterValue.value.map((value) => value.toString())
+  }
+  return filterValue.value.toString()
 })
 
 const emitUpdate = () => {
   emit('update:modelValue', {
     ...props.modelValue,
     operator: selectedOperator.value,
-    value: filterValue.value + '',
+    value: formattedValue
   });
 }
 

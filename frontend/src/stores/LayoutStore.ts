@@ -43,6 +43,7 @@ const layoutStore = defineStore('layout', {
         updateFilter(id: string | number, filters: Filter[]) {
             const index = this.getTileID(id + '');
             Object.assign((this.layout as KPITile[])[index].request, { filters: filters });
+            console.log(this.layout);
             (this.layout as KPITile[])[index].changed++;
         },
         registerChange(){
