@@ -21,8 +21,8 @@ class ProcessMiningService:
     def get_patient_attributes(self) -> list[PatientAttribute]:
         return self.patient_attributes
 
-    def get_filter_attributes(self) -> list[PatientAttribute]:
-        return self.patient_attributes + self.filter_attributes
+    def get_process_attributes(self) -> list[PatientAttribute]:
+        return self.filter_attributes
 
     def get_variants(self, request: VariantListRequest) -> list[Variant]:
         el = filter_log(self.event_log, request.filters)

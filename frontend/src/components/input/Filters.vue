@@ -1,9 +1,10 @@
 <script setup lang='ts'>
 import SingleFilter from '@/components/input/SingleFilter.vue';
 import { patientAttributesStore } from '@/stores/PatientAttributesStore';
-import { Filter, FilterOperators, PatientAttribute } from '@/types';
+import {Filter, ProcessAttributes, FilterOperators, PatientAttribute} from '@/types';
 import { storeToRefs } from 'pinia';
 import { computed, ref } from 'vue';
+import {prettyAttributeNames} from '@/util';
 
 const store = patientAttributesStore();
 const { attributes } = storeToRefs(store);
@@ -14,6 +15,29 @@ const selectAttributeOverlay = ref();
 
 const filters = computed(() => {
   return ((props.modelValue ?? []) as Filter[])
+})
+
+const filterAttributes = computed(() => {
+  return [
+    {
+      label: 'Patient attributes',
+      items: attributes.value.map(attribute => {
+        return {
+          ...attribute,
+          label: prettyAttributeNames(attribute.name)
+        }
+      })
+    },
+    {
+      label: 'Process attributes',
+      items: ProcessAttributes.map(attribute => {
+        return {
+          ...attribute,
+          label: prettyAttributeNames(attribute.name)
+        }
+      })
+    }
+  ]
 })
 
 const showSelectAttribute = (event) => {
@@ -46,7 +70,13 @@ const removeFilter = (index: number) => {
         <SingleFilter v-model="filters[i]" @remove="removeFilter(i)" class="overflow-visible flex-shrink-0" />
       </div>
       <OverlayPanel ref="selectAttributeOverlay" append-to="body" show-close-icon class="inline-block overlay">
-        <Listbox :options="attributes" filter option-label="name" class="w-full md:w-14rem"
+        <Listbox
+            :options="filterAttributes" filter
+            option-label="label"
+            option-group-label="label"
+            option-group-children="items"
+            class="w-full md:w-14rem"
+            list-style="max-height: 25vh;"
           @update:model-value="addFilter" />
       </OverlayPanel>
     </div>

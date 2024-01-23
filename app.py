@@ -139,10 +139,10 @@ def get_patient_attributes():
     return jsonify(PROCESS_MINING_SERVICE.get_patient_attributes())
 
 
-@app.route('/filter-attributes')
+@app.route('/process-attributes')
 @cache.cached(timeout=3600)
 def get_filter_attributes():
-    return jsonify(PROCESS_MINING_SERVICE.get_filter_attributes())
+    return jsonify(PROCESS_MINING_SERVICE.get_process_attributes())
 
 
 @app.route('/event-log')

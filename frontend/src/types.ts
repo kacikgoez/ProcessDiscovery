@@ -76,7 +76,7 @@ export const ServerAttributes : PatientAttribute[] = await fetch(`//${window.loc
     })
     .then(response => response.json());
 
-export const FilterAttributes : PatientAttribute[] = await fetch('http://127.0.0.1:80/filter-attributes',
+export const ProcessAttributes : PatientAttribute[] = await fetch('http://127.0.0.1:80/process-attributes',
     {
         method: 'GET',
         headers: {
