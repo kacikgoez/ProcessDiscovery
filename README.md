@@ -164,18 +164,27 @@ You can use the event log to analyze the process using other tools such as ProM 
 #### Add a Tile
 All Tiles are shown in the grid. You can add new tiles by clicking on the button (3).
 
+
 ![](./images/overview.png "Overview")
+
+
 ### Tiles
 Tiles show the visualizations of data. They can be deleted by clicking on the button (3), resized by dragging the button (4) and moved by dragging them.
 To download the visualization you can click on the button (1). 
 The Tile can be configurated by clicking on the button (2). 
+
+
 ![](./images/tile.jpg "Tile")
+
 
 In the configuration page you can select a disaggregation attribute after clicking on the dropdown menu (2) and 
 scroll the page to see all available visualizations. The background will change to blue after clicking on the visualization you need. 
 To edit the title you can click on the text (1) and type a new title. 
 After completing the configuration you need to click on the button (3) to save the changes.
+
+
 ![](./images/configuration.png "Configuration")
+
 
 ## Features and Functions
 ### Filtering
@@ -195,7 +204,11 @@ or from the following process attributes:
 | Variant        | Categorical    | The variant of the case (sequence of activities).               |
 | Case duration  | Numerical      | The duration of the case from first to last event (in seconds). |
 | Case size      | Numerical      | The number of events in the case.                               |
+
+
 ![](./images/filter.png "Filter")
+
+
 Note that we treat all attributes except the patients age as categorical attributes. For the operator, you can choose from the following operators (depending on the attribute type):
 
 | Operator               | Attribute Type | Value    | Description                                          |
@@ -212,7 +225,11 @@ Note that we treat all attributes except the patients age as categorical attribu
 | GREATER THAN OR EQUALS | Numerical      | Single   | The attribute is greater than or equal to the value. |
 
 The default operator of filters is 'IS NOT EMPTY'. To change the operator you can click on the button (1) and then click on the dropdown menu (2).
+
+
 ![](./images/operator.png "Operator")
+
+
 Depending on the operator, you must enter none, one, or multiple values. For example, if you choose the operator "CONTAINS", you must enter multiple values.
 For categorical attributes, you can select the value(s) via a dropdown menu. For numerical attributes, you must enter the value manually.
 
@@ -224,7 +241,10 @@ You can download each visualization as a PNG file by clicking on the download ic
 #### Variants
 You can get an overview of the variants of the process by using the "Variants" visualization.
 This visualization lists all variants of the process. A variant is a sequence of events that occurred in the process.
+
+
 ![](./images/variant_list.png "Variant List")
+
 
 Each variant is represented by a chevron diagram. The chevron diagram shows the sequence of events for each variant.
 The activity names are abbreviated to fit the diagram. You can hover over the diagram to see the full activity name.
@@ -235,7 +255,10 @@ Note that the variants are sorted in descending order based on the overall perce
 
 #### Distribution
 You can select a disaggregation attribute and then select a pie chart to view the distribution of the attribute across all cases.
+
+
 ![](./images/Pie.png "Distribution")
+
 
 #### KPIs
 You can assess process conformance and performance through the following six KPIs visualizations. 
@@ -257,7 +280,10 @@ You can select this visualization to see the paths for all cases, including happ
 The nodes in the graph represent activities and the edges give the number of the directly following relation.
 You can hover over the edge to see the full source-to-target relationship with number. 
 The edges in red have the highest number in the dfg.
+
+
 ![](./images/DFG.png "DFG")
+
 
 #### De-Jure Process
 For the dejure process, you can select the visualization using different performance statistics for a disaggregation attribute. 
