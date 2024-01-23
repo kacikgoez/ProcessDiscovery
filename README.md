@@ -196,7 +196,10 @@ You can download each visualization as a PNG file by clicking on the download ic
 #### Variants
 You can get an overview of the variants of the process by using the "Variants" visualization.
 This visualization lists all variants of the process. A variant is a sequence of events that occurred in the process.
+
+
 ![](./images/variant_list.png "Variant List")
+
 
 Each variant is represented by a chevron diagram. The chevron diagram shows the sequence of events for each variant.
 The activity names are abbreviated to fit the diagram. You can hover over the diagram to see the full activity name.
@@ -213,14 +216,15 @@ You can select a disaggregation attribute and then select a pie chart to view th
 You can select a disaggregation attribute and a kpi under the kpi module. 
 By clicking multiple KPIs, you can also add them to a tile. 
 
-| KPIs                         | Description                                                        |
-|------------------------------|--------------------------------------------------------------------|
-| Happy Path Adherence         | Calculate the proportion of patients following the de-jure process |
-| Dropout Rate                 | Calculate how many patients drop out at each stage                 |
-| Permuted Path Adherence      | Calculate how many cases differ from the dejure process pathway    |
-| Bureaucratic Duration        | Measure the duration from referral to procurement in minute        |
-| Evaluation to Approach       | Measure the duration from evaluation to approach in minute         |
-| Authorization to Procurement | Measure the duration from authorization to procurement in minute   |
+| Metric                        | Description                                                                                                                                              | Calculation                                                                                                                                      | Applications                                                                                                                                                                                                                                   |
+|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Happy Path Adherence          | Measures the proportion of patients who follow the predefined, optimal process flow (de jure process) for their care pathway.                           | For each patient group, calculate the ratio of the number of patients following the de jure process to the total number of patients in the group. | Identifying deviations from the happy path can help healthcare providers to pinpoint process inefficiencies, understand the reasons for non-adherence, and develop interventions to improve compliance with the care pathway.                  |
+| Dropout Rate                  | Calculates the rate at which patients discontinue or drop out from their prescribed care pathway at each stage of the process.                           | Analyze the event log to determine the last recorded stage for each patient. Aggregate these data to identify the number of dropouts at each stage. | By understanding where and why patients are dropping out, healthcare organizations can tailor interventions to address specific challenges, thereby improving patient retention and outcomes.                                                |
+| Permuted Path Adherence       | Assesses the extent to which patient care pathways differ from the standard (de jure) process.                                                           | Identify all patient pathways that do not strictly follow the de jure process. Count and categorize these variations.                              | Analyzing permuted paths can reveal innovative practices or necessary adaptations to the standard care process. It can also help in identifying best practices and areas for standardization.                                                  |
+| Bureaucratic Duration         | Measures the time taken from referral to procurement, highlighting the efficiency of the administrative and logistical aspects of the care pathway.     | For each patient or case, calculate the total duration from the referral event to the procurement event.                                           | Shortening bureaucratic duration can lead to faster treatment initiation, improved patient experience, and reduced costs. This metric helps in pinpointing delays and inefficiencies in the process.                                         |
+| Evaluation to Approach        | Measures the time interval between the evaluation and approach stages in the patient care pathway.                                                       | Calculate the average duration between the evaluation and approach stages for patients.                                                            | Reducing the time between evaluation and approach can accelerate patient access to care, potentially improving outcomes by enabling timely treatment.                                                               |
+| Authorization to Procurement  | Quantifies the duration between obtaining treatment authorization and the procurement of necessary services or treatments.                               | Measure the average time from authorization to procurement across different patient groups or treatment categories.                                | Streamlining the authorization to procurement process can reduce wait times for patients, improve resource utilization, and enhance overall process efficiency.                                                      |
+
 #### DFG
 You can select this visualization to see the paths for all cases, including happy paths and permuted paths. 
 The nodes in the graph represent activities and the edges give the number of the directly following relation.
