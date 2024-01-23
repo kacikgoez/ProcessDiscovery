@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { theme } from '@/theme.js';
-import { DataSeries, EndpointURI, Filter, ServerRequest, constructJson, downloadVisualizationBusKey, formatDataSeries, generateCoordinates, hashColor } from '@/types';
+import { DataSeries, EndpointURI, Filter, ServerRequest, activityNameEnumMap, colorPalette, constructJson, downloadVisualizationBusKey, formatDataSeries, generateCoordinates, hashColor } from '@/types';
 import { capitalizeWords } from '@/util';
 import { useEventBus } from '@vueuse/core';
 import * as echarts from 'echarts';
@@ -178,31 +178,54 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
                 break;
             }
             case EndpointURI.DFG: {
-                // Example usage with responseData.nodes:
-                let nodes = responseData.nodes.map((item) => {
-                    const generatedCoordinates = generateCoordinates(responseData.nodes);
-                    const nodeIndex = responseData.nodes.findIndex((node) => node.label === item.label);
-                    const { x, y } = generatedCoordinates[nodeIndex];
-                    return { name: item.label, x, y };
+                // Assuming responseData.edges is an array of edges with 'source', 'target', and 'value' properties
+
+                // Step 1: Find the maximum and minimum values among all edges
+                const maxValue = Math.max(...responseData.edges.map(item => item.value));
+                const minValue = Math.min(...responseData.edges.map(item => item.value));
+
+                // Step 2: Function to determine color based on value using a gradient
+                const getColorByValue = (value, minValue, maxValue) => {
+                    // Normalize value between 0 and 1
+                    const normalizedValue = (value - minValue) / (maxValue - minValue);
+                    // Generate gradient color - simple linear interpolation between blue and red
+                    const r = Math.floor(normalizedValue * 255); // More red as value increases
+                    const b = 255 - r; // More blue as value decreases
+                    return `rgb(${r},0,${b})`;
+                };
+
+                let nodes = responseData.nodes.map((item, index, arr) => {
+                    const generatedCoordinates = generateCoordinates(arr); // Ensure this is correctly implemented to not generate coordinates every iteration
+                    const { x, y } = generatedCoordinates[index]; // Assuming generateCoordinates returns an array of the same length as nodes with {x, y} for each node
+                    return {
+                        name: item.label, x, y,
+                        itemStyle: {
+                            color: colorPalette[activityNameEnumMap[item.label]]
+                        }
+                    };
                 });
-                /* eslint-disable no-debugger */
-                debugger;
+
                 let edges = responseData.edges.map((item) => {
                     return {
-                        source: item.source, target: item.target, value: item.value, lineStyle: {
+                        source: item.source,
+                        target: item.target,
+                        value: item.value,
+                        lineStyle: {
                             normal: {
-                                width: 1
+                                width: 1,
+                                color: getColorByValue(item.value, minValue, maxValue) // Dynamic gradient color based on value
                             }
                         },
                         label: {
                             formatter: item.value + '',
-                            // proposed change here another option is  
-                            // direction: 'horizontal',
                             show: true,
                         }
-                    }
-                })
+                    };
+                });
+
+                // Update your eCharts option
                 Object.assign(propRefs.option.value.series[0], { data: nodes, links: edges });
+
                 break;
             }
         }
