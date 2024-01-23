@@ -51,70 +51,70 @@ visualTour.addSteps([
             },
         ]
     },
-    {
-        title: 'Grid',
-        text: 'This is the grid. It is the main component of the dashboard. It consists of tiles, which are visualizations of data.',
-        attachTo: {
-            element: '.vue-grid-layout',
-            on: 'top'
-        },
-    },
-    {
-        title: 'Tiles',
-        text: 'Tiles are visualizations of data. They can be moved by dragging them around the grid. You can also resize them by dragging the bottom right corner. Feel free to try it out!',
-        attachTo: {
-            element: '#vue-tile-0',
-            on: 'right'
-        },
-    },
-    {
-        title: 'Distribution Visualization',
-        text: 'This tile shows the first type of visualization: a distribution. To be exact, currently it shows the distribution of genders in the dataset.' +
-            'You can change the disaggregation attribute by editing the tile.<br> Lets start by changing this visualization to show the distribution of ages in the dataset. Click on the edit button in the top right corner of the tile.',
-        attachTo: {
-            element: '#vue-tile-0',
-            on: 'right'
-        },
-        advanceOn: { selector: '#vue-tile-0 .flex-1:nth-child(3)>.tile-btn', event: 'click' },
-        buttons: [],
-    },
-    {
-        title: 'Disaggregation Attribute',
-        text: 'This is the disaggregation attribute. It is used to determine the distribution. You can change it by clicking on the dropdown menu and selecting a different attribute.',
-        attachTo: {
-            element: 'input#change-title+div.p-dropdown',
-            on: 'right'
-        },
-        advanceOn: { selector: 'input#change-title+div.p-dropdown', event: 'click' },
-        buttons: [],
-    },
-    {
-        title: 'Select a Disaggregation Attribute',
-        text: 'Select the age attribute.',
-        attachTo: {
-            element: 'ul.p-dropdown-items',
-            on: 'right'
-        },
-        advanceOn: { selector: 'ul.p-dropdown-items>li:nth-child(2)', event: 'click' },
-        buttons: [],
-    },
-    {
-        title: 'Tile Title',
-        text: 'This is the title of the tile. You can change it by clicking on the text and typing a new title.',
-        attachTo: {
-            element: 'input#change-title',
-            on: 'right'
-        },
-    },
-    {
-        title: 'Save Changes',
-        text: 'You can save the changes you made by clicking on the save button.',
-        attachTo: {
-            element: 'div.p-dialog-footer>button.primary',
-            on: 'right'
-        },
-        advanceOn: { selector: 'div.p-dialog-footer>button.primary', event: 'click' },
-    },
+    // {
+    //     title: 'Grid',
+    //     text: 'This is the grid. It is the main component of the dashboard. It consists of tiles, which are visualizations of data.',
+    //     attachTo: {
+    //         element: '.vue-grid-layout',
+    //         on: 'top'
+    //     },
+    // },
+    // {
+    //     title: 'Tiles',
+    //     text: 'Tiles are visualizations of data. They can be moved by dragging them around the grid. You can also resize them by dragging the bottom right corner. Feel free to try it out!',
+    //     attachTo: {
+    //         element: '#vue-tile-0',
+    //         on: 'right'
+    //     },
+    // },
+    // {
+    //     title: 'Distribution Visualization',
+    //     text: 'This tile shows the first type of visualization: a distribution. To be exact, currently it shows the distribution of genders in the dataset.' +
+    //         'You can change the disaggregation attribute by editing the tile.<br> Lets start by changing this visualization to show the distribution of ages in the dataset. Click on the edit button in the top right corner of the tile.',
+    //     attachTo: {
+    //         element: '#vue-tile-0',
+    //         on: 'right'
+    //     },
+    //     advanceOn: { selector: '#vue-tile-0 .flex-1:nth-child(3)>.tile-btn', event: 'click' },
+    //     buttons: [],
+    // },
+    // {
+    //     title: 'Disaggregation Attribute',
+    //     text: 'This is the disaggregation attribute. It is used to determine the distribution. You can change it by clicking on the dropdown menu and selecting a different attribute.',
+    //     attachTo: {
+    //         element: 'input#change-title+div.p-dropdown',
+    //         on: 'right'
+    //     },
+    //     advanceOn: { selector: 'input#change-title+div.p-dropdown', event: 'click' },
+    //     buttons: [],
+    // },
+    // {
+    //     title: 'Select a Disaggregation Attribute',
+    //     text: 'Select the age attribute.',
+    //     attachTo: {
+    //         element: 'ul.p-dropdown-items',
+    //         on: 'right'
+    //     },
+    //     advanceOn: { selector: 'ul.p-dropdown-items>li:nth-child(2)', event: 'click' },
+    //     buttons: [],
+    // },
+    // {
+    //     title: 'Tile Title',
+    //     text: 'This is the title of the tile. You can change it by clicking on the text and typing a new title.',
+    //     attachTo: {
+    //         element: 'input#change-title',
+    //         on: 'right'
+    //     },
+    // },
+    // {
+    //     title: 'Save Changes',
+    //     text: 'You can save the changes you made by clicking on the save button.',
+    //     attachTo: {
+    //         element: 'div.p-dialog-footer>button.primary',
+    //         on: 'right'
+    //     },
+    //     advanceOn: { selector: 'div.p-dialog-footer>button.primary', event: 'click' },
+    // },
     {
         title: 'Age Distribution',
         text: 'The tile now shows the distribution of ages in the dataset. You can see that the majority of the patients are between 50 and 80 years old.<br>' +
@@ -241,7 +241,7 @@ visualTour.addSteps([
         title: 'Remove Tile',
         text: 'You can remove a tile by clicking on the "Remove Tile" button in the top right corner of the tile.',
         attachTo: {
-            element: '.vue-grid-item:nth-last-child(3) .flex-1:nth-child(2)>.tile-btn',
+            element: '.vue-grid-item:nth-last-child(3) .flex-1:nth-child(4)>.tile-btn',
             on: 'right'
         },
     },
