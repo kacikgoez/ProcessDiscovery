@@ -63,7 +63,7 @@ const PatientAttributeKeysList = Object.values(ServerAttributes).map((key) => {
         name: key.name.replaceAll('_', ' '),
         code: key.name,
     }
-}).filter((key) => key.name !== 'hospital id' && key.name !== 'age')
+}).filter((key) => key.name !== 'hospital id')
 
 const selectedChart: Ref<{ endpoint: string, value: string } | null> = ref()
 
@@ -80,22 +80,19 @@ function close() {
 }
 
 function confirm() {
-    /* eslint-disable no-debugger */
     if (!selectedChart.value === null || !Array.isArray(selectedChart.value) || selectedChart.value.length == 0) return
     const editObj = { title: title.value, request: { endpoint: selectedChart.value![0].endpoint, disaggregation_attribute: { name: dis_attr.value.code } } };
+    if (dis_attr.value.code) Object.assign(editObj.request.disaggregation_attribute, { bins: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] });
+
     switch (selectedChart.value![0].endpoint) {
         case EndpointURI.KPI:
             Object.assign(editObj.request, { kpi: selectedChart.value!.map(item => item.value) });
-            /* eslint-disable no-debugger */
-            debugger;
             Object.assign(editObj, { type: Charts.HorizontalBarChart });
             break;
         case EndpointURI.DFG:
             Object.assign(editObj, { type: Charts.Graph });
             break;
         case EndpointURI.DISTRIBUTION:
-            /* eslint-disable no-debugger */
-            debugger;
             Object.assign(editObj, { type: selectedChart.value![0].value });
             break;
         case EndpointURI.VARIANT:

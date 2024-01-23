@@ -13,13 +13,13 @@
 </template>
 
 <script setup lang="ts">
+import { globalFiltersStore } from '@/stores/GlobalFiltersStore';
 import { theme } from '@/theme.js';
 import { DataSeries, EndpointURI, Filter, ServerRequest, activityNameEnumMap, colorPalette, constructJson, downloadVisualizationBusKey, formatDataSeries, generateCoordinates, hashColor } from '@/types';
 import { capitalizeWords } from '@/util';
 import { useEventBus } from '@vueuse/core';
 import * as echarts from 'echarts';
 import { PropType, defineProps, onBeforeMount, onMounted, ref, toRefs, watch } from 'vue';
-import {globalFiltersStore} from '@/stores/GlobalFiltersStore';
 
 const props = defineProps({
     id: { type: String, required: true },
@@ -114,16 +114,13 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              ...constructJson(propRefs.filters.value.concat(globalFilters.filters)),
-              ...requestBody
+                ...constructJson(propRefs.filters.value.concat(globalFilters.filters)),
+                ...requestBody
             }),
         });
 
         const textResponse: string = await response.text();
         const responseData = JSON.parse(textResponse.replaceAll('NaN', '0'))
-
-        /* eslint-disable no-debugger */
-        debugger;
 
         let data = [];
 

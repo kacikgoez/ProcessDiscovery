@@ -32,7 +32,6 @@ const { layout } = storeToRefs(globalLayout)
 const emits = defineEmits(['close', 'edit'])
 
 watch(layout, (newVal) => {
-    /* eslint-disable no-debugger */
     layout.value = newVal
 })
 
