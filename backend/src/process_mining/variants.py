@@ -3,7 +3,7 @@ from typing import Collection
 import pandas as pd
 from pm4py.objects.log.util import pandas_numpy_variants
 
-from backend.src.dataclasses.dataclasses import Variant
+from backend.src.dataclasses.charts import Variant
 
 
 def get_variants_with_case_ids(el: pd.DataFrame) -> dict[Collection[str], list[str]]:

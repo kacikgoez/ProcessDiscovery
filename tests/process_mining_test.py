@@ -1,7 +1,6 @@
 import pytest
 from backend.src.dataclasses.attributes import DisaggregationAttribute, AttributeType
-from backend.src.dataclasses.charts import DataSeries, MultiDataSeries, DataItem, Graph, Node, Edge
-from backend.src.dataclasses.dataclasses import Variant
+from backend.src.dataclasses.charts import DataSeries, MultiDataSeries, DataItem, Graph, Node, Edge, Variant
 from backend.src.dataclasses.requests import KpiRequest, KpiType, DistributionRequest, VariantListRequest, DfgRequest
 from backend.src.process_mining.variants import get_variants_with_case_ids
 

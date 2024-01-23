@@ -48,8 +48,6 @@ def load_event_log(path: str) -> pd.DataFrame:
     # Merge the process attributes with the event log
     df = df.merge(process_attributes, on='case:concept:name')
 
-    print(df.dtypes)
-
     return df
 
 
