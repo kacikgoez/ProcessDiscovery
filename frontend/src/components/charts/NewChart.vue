@@ -6,9 +6,6 @@
                 bar_chart
             </span>
         </div>
-        <div class="kpi-choose-chatpgt">
-            <img class="kpi-icon" src="@/assets/chatgpt.svg">
-        </div>
     </div>
 </template>
 <script setup lang="ts">
