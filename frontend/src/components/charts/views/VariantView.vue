@@ -29,8 +29,6 @@ watch(propRefs.filters, () => {
 }, { deep: true });
 
 function fetchVariants() {
-    /* eslint-disable no-debugger */
-    debugger;
     fetch(`//${window.location.hostname}/variants`, {
         method: 'POST',
         headers: {

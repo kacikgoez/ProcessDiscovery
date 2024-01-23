@@ -66,7 +66,7 @@ export interface IDictionary<TValue> {
     [id: string]: TValue;
 }
 
-export const ServerAttributes : PatientAttribute[] = await fetch(`//${window.location.hostname}:80/patient-attributes`,
+export const ServerAttributes : PatientAttribute[] = await fetch(`//${window.location.hostname}/patient-attributes`,
     {
         method: 'GET',
         headers: {
@@ -76,7 +76,7 @@ export const ServerAttributes : PatientAttribute[] = await fetch(`//${window.loc
     })
     .then(response => response.json());
 
-export const ProcessAttributes : PatientAttribute[] = await fetch('http://127.0.0.1:80/process-attributes',
+export const ProcessAttributes : PatientAttribute[] = await fetch(`//${window.location.hostname}/process-attributes`,
     {
         method: 'GET',
         headers: {
