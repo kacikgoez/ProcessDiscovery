@@ -1,6 +1,7 @@
 site_name: ORCA
 repo_url: https://github.com/kacikgoez/ProcessDiscovery
 repo_name: ProcessDiscovery
+site_url: https://kacikgoez.github.io/ProcessDiscovery/
 
 nav:
   - Home: index.md
