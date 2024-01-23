@@ -1,7 +1,6 @@
 import pytest
 from backend.src.dataclasses.attributes import DisaggregationAttribute, AttributeType
-from backend.src.dataclasses.charts import DataSeries, MultiDataSeries, DataItem, Graph, Node, Edge
-from backend.src.dataclasses.dataclasses import Variant
+from backend.src.dataclasses.charts import DataSeries, MultiDataSeries, DataItem, Graph, Node, Edge, Variant
 from backend.src.dataclasses.requests import KpiRequest, KpiType, DistributionRequest, VariantListRequest, DfgRequest
 from backend.src.process_mining.variants import get_variants_with_case_ids
 
@@ -56,8 +55,14 @@ class TestVariants:
         result = test_process_mining_service.get_variants(request)
 
         expected = [
-            Variant(activities=['Referral', 'Evaluation', 'Approach', 'Authorization', 'Procurement', 'Transplant'], count=1, frequency=0.5, distribution={'F': 1, 'M': 0}),
-            Variant(activities=['Referral', 'Evaluation'], count=1, frequency=0.5, distribution={'M': 1, 'F': 0})
+            Variant(
+                activities=['Referral', 'Evaluation', 'Approach', 'Authorization', 'Procurement', 'Transplant'],
+                count=1, frequency=0.5,
+                distribution=DataSeries.from_dict(data={'F': 1, 'M': 0}, name='gender')),
+            Variant(
+                activities=['Referral', 'Evaluation'],
+                count=1, frequency=0.5,
+                distribution=DataSeries.from_dict(data={'M': 1, 'F': 0}, name='gender')),
         ]
 
         assert result == expected

@@ -122,6 +122,14 @@ export type MultiDataSeries = {
     data: DataSeries[]
 }
 
+export type Variant = {
+    id: number,
+    activities: string[],
+    count: number,
+    frequency: number,
+    distribution: DataSeries,
+}
+
 export type DataType = Graph | DataSeries | MultiDataSeries
 
 const colors: string[] = [
@@ -206,14 +214,6 @@ export const colorPalette: IDictionary<string> = {
     PRO: '#FFDB5C',
     TRA: '#ff9f7f',
 };
-
-export type Variant = {
-    id: number,
-    activities: string[],
-    count: number,
-    frequency: number,
-    distribution: IDictionary<number>,
-}
 
 export type ListEntry = {
     name: string,

@@ -1,8 +1,7 @@
 import pandas as pd
 
 from backend.src.dataclasses.attributes import PatientAttribute
-from backend.src.dataclasses.charts import Graph, MultiDataSeries, DataSeries
-from backend.src.dataclasses.dataclasses import Variant
+from backend.src.dataclasses.charts import Graph, MultiDataSeries, DataSeries, Variant
 from backend.src.dataclasses.requests import KpiRequest, KpiType, VariantListRequest, DistributionRequest, DfgRequest
 from backend.src.process_mining.event_log import load_event_log, load_patient_attributes, create_bins, filter_log, \
     load_filter_attributes

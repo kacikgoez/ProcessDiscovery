@@ -10,6 +10,7 @@ import BaseChart from '@/components/charts/BaseChart.vue';
 import { activityNameEnumMap, colorPalette, Filter, IDictionary, Variant } from '@/types';
 import * as echarts from 'echarts';
 import { onMounted, PropType, Ref, ref, toRefs, watch } from 'vue';
+import {capitalizeFirstLetter} from '@/util';
 
 const props = defineProps({
   width: { type: Number, required: true },
@@ -71,7 +72,7 @@ const addChevron: (variant: Variant, total_count: number) => echarts.SeriesOptio
     },
     // Add the pie chart
     {
-      name: `Variant ${chevronCounter.value}`,
+      name: `Variant ${chevronCounter.value} - ${capitalizeFirstLetter(variant.distribution.name)}`,
       id: `pie_${chevronCounter.value}`,
       center: ['10%', `${(100 / total_count) * (chevronCounter.value - 0.5)}%`],
       radius: ['10%', '13%'],
@@ -97,10 +98,10 @@ const addChevron: (variant: Variant, total_count: number) => echarts.SeriesOptio
       labelLine: {
         show: false
       },
-      data: Object.entries(variant.distribution).map(entry => {
+      data: variant.distribution.data.map(entry => {
         return {
-          name: entry[0],
-          value: entry[1]
+          name: entry.x,
+          value: entry.y,
         }
       }),
       type: 'pie'

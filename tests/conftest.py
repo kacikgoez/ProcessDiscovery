@@ -21,17 +21,17 @@ def test_log(test_process_mining_service):
     return test_process_mining_service.event_log
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def process_mining_service():
     return ProcessMiningService()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def patient_attributes(process_mining_service):
     return process_mining_service.get_patient_attributes()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def event_log(process_mining_service):
     return process_mining_service.event_log
 
