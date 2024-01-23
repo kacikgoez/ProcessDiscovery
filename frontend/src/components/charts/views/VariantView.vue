@@ -29,6 +29,8 @@ watch(propRefs.filters, () => {
 }, { deep: true });
 
 function fetchVariants() {
+    /* eslint-disable no-debugger */
+    debugger;
     fetch(`//${window.location.hostname}/variants`, {
         method: 'POST',
         headers: {
@@ -37,9 +39,7 @@ function fetchVariants() {
         },
         body: JSON.stringify({
             ...constructJson(props.filters),
-            'disaggregation_attribute': {
-                'name': 'race'
-            },
+            disaggregation_attribute: props.request.disaggregation_attribute
         }),
     }).then(response => response.json())
         .then(data => {
