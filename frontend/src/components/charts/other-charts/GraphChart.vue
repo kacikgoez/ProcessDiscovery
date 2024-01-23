@@ -38,11 +38,8 @@ const option: Ref<echarts.EChartsOption> = ref({
         {
             type: 'graph',
             layout: 'none',
-            symbolSize: 50,
-            roam: true,
-            force: {
-                edgeLength: 1,
-            },
+            symbolSize: 80,
+            roam: false,
             label: {
                 show: true
             },
@@ -55,7 +52,7 @@ const option: Ref<echarts.EChartsOption> = ref({
             links: [],
             lineStyle: {
                 opacity: 0.9,
-                width: 2,
+                width: 10,
                 curveness: 0.05
             }
         }
