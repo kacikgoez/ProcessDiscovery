@@ -146,12 +146,29 @@ This will build the docker images and run the dashboard. You can access the dash
 
 ## User Interface
 ### Overview
+#### Help
+You can choose to start a tour or reset the dashboard at any time by clicking on the button (1) in the top left corner of the dashboard.
+
 #### Download the Event Log
-You can download the event log as a CSV file by clicking on the button "Download Event Log" in the top right corner of the dashboard. The event log will be downloaded as a CSV file.
+You can download the event log as a CSV file by clicking on the button (2) in the top right corner of the dashboard. The event log will be downloaded as a CSV file.
 The event log contains a row for each event. The row contains information about the patient and the event (e.g., timestamp, event type). See [here](#extraction-of-the-event-log) for more information.
 You can use the event log to analyze the process using other tools such as ProM or PM4Py.
 
+#### Add a Tile
+All Tiles are shown in the grid. You can add new tiles by clicking on the button (3).
+
+![](./images/overview.png "Overview")
 ### Tiles
+Tiles show the visualizations of data. They can be deleted by clicking on the button (3), resized by dragging the button (4) and moved by dragging them.
+To download the visualization you can click on the button (1). 
+The Tile can be configurated by clicking on the button (2). 
+![](./images/tile.jpg "Tile")
+
+In the configuration page you can select a disaggregation attribute after clicking on the dropdown menu (2) and 
+scroll the page to see all available visualizations. The background will change to blue after clicking on the visualization you need. 
+To edit the title you can click on the text (1) and type a new title. 
+After completing the configuration you need to click on the button (3) to save the changes.
+![](./images/configuration.png "Configuration")
 
 ## Features and Functions
 ### Filtering
@@ -159,7 +176,8 @@ The dashboard supports two types of filters: global filters and individual filte
 The global filters are applied to all visualizations. The individual filters are only applied to the corresponding visualization (in addition to the global filters).
 Multiple filters are combined with the logical operator "AND".
 
-You can add a global filter by clicking on the filter icon in the top right corner of the dashboard. Individual filters can be added by clicking on the filter icon in the top right corner of the tile of the corresponding visualization.
+You can add a global filter by clicking on the filter icon in the top right corner of the dashboard. Individual filters can be added by clicking on the button (1) of the tile of the corresponding visualization. 
+After that you can scroll through the page or enter an attribute into the search to select an attribute.
 Each filter consists of an attribute, an operator, and a value. For the attribute, you can choose from the attributes that are available for each patient (see [here](#the-dataset) for more information)
 or from the following process attributes:
 
@@ -170,7 +188,7 @@ or from the following process attributes:
 | Variant        | Categorical    | The variant of the case (sequence of activities).               |
 | Case duration  | Numerical      | The duration of the case from first to last event (in seconds). |
 | Case size      | Numerical      | The number of events in the case.                               |
-
+![](./images/filter.png "Filter")
 Note that we treat all attributes except the patients age as categorical attributes. For the operator, you can choose from the following operators (depending on the attribute type):
 
 | Operator               | Attribute Type | Value    | Description                                          |
@@ -186,8 +204,11 @@ Note that we treat all attributes except the patients age as categorical attribu
 | GREATER THAN           | Numerical      | Single   | The attribute is greater than the value.             |
 | GREATER THAN OR EQUALS | Numerical      | Single   | The attribute is greater than or equal to the value. |
 
+The default operator of filters is 'IS NOT EMPTY'. To change the operator you can click on the button (1) and then click on the dropdown menu (2).
+![](./images/operator.png "Operator")
 Depending on the operator, you must enter none, one, or multiple values. For example, if you choose the operator "CONTAINS", you must enter multiple values.
 For categorical attributes, you can select the value(s) via a dropdown menu. For numerical attributes, you must enter the value manually.
+
 
 ### Downloading Visualizations
 You can download each visualization as a PNG file by clicking on the download icon in the top right corner of the tile.
@@ -196,10 +217,7 @@ You can download each visualization as a PNG file by clicking on the download ic
 #### Variants
 You can get an overview of the variants of the process by using the "Variants" visualization.
 This visualization lists all variants of the process. A variant is a sequence of events that occurred in the process.
-
-
 ![](./images/variant_list.png "Variant List")
-
 
 Each variant is represented by a chevron diagram. The chevron diagram shows the sequence of events for each variant.
 The activity names are abbreviated to fit the diagram. You can hover over the diagram to see the full activity name.
@@ -210,28 +228,41 @@ Note that the variants are sorted in descending order based on the overall perce
 
 #### Distribution
 You can select a disaggregation attribute and then select a pie chart to view the distribution of the attribute across all cases.
-![](./images/distribution.png "Variant List")
+![](./images/Pie.png "Distribution")
 
 #### KPIs
-You can select a disaggregation attribute and a kpi under the kpi module. 
+You can assess process conformance and performance through the following six KPIs visualizations. 
+The first three KPIs focus on deviations from the process path and the last three KPIs focus on the duration of the process. 
 By clicking multiple KPIs, you can also add them to a tile. 
 
-| Metric                        | Description                                                                                                                                              | Calculation                                                                                                                                      | Applications                                                                                                                                                                                                                                   |
-|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Happy Path Adherence          | Measures the proportion of patients who follow the predefined, optimal process flow (de jure process) for their care pathway.                           | For each patient group, calculate the ratio of the number of patients following the de jure process to the total number of patients in the group. | Identifying deviations from the happy path can help healthcare providers to pinpoint process inefficiencies, understand the reasons for non-adherence, and develop interventions to improve compliance with the care pathway.                  |
-| Dropout Rate                  | Calculates the rate at which patients discontinue or drop out from their prescribed care pathway at each stage of the process.                           | Analyze the event log to determine the last recorded stage for each patient. Aggregate these data to identify the number of dropouts at each stage. | By understanding where and why patients are dropping out, healthcare organizations can tailor interventions to address specific challenges, thereby improving patient retention and outcomes.                                                |
-| Permuted Path Adherence       | Assesses the extent to which patient care pathways differ from the standard (de jure) process.                                                           | Identify all patient pathways that do not strictly follow the de jure process. Count and categorize these variations.                              | Analyzing permuted paths can reveal innovative practices or necessary adaptations to the standard care process. It can also help in identifying best practices and areas for standardization.                                                  |
-| Bureaucratic Duration         | Measures the time taken from referral to procurement, highlighting the efficiency of the administrative and logistical aspects of the care pathway.     | For each patient or case, calculate the total duration from the referral event to the procurement event.                                           | Shortening bureaucratic duration can lead to faster treatment initiation, improved patient experience, and reduced costs. This metric helps in pinpointing delays and inefficiencies in the process.                                         |
-| Evaluation to Approach        | Measures the time interval between the evaluation and approach stages in the patient care pathway.                                                       | Calculate the average duration between the evaluation and approach stages for patients.                                                            | Reducing the time between evaluation and approach can accelerate patient access to care, potentially improving outcomes by enabling timely treatment.                                                               |
-| Authorization to Procurement  | Quantifies the duration between obtaining treatment authorization and the procurement of necessary services or treatments.                               | Measure the average time from authorization to procurement across different patient groups or treatment categories.                                | Streamlining the authorization to procurement process can reduce wait times for patients, improve resource utilization, and enhance overall process efficiency.                                                      |
-
+| KPIs                         | Description                                                        |
+|------------------------------|--------------------------------------------------------------------|
+| Happy Path Adherence         | Calculate the proportion of patients following the de-jure process |
+| Dropout Rate                 | Calculate how many patients drop out at each stage                 |
+| Permuted Path Adherence      | Calculate how many cases differ from the dejure process pathway    |
+| Bureaucratic Duration        | Measure the duration from referral to procurement in second        |
+| Evaluation to Approach       | Measure the duration from evaluation to approach in second         |
+| Authorization to Procurement | Measure the duration from authorization to procurement in second   |
 #### DFG
 You can select this visualization to see the paths for all cases, including happy paths and permuted paths. 
 The nodes in the graph represent activities and the edges give the number of the directly following relation.
+You can hover over the edge to see the full source-to-target relationship with number. 
+The edges in red have the highest number in the dfg.
+![](./images/DFG.png "DFG")
 
 #### De-Jure Process
 For the dejure process, you can select the visualization using different performance statistics for a disaggregation attribute. 
-The nodes in the graph represent activities and the edges give information such as drop out rate, maximum duration, etc.
+The nodes in the graph represent activities and the edges give the statistics.
+
+| Statistics   | Description                                                        |
+|--------------|--------------------------------------------------------------------|
+| MAX          | The max duration between two activities                            |
+| MIN          | The min duration between two activities                            |
+| MEDIAN       | The median duration between two activities                         |
+| MEAN         | The mean duration between two activities                           |
+| REMAIN       | The percentage of activity that goes to the next activity          |
+| DROP         | The percentage of disaggregated patient that drop in each activity |
+
 ## Troubleshooting
 
 ## Glossary
