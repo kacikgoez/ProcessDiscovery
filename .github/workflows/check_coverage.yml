@@ -64,7 +64,7 @@ jobs:
       #----------------------------------------------
       - name: Set working directory as python path variable
         run: |
-          echo "::set-env name=PYTHONPATH::${{ github.workspace }}"
+          echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
       #----------------------------------------------
       # load extracted event log from cache
       #----------------------------------------------
