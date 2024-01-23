@@ -1,13 +1,13 @@
 <template>
   <BaseChart :key="propRefs.variants.value.length" :width="width" :height="calculatedHeight" :max-width="maximumWidth"
-    :option="options">
+    :option="options" :filters="filters">
   </BaseChart>
 </template>
 
 <script setup lang="ts">
 
 import BaseChart from '@/components/charts/BaseChart.vue';
-import { activityNameEnumMap, colorPalette, IDictionary, Variant } from '@/types';
+import { activityNameEnumMap, colorPalette, Filter, IDictionary, Variant } from '@/types';
 import * as echarts from 'echarts';
 import { onMounted, PropType, Ref, ref, toRefs, watch } from 'vue';
 
@@ -15,6 +15,7 @@ const props = defineProps({
   width: { type: Number, required: true },
   height: { type: Number, required: true },
   variants: { type: Object as PropType<Variant[]>, required: true },
+  filters: { type: Array as () => Filter[], required: true },
 });
 
 const propRefs = toRefs(props);
@@ -145,6 +146,9 @@ const generateOptions: () => [echarts.EChartsOption, number] = () => {
     },
     series: []
   }
+
+  if (!Array.isArray(propRefs.variants.value)) return [option, total];
+
   for (const variant of propRefs.variants.value) {
     (option.series! as echarts.SeriesOption[]).push(...addChevron(variant, total));
   }

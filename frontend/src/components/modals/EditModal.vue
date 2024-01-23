@@ -36,7 +36,6 @@
 
 import { layoutStore } from '@/stores/LayoutStore';
 import { Charts, EndpointURI, Endpoints, ServerAttributes } from '@/types';
-import { storeToRefs } from 'pinia';
 import Button from 'primevue/button';
 import Listbox from 'primevue/listbox';
 import { Ref, computed, ref, toRef, watch } from 'vue';
@@ -49,10 +48,8 @@ const props = defineProps({
 const emit = defineEmits(['update:visible'])
 
 const globalLayout = layoutStore();
-const { layout } = storeToRefs(globalLayout)
 
-const index = layout.value.findIndex((kpi) => kpi.i === props.id)!
-const title = ref(layout.value[index].title)
+const title = ref(globalLayout.getTile(props.id)!.title)
 
 const visibleArg = toRef(props, 'visible')
 const visibleProp = ref(false)
@@ -89,16 +86,23 @@ function confirm() {
     switch (selectedChart.value![0].endpoint) {
         case EndpointURI.KPI:
             Object.assign(editObj.request, { kpi: selectedChart.value!.map(item => item.value) });
-            Object.assign(editObj, { type: Charts.LineChart });
+            /* eslint-disable no-debugger */
+            debugger;
+            Object.assign(editObj, { type: Charts.HorizontalBarChart });
+            break;
+        case EndpointURI.DFG:
+            Object.assign(editObj, { type: Charts.Graph });
             break;
         case EndpointURI.DISTRIBUTION:
+            /* eslint-disable no-debugger */
+            debugger;
             Object.assign(editObj, { type: selectedChart.value![0].value });
             break;
         case EndpointURI.VARIANT:
             Object.assign(editObj, { type: selectedChart.value![0].value });
             break;
     }
-    globalLayout.edit(index, editObj)
+    globalLayout.updateTile(props.id, editObj)
     visibleProp.value = false
 }
 

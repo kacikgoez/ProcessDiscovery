@@ -14,11 +14,11 @@
 
 <script setup lang="ts">
 import { theme } from '@/theme.js';
-import {DataSeries, EndpointURI, ServerRequest, formatDataSeries, downloadVisualizationBusKey} from '@/types';
+import { DataSeries, EndpointURI, Filter, ServerRequest, constructJson, downloadVisualizationBusKey, formatDataSeries, generateCoordinates, hashColor } from '@/types';
 import { capitalizeWords } from '@/util';
+import { useEventBus } from '@vueuse/core';
 import * as echarts from 'echarts';
 import { PropType, defineProps, onBeforeMount, onMounted, ref, toRefs, watch } from 'vue';
-import {useEventBus} from '@vueuse/core';
 
 const props = defineProps({
     id: { type: String, required: true },
@@ -28,16 +28,17 @@ const props = defineProps({
     minWidth: { type: Number, default: -1 },
     request: { type: Object as PropType<ServerRequest>, required: true },
     option: { type: Object as PropType<echarts.EChartsOption>, required: true },
+    filters: { type: Array as () => Filter[], required: true },
+    kpi: { type: String, required: false, default: null },
 });
 
 const loaded = ref(false);
 const propRefs = toRefs(props);
 const chartDom = ref(null);
 const downloadBus = useEventBus(downloadVisualizationBusKey);
+let currentKPI: string | null = null;
 
 onBeforeMount(async () => {
-    /* eslint-disable no-debugger */
-    // debugger
     const requestBody: ServerRequest = {} as ServerRequest;
 
     if (props.request.disaggregation_attribute) requestBody['disaggregation_attribute'] = props.request.disaggregation_attribute;
@@ -49,16 +50,15 @@ onBeforeMount(async () => {
 
     const baseDataItem = propRefs.option.value.series[0]
 
-    if (props.request.endpoint === EndpointURI.KPI && props.request.kpi) {
-        let promiseList = [];
-        for (let i = 0; i < props.request.kpi.length; i++) {
-            Object.assign(requestBody, { kpi: props.request.kpi[i] });
-            promiseList.push(fetchEndpoint(requestBody, baseDataItem, i));
-        }
-        await Promise.all(promiseList);
-    } else {
-        await fetchEndpoint(requestBody, baseDataItem);
+    if (propRefs.kpi.value !== null) {
+        Object.assign(requestBody, { kpi: propRefs.kpi.value })
+        currentKPI = propRefs.kpi.value;
+    } else if (Array.isArray(propRefs.request.value.kpi)) {
+        Object.assign(requestBody, { kpi: propRefs.request.value.kpi[0] })
+        currentKPI = propRefs.request.value.kpi[0];
     }
+
+    await fetchEndpoint(requestBody, baseDataItem);
 
     loaded.value = true;
 });
@@ -69,7 +69,6 @@ onMounted(() => {
     const myChart = echarts.init(chartDom.value, { renderer: 'canvas' });
 
     // Render the inital chart
-    if (props.option.name) debugger;
     myChart.setOption(props.option);
     myChart.resize({ width: propRefs.width.value, height: propRefs.height.value });
 
@@ -92,47 +91,52 @@ onMounted(() => {
 
     // Download the chart
     downloadBus.on((event) => {
-      if (event.id === props.id) {
-          const base64 = myChart.getDataURL();
-          const link = document.createElement('a');
-          link.href = base64;
-          link.download = event.title + '.png';
-          link.click();
-      }
-  });
+        if (event.id === props.id) {
+            const base64 = myChart.getDataURL();
+            const link = document.createElement('a');
+            link.href = base64;
+            link.download = event.title + '.png';
+            link.click();
+        }
+    });
 });
 
 async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.SeriesOption, index: number = 0) {
     try {
         // Variant fetching is done in the VariantChart.vue component, dismiss it here
         if (props.request.endpoint && props.request.endpoint === EndpointURI.VARIANT) return;
-        const response = await fetch('http://127.0.0.1:80/' + props.request.endpoint.replace('/', ''), {
+        const response = await fetch(`//${window.location.hostname}/` + props.request.endpoint.replace('/', ''), {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(requestBody),
+            body: JSON.stringify({ ...constructJson(propRefs.filters.value), ...requestBody }),
         });
 
-        const responseData = await response.json();
-        console.debug(responseData)
+        const textResponse: string = await response.text();
+        const responseData = JSON.parse(textResponse.replaceAll('NaN', '0'))
+
+        /* eslint-disable no-debugger */
+        debugger;
 
         let data = [];
 
-        let legend = (responseData.series ? responseData.series[0].data : responseData.data)
-        legend = legend.filter((item: any) => item.name !== undefined || item.x !== undefined);
-        legend = legend.map((item: any) => item.name || item.x);
+        if (props.request.endpoint !== EndpointURI.DFG) {
+            let legend = (responseData.series ? responseData.series[0].data : responseData.data)
+            legend = legend.filter((item: any) => item.name !== undefined || item.x !== undefined);
+            legend = legend.map((item: any) => item.name || item.x);
 
-        // Depending on which axis is category, assign legend to it
-        if (propRefs.option.value.xAxis && propRefs.option.value.xAxis.type === 'category') {
-            Object.assign(propRefs.option.value, {
-                xAxis: { type: 'category', data: legend },
-            });
-        } else if (propRefs.option.value.yAxis && propRefs.option.value.yAxis.type === 'category') {
-            Object.assign(propRefs.option.value, {
-                yAxis: { type: 'category', data: legend }
-            });
+            // Depending on which axis is category, assign legend to it
+            if (propRefs.option.value.xAxis && propRefs.option.value.xAxis.type === 'category') {
+                Object.assign(propRefs.option.value, {
+                    xAxis: { type: 'category', data: legend },
+                });
+            } else if (propRefs.option.value.yAxis && propRefs.option.value.yAxis.type === 'category') {
+                Object.assign(propRefs.option.value, {
+                    yAxis: { type: 'category', data: legend }
+                });
+            }
         }
 
         // TypeScript is B with this
@@ -140,25 +144,62 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
 
         // Add a new series item to the option if multiple (besides first item, already passed by options)
         if (index > 0) propRefs.option.value.series.push(JSON.parse(JSON.stringify(baseDataItem)));
+        index = propRefs.option.value.series.length - 1;
 
         // Assign the data to the series depending on endpoint
         switch (props.request.endpoint) {
             case EndpointURI.DISTRIBUTION: {
                 const data = (responseData as DataSeries).data.map((item) => {
-                  return { name: item.x, value: item.y };
+                    return { name: item.x, value: item.y, itemStyle: { color: hashColor(item.x + '') } };
                 });
                 Object.assign(propRefs.option.value.series[index], { name: capitalizeWords(responseData.name), data: data });
                 break;
             }
             case EndpointURI.KPI: {
+                // copy baseItem & replace with empty array
                 data = responseData;
-                const formatted = formatDataSeries(data.series[0] as DataSeries);
-                Object.assign(propRefs.option.value.series[index], { name: capitalizeWords(data.name), data: formatted.data });
+                let colors = [];
+                const multi = currentKPI === 'DROP_OUT';
+                const baseItem = Object.assign({}, propRefs.option.value.series[index]);
+                propRefs.option.value.series = [] as any;
+                for (const dataItem in data.series) {
+                    const copyItem = Object.assign({}, baseItem);
+                    const formatted = formatDataSeries(data.series[dataItem] as DataSeries, multi);
+                    Object.assign(copyItem, { name: capitalizeWords(data.series[dataItem].name), data: formatted.data });
+                    if (multi) colors.push(formatted.colors[0]);
+                    propRefs.option.value.series.push(copyItem);
+                }
+                Object.assign(propRefs.option.value, { color: colors });
                 break;
             }
-            default:
-                data = responseData;
+            case EndpointURI.DFG: {
+                // Example usage with responseData.nodes:
+                let nodes = responseData.nodes.map((item) => {
+                    const generatedCoordinates = generateCoordinates(responseData.nodes);
+                    const nodeIndex = responseData.nodes.findIndex((node) => node.label === item.label);
+                    const { x, y } = generatedCoordinates[nodeIndex];
+                    return { name: item.label, x, y };
+                });
+                /* eslint-disable no-debugger */
+                debugger;
+                let edges = responseData.edges.map((item) => {
+                    return {
+                        source: item.source, target: item.target, value: item.value, lineStyle: {
+                            normal: {
+                                width: 1
+                            }
+                        },
+                        label: {
+                            formatter: item.value + '',
+                            // proposed change here another option is  
+                            // direction: 'horizontal',
+                            show: true,
+                        }
+                    }
+                })
+                Object.assign(propRefs.option.value.series[0], { data: nodes, links: edges });
                 break;
+            }
         }
     } catch (error) {
         console.error('ERROR', error);

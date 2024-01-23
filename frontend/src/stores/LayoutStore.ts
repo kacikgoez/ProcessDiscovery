@@ -1,42 +1,55 @@
-import { KPITile } from '@/types';
+import { Filter, KPITile } from '@/types';
 import { defineStore } from 'pinia';
-import { Ref, ref } from 'vue';
 
-const layoutStore = defineStore('layout', () => {
-    const layout : Ref<KPITile[]> = ref([])
-    const changeRegister = ref(0);
+interface StateType {
+    layout: KPITile[],
+    changeRegister: number
+}
 
-    function registerChange(){
-        changeRegister.value++;
-    }
-
-    function set(newLayout : KPITile[]) : void {
-        layout.value = newLayout;
-    }
-
-    // Add a tile to the layout
-    function add(tile : KPITile){
-        layout.value.push(tile);
-    }
-
-    // Update the tile by array index
-    function edit(index : number, newData : KPITile){
-        Object.assign(layout.value[index], newData);
-        // update to refresh the grid
-        layout.value[index].changed += 1;
-    }
-
-    // Update the tile by array index
-    function get(index : number ){
-        return layout.value[index];
-    }
-
-    // Remove from the tile
-    function remove(id : string){
-        layout.value = layout.value.filter(tile => tile.i != id);
-    }
-
-    return { layout, set, add, edit, get, remove, registerChange}
+const layoutStore = defineStore('layout', {
+    state: () : StateType => ({
+        layout: [] as KPITile[],
+        changeRegister: 0
+    }),
+    getters: {
+        getTile: (state) => (id: string) => {
+            return state.layout.find((tile) => tile.i === id);
+        },
+        getTileID: (state) => (id: string) => {
+            const tile : KPITile | undefined = (state.layout as KPITile[]).find((tile) => tile.i === id);
+            const index = tile ? (state.layout as KPITile[]).indexOf(tile) : -1;
+            return index;
+        }
+    },
+    actions: {
+        addTile(tile: KPITile) {
+            (this.layout as KPITile[]).push(tile);
+        },
+        removeTile(id: string | number) {
+            this.layout = this.layout.filter(tile => tile.i != id);
+        },
+        updateTile(id: string | number, tile: Object) {
+            const index = this.getTileID(id + '');
+            console.log('update tile', id, tile, index)
+            Object.assign((this.layout as KPITile[])[index], tile);
+            // update to refresh the grid
+            (this.layout as KPITile[])[index].changed++;
+        },
+        updateKPI(id: string | number, kpis: string[]) {
+            const index = this.getTileID(id + '');
+            Object.assign((this.layout as KPITile[])[index].request, { kpi: kpis});
+            (this.layout as KPITile[])[index].changed++;
+        },
+        updateFilter(id: string | number, filters: Filter[]) {
+            const index = this.getTileID(id + '');
+            Object.assign((this.layout as KPITile[])[index].request, { filters: filters });
+            console.log(this.layout);
+            (this.layout as KPITile[])[index].changed++;
+        },
+        registerChange(){
+            this.changeRegister++;
+        }
+    },
 });
 
 export { layoutStore };

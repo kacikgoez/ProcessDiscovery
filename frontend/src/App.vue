@@ -1,34 +1,39 @@
 <template>
   <Toast></Toast>
   <ConfirmPopup></ConfirmPopup>
-  <div class="absolute h-full top-0 bottom-0 left-0 right-0">
-    <div class="flex flex-col">
-      <nav id="navigation-bar" style="border-bottom: 1px solid #efefef;">
-        <div id="navbar-left">
-          <button id="navbar-sidebar-btn"></button>
+  <div class='absolute h-full top-0 bottom-0 left-0 right-0'>
+    <div class='flex flex-col'>
+      <nav id='navigation-bar' style='border-bottom: 1px solid #efefef;'>
+        <div id='navbar-left'>
+          <button id='navbar-sidebar-btn'></button>
         </div>
-        <div id="navbar-center">
-          <h1 id="navbar-title">🐳 orca </h1>
+        <div id='navbar-center'>
+          <h1 id='navbar-title'>🐳 orca </h1>
         </div>
-        <div id="navbar-right">
-          <div v-if="isRenderDeployment" id="render-version">
+        <div id='navbar-right'>
+          <div v-if='isRenderDeployment' id='render-version'>
             <h1>{{ commit }} - {{ branch }}</h1>
           </div>
-          <Button icon="pi pi-plus" aria-label="Add tile" @click="addTile" class="float-right" />
-          <Button icon="pi pi-download" aria-label="Download event log" @click="downloadEventLog" class="float-right" />
+          <Button icon="pi pi-plus" aria-label="Add tile" class="float-right" @click="addTile" />
+          <Button icon="pi pi-download" aria-label="Download event log" class="float-right" @click="downloadEventLog" />
         </div>
       </nav>
-      <!-- <div class="bg-white p-3" style="border-bottom: 1px solid #efefef;">
-        input class="bg-gray-50 border-[#cecece] border-[0.5px] p-1 rounded-xl text-sm pl-2 pr-2" placeholder="Search" />
-    </div> -->
+      <div class='bg-white p-3' style='border-bottom: 1px solid #efefef;'>
+        <!-- <input class='bg-gray-50 border-[#cecece] border-[0.5px] p-1 rounded-xl text-sm pl-2 pr-2' placeholder='Search' /> -->
+        <div class='inline-flex'>
+          <Filters style="color: unset"></Filters>
+        </div>
+      </div>
     </div>
     <div style="max-width: 1500px; margin: auto;">
       <KPIGrid v-model:data="layout" class="mr-5 ml-5" @close="remove"></KPIGrid>
     </div>
   </div>
 </template>
-<script setup lang="ts">
+<script setup lang='ts'>
 
+import Filters from '@/components/input/Filters.vue';
+import { patientAttributesStore } from '@/stores/PatientAttributesStore';
 import { storeToRefs } from 'pinia';
 import { ref } from 'vue';
 import KPIGrid from './components/grid/KPIGrid.vue';
@@ -44,7 +49,7 @@ const isRenderDeployment = ref(false)
 fetch('/render-config')
   .then(response => response.json())
   .then(data => {
-    // If data is not empty, look extract "commit" and "branch" from JSON
+    // If data is not empty, look extract 'commit' and 'branch' from JSON
     if (Object.keys(data).length > 0) {
       ('SHOWING DEPLOYMENT INFO')
       commit.value = `SHA: ${data.commit.slice(0, 5)}...`
@@ -55,68 +60,87 @@ fetch('/render-config')
     // Not a render.com deployment (or something went wrong)
   })
 
+// Closes a KPI tile by its index
+// async function close(index: Number) {
+//   layout.value = layout.value!.filter((kpi) => kpi.i !== index)
+// }
+
+const patientAttributes = patientAttributesStore();
+patientAttributes.fetchAttributes();
+
 const globalLayout = layoutStore();
-const remove = globalLayout.remove;
+const remove = globalLayout.removeTile;
 const { layout } = storeToRefs(globalLayout)
 
 const defaultValue: KPITile[] = [
   {
-    title: 'A Pie Chart', type: Charts.PieChart, x: 0, y: 0, w: 4, h: 10, i: '0', changed: 0, request: {
+    title: 'A Pie Chart', type: Charts.PieChart, x: 0, y: 0, w: 4, h: 10, i: '0',
+    changed: 0,
+    request: {
       endpoint: EndpointURI.DISTRIBUTION,
       method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
-      }
+      },
+      filters: [],
     },
   },
   {
-    title: 'A Line Chart', type: Charts.LineChart, x: 4, y: 0, w: 4, h: 10, i: '1', changed: 0, request: {
-      endpoint: EndpointURI.KPI,
+    title: 'A Graph', type: Charts.Graph, x: 4, y: 0, w: 4, h: 10, i: '1',
+    changed: 0,
+    request: {
+      endpoint: EndpointURI.DFG,
       method: 'POST',
-      kpi: ['PERMUTED_PATH_ADHERENCE', 'BUREAUCRATIC_DURATION'],
       disaggregation_attribute: {
         name: 'gender'
-      }
+      },
+      filters: [],
     }
   },
   {
-    title: 'A Horizontal Bar Chart', type: Charts.HorizontalBarChart, x: 4, y: 0, w: 4, h: 10, i: '2', changed: 0, request: {
+    title: 'A Horizontal Bar Chart', type: Charts.HorizontalBarChart, x: 4, y: 0, w: 4, h: 10, i: '2', changed: 0,
+    request: {
       endpoint: EndpointURI.DISTRIBUTION,
       method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
-      }
+      },
+      filters: []
     }
   },
   {
-    title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, x: 0, y: 0, w: 4, h: 10, i: '3', changed: 0, request: {
+    title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, x: 0, y: 0, w: 4, h: 10, i: '3', changed: 0,
+    request: {
       endpoint: EndpointURI.VARIANT,
       method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
-      }
+      },
+      filters: [],
     }
   },
   {
-    title: 'New Tile', type: Charts.NewChart, x: 8, y: 0, w: 4, h: 10, i: '4', changed: 0, request: {
+    title: 'New Tile', type: Charts.NewChart, x: 8, y: 0, w: 4, h: 10, i: '4', changed: 0,
+    request: {
       endpoint: EndpointURI.DISTRIBUTION,
       method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
-      }
-    }
+      },
+      filters: [],
+    },
   },
 ];
 
-if (localStorage.getItem('layout') === null) {
-  globalLayout.set(defaultValue);
+if (localStorage.getItem('layout') === null || location.hash === '#reset') {
+  globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
 } else {
-  // globalLayout.set(JSON.parse(localStorage.getItem('layout')!))
-  globalLayout.set(defaultValue);
+  globalLayout.$patch(JSON.parse(localStorage.getItem('layout')!));
+  // globalLayout.$patch({ layout: defaultValue, changeRegister: ref(0) });
 }
 
 const addTile = () => {
-  globalLayout.add({
+  globalLayout.addTile({
     title: 'New Tile',
     type: Charts.NewChart,
     changed: 0,
@@ -125,19 +149,20 @@ const addTile = () => {
       method: 'POST',
       disaggregation_attribute: {
         name: 'gender'
-      }
+      },
+      filters: [],
     },
     x: 8,
     y: 20,
     w: 4,
     h: 10,
-    i: (layout.value.length + 1).toString(),
+    i: (new Date().getTime()).toString(),
   });
 };
 
 
 window.addEventListener('beforeunload', () => {
-  localStorage.setItem('layout', JSON.stringify(layout.value))
+  localStorage.setItem('layout', JSON.stringify(globalLayout.$state))
 })
 
 function downloadEventLog() {

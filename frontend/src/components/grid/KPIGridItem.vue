@@ -20,13 +20,27 @@
         </span>
       </div>
     </div>
+    <div>
+    </div>
     <div ref="tileContent" class="tile-content">
-      <div class="overflow-y-auto overflow-x-hidden h-full">
+      <Carousel v-if="isMultiKPI" class="overflow-y-auto overflow-x-hidden h-full" :value="requestRef.kpi"
+        :num-visible="1" :num-scroll="1">
+        <template #item="{ data }">
+          <div class="overflow-y-auto overflow-x-hidden h-full">
+            <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width * 0.9"
+              :height="height * 0.9" :filters="filterCleared" :title="title" :request="requestRef" :kpi="data"
+              @change="change">
+            </component>
+          </div>
+        </template>
+      </Carousel>
+      <div v-else class="overflow-y-auto overflow-x-hidden h-full">
         <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width" :height="height"
-          :request="requestRef" @change="change"></component>
+          :filters="filterCleared" :title="title" :request="requestRef" @change="change"></component>
       </div>
     </div>
     <div class="tile-footer">
+      <Filters :id="props.i" v-model="filters"></Filters>
     </div>
     <EditModal :id="props.i" v-model:visible="visible">
 
@@ -35,19 +49,23 @@
 </template>
 
 <script setup lang="ts">
-import {Charts, downloadVisualizationBusKey, KPIActions, KPIChange, ServerRequest} from '@/types';
-import {useElementSize, useEventBus} from '@vueuse/core';
+import { layoutStore } from '@/stores/LayoutStore';
+import { Charts, downloadVisualizationBusKey, EndpointURI, Filter, FilterOperators, KPIActions, KPIChange, ServerRequest } from '@/types';
+import { useElementSize, useEventBus } from '@vueuse/core';
 import { useConfirm } from 'primevue/useconfirm';
 import {
-  PropType,
+  computed,
   defineAsyncComponent,
   defineEmits,
   defineProps,
   onBeforeMount,
+  PropType,
   ref,
   shallowRef,
-  toRef
+  toRef,
+  watch
 } from 'vue';
+import Filters from '../input/Filters.vue';
 import EditModal from '../modals/EditModal.vue';
 
 const tileContent = ref(null);
@@ -81,9 +99,25 @@ const props = defineProps({
   i: { type: String, required: true },
 });
 
-
 const emits = defineEmits(['close', 'update:data', 'draggable', 'edit']);
+
+// Filter component
+const filters = ref(props.request.filters ?? []);
+
+// Clean of deleted filters
+const filterCleared = computed(() => {
+  return (filters.value as Filter[]).filter((filter) => filter.operator !== FilterOperators.NONE)
+});
+
+const isMultiKPI = computed(() => {
+  return requestRef.value?.endpoint === EndpointURI.KPI && Array.isArray(requestRef.value?.kpi) && requestRef.value?.kpi.length > 1;
+});
+
+// Needed for deep watch, otherwise old val = new val
+const filterString = computed(() => JSON.stringify(filters.value));
+const globalLayout = layoutStore();
 const visible = ref(false);
+
 let chart = shallowRef<Object>();
 // If this is changed, the chart component will be reloaded
 const changed = shallowRef(0);
@@ -94,6 +128,13 @@ const title = toRef(props, 'title');
 
 onBeforeMount(() => {
   requestRef.value = props.request;
+
+  watch(filterString, (newVal, oldVal) => {
+    if (newVal !== oldVal) {
+      globalLayout.updateFilter(props.i, filterCleared.value);
+      changed.value++;
+    }
+  }, { deep: true });
 });
 
 function show() {
@@ -126,7 +167,7 @@ async function change(data: KPIChange) {
 function downloadVisualization() {
   downloadBus.emit({
     id: props.i,
-    title: props.title,
+    title: props.title
   });
 }
 
@@ -170,7 +211,7 @@ change({ action: KPIActions.ChangeComponent, component: component });
   flex-grow: 9;
   width: 100%;
   height: 100%;
-  padding: 0px 8px 16px 8px;
+  padding: 0px 8px 0px 8px;
   margin: 0;
   background-color: #ffffff;
   overflow-y: auto;
@@ -195,7 +236,7 @@ change({ action: KPIActions.ChangeComponent, component: component });
 
 .tile-footer {
   flex-grow: 1;
-  padding-top: 0.8rem;
+  padding-top: 0;
 }
 
 .exit-button {

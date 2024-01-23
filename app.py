@@ -1,17 +1,17 @@
 import os
-
-from flask import Flask, jsonify, send_from_directory, request
 import threading as thread
 
+from flask import Flask, jsonify, request, send_from_directory
+from flask_caching import Cache
 from flask_cors import CORS
 from flask_marshmallow import Marshmallow
-from flask_caching import Cache
-from waitress import serve
 from termcolor import colored
+from waitress import serve
 
-from backend.src.flask.schemas.api_endpoint_schemas import GetVariantListSchema, KpiSchema, DistributionSchema, DfgSchema
-from backend.src.flask.services.process_mining_service import ProcessMiningService
-
+from backend.src.flask.schemas.api_endpoint_schemas import (
+    DfgSchema, DistributionSchema, GetVariantListSchema, KpiSchema)
+from backend.src.flask.services.process_mining_service import \
+    ProcessMiningService
 from definitions import CLEAN_EVENT_LOG_PATH
 
 PROCESS_MINING_SERVICE = ProcessMiningService()
