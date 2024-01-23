@@ -1,12 +1,11 @@
-from typing import Any
-
 import pandas as pd
 
-from backend.src.dataclasses.attributes import CategoricalAttribute, NumericalAttribute
+from backend.src.dataclasses.attributes import PatientAttribute
 from backend.src.dataclasses.charts import Graph, MultiDataSeries, DataSeries
 from backend.src.dataclasses.dataclasses import Variant
 from backend.src.dataclasses.requests import KpiRequest, KpiType, VariantListRequest, DistributionRequest, DfgRequest
-from backend.src.process_mining.event_log import load_event_log, load_patient_attributes, create_bins, filter_log
+from backend.src.process_mining.event_log import load_event_log, load_patient_attributes, create_bins, filter_log, \
+    load_filter_attributes
 from backend.src.process_mining import kpi, dfg
 from backend.src.process_mining import distribution
 from backend.src.process_mining.variants import get_variants_with_frequencies
@@ -16,11 +15,14 @@ from definitions import CLEAN_EVENT_LOG_PATH
 class ProcessMiningService:
     def __init__(self):
         self.event_log: pd.DataFrame = load_event_log(CLEAN_EVENT_LOG_PATH)
-        self.patient_attributes: list[CategoricalAttribute | NumericalAttribute] = load_patient_attributes(
-            self.event_log)
+        self.patient_attributes: list[PatientAttribute] = load_patient_attributes(self.event_log)
+        self.filter_attributes: list[PatientAttribute] = load_filter_attributes(self.event_log)
 
-    def get_patient_attributes(self) -> list[CategoricalAttribute | NumericalAttribute]:
+    def get_patient_attributes(self) -> list[PatientAttribute]:
         return self.patient_attributes
+
+    def get_process_attributes(self) -> list[PatientAttribute]:
+        return self.filter_attributes
 
     def get_variants(self, request: VariantListRequest) -> list[Variant]:
         el = filter_log(self.event_log, request.filters)

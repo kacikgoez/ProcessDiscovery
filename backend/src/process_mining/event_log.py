@@ -1,9 +1,10 @@
+import numpy as np
 import pandas as pd
 
 from backend.src.dataclasses.attributes import AttributeType, CategoricalAttribute, NumericalAttribute, \
     DisaggregationAttribute, PatientAttribute
 from backend.src.dataclasses.filters import FilterOperator, BaseFilter
-from definitions import PATIENT_ATTRIBUTES
+from definitions import PATIENT_ATTRIBUTES, FILTER_ATTRIBUTES
 
 
 def load_event_log(path: str) -> pd.DataFrame:
@@ -27,6 +28,28 @@ def load_event_log(path: str) -> pd.DataFrame:
     categorical_columns = [k for k, v in PATIENT_ATTRIBUTES.items() if v == AttributeType.CATEGORICAL]
     df[categorical_columns] = df[categorical_columns].astype('category')
 
+    # Calculate all filter attribute related columns
+    process_attributes = df.groupby('case:concept:name').agg(
+        start_activity=('concept:name', 'first'),
+        end_activity=('concept:name', 'last'),
+        case_size=('concept:name', 'count'),
+        variant=('concept:name', lambda x: ' '.join(x)),
+        case_duration=('time:timestamp', lambda x: (x.iloc[-1] - x.iloc[0]).seconds)
+    )
+
+    # Convert the categorical columns to categorical
+    categorical_columns = [k for k, v in FILTER_ATTRIBUTES.items() if v == AttributeType.CATEGORICAL]
+    process_attributes[categorical_columns] = process_attributes[categorical_columns].astype('category')
+
+    # Convert the numerical columns to int as int64 cannot be serialized to JSON
+    numerical_columns = [k for k, v in FILTER_ATTRIBUTES.items() if v == AttributeType.NUMERICAL]
+    process_attributes[numerical_columns] = process_attributes[numerical_columns].astype(np.float64)
+
+    # Merge the process attributes with the event log
+    df = df.merge(process_attributes, on='case:concept:name')
+
+    print(df.dtypes)
+
     return df
 
 
@@ -45,6 +68,29 @@ def load_patient_attributes(event_log: pd.DataFrame) -> list[PatientAttribute]:
 
     # Iterate over all patient attributes and add them to the corresponding list
     for name, attribute_type in PATIENT_ATTRIBUTES.items():
+        if attribute_type == AttributeType.CATEGORICAL:
+            attributes.append(CategoricalAttribute(name, event_log[name].cat.categories))
+        elif attribute_type == AttributeType.NUMERICAL:
+            attributes.append(NumericalAttribute(name, event_log[name].min(), event_log[name].max()))
+
+    return attributes
+
+
+def load_filter_attributes(event_log: pd.DataFrame) -> list[PatientAttribute]:
+    """
+    Load the filter attributes from the event log. For categorical attributes, all possible values will be extracted.
+    For numerical attributes, the minimum and maximum value will be extracted.
+
+    Args:
+        event_log (pd.DataFrame): The event log.
+
+    Returns:
+        (list[PatientAttribute]): The filter attributes.
+    """
+    attributes = []
+
+    # Iterate over all filter attributes and add them to the corresponding list
+    for name, attribute_type in FILTER_ATTRIBUTES.items():
         if attribute_type == AttributeType.CATEGORICAL:
             attributes.append(CategoricalAttribute(name, event_log[name].cat.categories))
         elif attribute_type == AttributeType.NUMERICAL:
