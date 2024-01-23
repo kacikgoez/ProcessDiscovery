@@ -1,4 +1,4 @@
-import { Filter, KPITile } from '@/types';
+import {Charts, EndpointURI, Filter, KPITile} from '@/types';
 import { defineStore } from 'pinia';
 
 interface StateType {
@@ -6,9 +6,69 @@ interface StateType {
     changeRegister: number
 }
 
+const defaultLayout: KPITile[] = [
+  {
+    title: 'A Pie Chart', type: Charts.PieChart, x: 0, y: 0, w: 4, h: 10, i: '0',
+    changed: 0,
+    request: {
+      endpoint: EndpointURI.DISTRIBUTION,
+      method: 'POST',
+      disaggregation_attribute: {
+        name: 'gender'
+      },
+      filters: [],
+    },
+  },
+  {
+    title: 'A Graph', type: Charts.Graph, x: 4, y: 0, w: 4, h: 10, i: '1',
+    changed: 0,
+    request: {
+      endpoint: EndpointURI.DFG,
+      method: 'POST',
+      disaggregation_attribute: {
+        name: 'gender'
+      },
+      filters: [],
+    }
+  },
+  {
+    title: 'A Horizontal Bar Chart', type: Charts.HorizontalBarChart, x: 4, y: 0, w: 4, h: 10, i: '2', changed: 0,
+    request: {
+      endpoint: EndpointURI.DISTRIBUTION,
+      method: 'POST',
+      disaggregation_attribute: {
+        name: 'gender'
+      },
+      filters: []
+    }
+  },
+  {
+    title: 'Chevron Diagram using SVG & ECharts', type: Charts.VariantView, x: 0, y: 0, w: 4, h: 10, i: '3', changed: 0,
+    request: {
+      endpoint: EndpointURI.VARIANT,
+      method: 'POST',
+      disaggregation_attribute: {
+        name: 'gender'
+      },
+      filters: [],
+    }
+  },
+  {
+    title: 'New Tile', type: Charts.NewChart, x: 8, y: 0, w: 4, h: 10, i: '4', changed: 0,
+    request: {
+      endpoint: EndpointURI.DISTRIBUTION,
+      method: 'POST',
+      disaggregation_attribute: {
+        name: 'gender'
+      },
+      filters: [],
+    },
+  },
+];
+
 const layoutStore = defineStore('layout', {
     state: () : StateType => ({
-        layout: [] as KPITile[],
+        layout: defaultLayout,
         changeRegister: 0
     }),
     getters: {
@@ -50,6 +110,7 @@ const layoutStore = defineStore('layout', {
             this.changeRegister++;
         }
     },
+    persist: true,
 });
 
 export { layoutStore };
