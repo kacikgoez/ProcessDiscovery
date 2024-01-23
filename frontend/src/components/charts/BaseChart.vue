@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { theme } from '@/theme.js';
-import { DataSeries, EndpointURI, Filter, ServerRequest, constructJson, downloadVisualizationBusKey, formatDataSeries, hashColor } from '@/types';
+import { DataSeries, EndpointURI, Filter, ServerRequest, constructJson, downloadVisualizationBusKey, formatDataSeries, generateCoordinates, hashColor } from '@/types';
 import { capitalizeWords } from '@/util';
 import { useEventBus } from '@vueuse/core';
 import * as echarts from 'echarts';
@@ -117,21 +117,26 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
         const textResponse: string = await response.text();
         const responseData = JSON.parse(textResponse.replaceAll('NaN', '0'))
 
+        /* eslint-disable no-debugger */
+        debugger;
+
         let data = [];
 
-        let legend = (responseData.series ? responseData.series[0].data : responseData.data)
-        legend = legend.filter((item: any) => item.name !== undefined || item.x !== undefined);
-        legend = legend.map((item: any) => item.name || item.x);
+        if (props.request.endpoint !== EndpointURI.DFG) {
+            let legend = (responseData.series ? responseData.series[0].data : responseData.data)
+            legend = legend.filter((item: any) => item.name !== undefined || item.x !== undefined);
+            legend = legend.map((item: any) => item.name || item.x);
 
-        // Depending on which axis is category, assign legend to it
-        if (propRefs.option.value.xAxis && propRefs.option.value.xAxis.type === 'category') {
-            Object.assign(propRefs.option.value, {
-                xAxis: { type: 'category', data: legend },
-            });
-        } else if (propRefs.option.value.yAxis && propRefs.option.value.yAxis.type === 'category') {
-            Object.assign(propRefs.option.value, {
-                yAxis: { type: 'category', data: legend }
-            });
+            // Depending on which axis is category, assign legend to it
+            if (propRefs.option.value.xAxis && propRefs.option.value.xAxis.type === 'category') {
+                Object.assign(propRefs.option.value, {
+                    xAxis: { type: 'category', data: legend },
+                });
+            } else if (propRefs.option.value.yAxis && propRefs.option.value.yAxis.type === 'category') {
+                Object.assign(propRefs.option.value, {
+                    yAxis: { type: 'category', data: legend }
+                });
+            }
         }
 
         // TypeScript is B with this
@@ -165,6 +170,34 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
                     propRefs.option.value.series.push(copyItem);
                 }
                 Object.assign(propRefs.option.value, { color: colors });
+                break;
+            }
+            case EndpointURI.DFG: {
+                // Example usage with responseData.nodes:
+                let nodes = responseData.nodes.map((item) => {
+                    const generatedCoordinates = generateCoordinates(responseData.nodes);
+                    const nodeIndex = responseData.nodes.findIndex((node) => node.label === item.label);
+                    const { x, y } = generatedCoordinates[nodeIndex];
+                    return { name: item.label, x, y };
+                });
+                /* eslint-disable no-debugger */
+                debugger;
+                let edges = responseData.edges.map((item) => {
+                    return {
+                        source: item.source, target: item.target, value: item.value, lineStyle: {
+                            normal: {
+                                width: 1
+                            }
+                        },
+                        label: {
+                            formatter: item.value + '',
+                            // proposed change here another option is  
+                            // direction: 'horizontal',
+                            show: true,
+                        }
+                    }
+                })
+                Object.assign(propRefs.option.value.series[0], { data: nodes, links: edges });
                 break;
             }
         }

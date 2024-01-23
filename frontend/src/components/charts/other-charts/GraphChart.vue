@@ -17,10 +17,21 @@ import * as echarts from 'echarts';
 import { PropType, Ref, ref } from 'vue';
 
 const option: Ref<echarts.EChartsOption> = ref({
-    title: {
-        text: 'Basic Graph'
+    tooltip: {
+        // Enable tooltip
+        show: true,
+        // Custom formatter function
+        formatter: function (params) {
+            // Check if the hovered item is a link
+            if (params.dataType === 'edge') {
+                // Return the custom tooltip text
+                // Here, it assumes your link has a property 'labelText' that holds the text you want to show
+                return params.name + ': ' + params.value + ''
+            }
+            // Handle node tooltip or other types differently if needed
+            return params.name; // Default display for nodes
+        }
     },
-    tooltip: {},
     animationDurationUpdate: 1500,
     animationEasingUpdate: 'quinticInOut',
     series: [
@@ -29,38 +40,23 @@ const option: Ref<echarts.EChartsOption> = ref({
             layout: 'none',
             symbolSize: 50,
             roam: true,
+            force: {
+                edgeLength: 1,
+            },
             label: {
                 show: true
             },
             edgeSymbol: ['circle', 'arrow'],
             edgeSymbolSize: [4, 10],
             edgeLabel: {
-                fontSize: 20
+                fontSize: 15
             },
-            data: [
-                // {
-                //     name: 'Node 1',
-                //     x: 300,
-                //     y: 300
-                // },
-            ],
-            // links: [],
-            links: [
-                {
-                    source: 'Node 2',
-                    target: 'Node 1',
-                    label: {
-                        show: true
-                    },
-                    lineStyle: {
-                        curveness: 0.2
-                    }
-                },
-            ],
+            data: [],
+            links: [],
             lineStyle: {
                 opacity: 0.9,
                 width: 2,
-                curveness: 0
+                curveness: 0.05
             }
         }
     ]

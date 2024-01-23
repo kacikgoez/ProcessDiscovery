@@ -402,3 +402,19 @@ function mapFilter(filter: Filter) {
         }
     }
 }
+
+export function generateCoordinates(nodes : { name : string }[]) {
+    const n = nodes.length;
+    const angleIncrement = 360 / n;
+    const radius = 100;
+    const coordinates = [];
+
+    for (let i = 0; i < n; i++) {
+        const angle = i * angleIncrement;
+        const x = radius * Math.cos((angle * Math.PI) / 180); // Convert degrees to radians
+        const y = radius * Math.sin((angle * Math.PI) / 180); // Convert degrees to radians
+        coordinates.push({ name: nodes[i].name, x, y });
+    }
+
+    return coordinates;
+}
