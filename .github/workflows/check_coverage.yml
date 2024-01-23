@@ -57,7 +57,7 @@ jobs:
         if: steps.load-raw-dataset.outputs.cache-hit != 'true'
         run: |
           mkdir -p backend/data/raw
-          wget -N -c --user hannoma --password "${{ secrets.RAW_DATA_PASSWORD }}" https://physionet.org/files/orchid/1.0.0/opd.csv
+          wget -N -c --user kacikgoez --password "${{ secrets.PHYSIO_PASSWORD }}" https://physionet.org/files/orchid/1.0.0/opd.csv
           mv opd.csv backend/data/raw
       #----------------------------------------------
       # set python path variable to current directory
