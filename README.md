@@ -119,6 +119,13 @@ You can also download the event log on the [dashboard](#download-the-event-log).
 You can easily run the dashboard on your local machine using Docker. Make sure you have Docker installed on your machine. If you don't have Docker installed, you can download it here: https://www.docker.com/products/docker-desktop.
 In addition, you need to have a reasonably modern browser installed. The dashboard was tested with the latest versions of Chrome, Firefox and Safari.
 
+### Clone the repository
+The respository is publically available, to clone it you can simply run the following `git` command:
+
+```
+git clone https://github.com/kacikgoez/ProcessDiscovery.git
+```
+
 ### Acquire the raw dataset
 The raw dataset is not included in this repository as it is a restricted dataset.
 You can download it from https://physionet.org/content/orchid/1.0.0/.
@@ -235,14 +242,16 @@ You can assess process conformance and performance through the following six KPI
 The first three KPIs focus on deviations from the process path and the last three KPIs focus on the duration of the process. 
 By clicking multiple KPIs, you can also add them to a tile. 
 
-| KPIs                         | Description                                                        |
-|------------------------------|--------------------------------------------------------------------|
-| Happy Path Adherence         | Calculate the proportion of patients following the de-jure process |
-| Dropout Rate                 | Calculate how many patients drop out at each stage                 |
-| Permuted Path Adherence      | Calculate how many cases differ from the dejure process pathway    |
-| Bureaucratic Duration        | Measure the duration from referral to procurement in second        |
-| Evaluation to Approach       | Measure the duration from evaluation to approach in second         |
-| Authorization to Procurement | Measure the duration from authorization to procurement in second   |
+| Metric                        | Description                                                                                                                                              | Calculation                                                                                                                                      | Applications                                                                                                                                                                                                                                   |
+|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Happy Path Adherence          | Measures the proportion of patients who follow the predefined, optimal process flow (de jure process) for their care pathway.                           | For each patient group, calculate the ratio of the number of patients following the de jure process to the total number of patients in the group. | Identifying deviations from the happy path can help healthcare providers to pinpoint process inefficiencies, understand the reasons for non-adherence, and develop interventions to improve compliance with the care pathway.                  |
+| Dropout Rate                  | Calculates the rate at which patients discontinue or drop out from their prescribed care pathway at each stage of the process.                           | Analyze the event log to determine the last recorded stage for each patient. Aggregate these data to identify the number of dropouts at each stage. | By understanding where and why patients are dropping out, healthcare organizations can tailor interventions to address specific challenges, thereby improving patient retention and outcomes.                                                |
+| Permuted Path Adherence       | Assesses the extent to which patient care pathways differ from the standard (de jure) process.                                                           | Identify all patient pathways that do not strictly follow the de jure process. Count and categorize these variations.                              | Analyzing permuted paths can reveal innovative practices or necessary adaptations to the standard care process. It can also help in identifying best practices and areas for standardization.                                                  |
+| Bureaucratic Duration         | Measures the time taken from referral to procurement, highlighting the efficiency of the administrative and logistical aspects of the care pathway.     | For each patient or case, calculate the total duration from the referral event to the procurement event.                                           | Shortening bureaucratic duration can lead to faster treatment initiation, improved patient experience, and reduced costs. This metric helps in pinpointing delays and inefficiencies in the process.                                         |
+| Evaluation to Approach        | Measures the time interval between the evaluation and approach stages in the patient care pathway.                                                       | Calculate the average duration between the evaluation and approach stages for patients.                                                            | Reducing the time between evaluation and approach can accelerate patient access to care, potentially improving outcomes by enabling timely treatment.                                                               |
+| Authorization to Procurement  | Quantifies the duration between obtaining treatment authorization and the procurement of necessary services or treatments.                               | Measure the average time from authorization to procurement across different patient groups or treatment categories.                                | Streamlining the authorization to procurement process can reduce wait times for patients, improve resource utilization, and enhance overall process efficiency.                                                      |
+
+
 #### DFG
 You can select this visualization to see the paths for all cases, including happy paths and permuted paths. 
 The nodes in the graph represent activities and the edges give the number of the directly following relation.
@@ -264,6 +273,10 @@ The nodes in the graph represent activities and the edges give the statistics.
 | DROP         | The percentage of disaggregated patient that drop in each activity |
 
 ## Troubleshooting
+
+- Ensure that the port 80 is free when using Docker. Use `netstat` or `lsof` to check whether the ports are free.
+
+- Use the reset button to reset the layout if it is bugged, which can sometimes happen for unknown reasons.
 
 ## Glossary
 **ORCA**: The name of the dashboard. It stands for Organ Retrieval and (Information) Collection Analytics.
