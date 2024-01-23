@@ -179,7 +179,7 @@ We would recommend going through the tour at least once to get a better understa
 The dashboard has a default layout that consists of four tiles. The tiles show the following visualizations: variants, distribution, KPIs, and DFG.
 TODO: Add image of default layout
 
-![](./images/overview.png "Overview")
+![](docs/assets/overview.png "Overview")
 
 ### Header
 In the header, you will find the following elements:
@@ -207,7 +207,7 @@ You can [add a new tile](#add-a-tile) by clicking on the button in the top right
 The tiles can be moved by dragging them. You can also resize the tiles by dragging the button (2) in the bottom right corner of the tile.
 Lastly, you can delete a tile by clicking on the button (3) in the top right corner of the tile.
 
-![](./images/tile.jpg "Tile")
+![](docs/assets/tile.jpg "Tile")
 
 In the header of each tile, you will find the following elements:
 
@@ -227,7 +227,7 @@ However, if you clear the browser's local storage, the dashboard will be reset t
 You can also reset the dashboard to the default layout by clicking on the button (1) in the top left corner of the dashboard (see [here](#help) for more information).
 
 ### Configure a Tile
-![](./images/configuration.png "Configuration")
+![](docs/assets/configuration.png "Configuration")
 
 You can configure a tile by clicking on the edit button (2) in the top right corner of the tile.
 Here you can change the visualization to be shown in the tile and the disaggregation attribute(s)
@@ -261,7 +261,7 @@ The following table shows the available process attributes:
 | Case duration  | Numerical      | The duration of the case from first to last event (in seconds). |
 | Case size      | Numerical      | The number of events in the case.                               |
 
-![](./images/filter.png "Filter")
+![](docs/assets/filter.png "Filter")
 
 The attributes are grouped (either patient or process attributes). 
 You can also search for an attribute by typing in the search bar and then selecting the attribute from the dropdown menu.
@@ -283,7 +283,7 @@ For the operator, you can choose from the following operators (depending on the 
 | GREATER THAN           | Numerical      | Single   | The attribute is greater than the value.             |
 | GREATER THAN OR EQUALS | Numerical      | Single   | The attribute is greater than or equal to the value. |
 
-![](./images/operator.png "Operator")
+![](docs/assets/operator.png "Operator")
 
 Depending on the operator, you must enter none, one, or multiple values. For example, if you choose the operator "CONTAINS", you must enter multiple values.
 For categorical attributes, you can select the value(s) via a dropdown menu. For numerical attributes, you must enter the value manually.
@@ -294,7 +294,7 @@ You can get an overview of the variants of the process by using the "Variants" v
 This visualization lists all variants of the process. A variant is a sequence of events that occurred in the process.
 
 
-![](./images/variant_list.png "Variant List")
+![](docs/assets/variant_list.png "Variant List")
 
 
 Each variant is represented by a chevron diagram. The chevron diagram shows the sequence of events for each variant.
@@ -308,7 +308,7 @@ Note that the variants are sorted in descending order based on the overall perce
 You can select a disaggregation attribute and then select a pie chart to view the distribution of the attribute across all cases.
 
 
-![](./images/Pie.png "Distribution")
+![](docs/assets/Pie.png "Distribution")
 
 
 #### KPIs
@@ -316,7 +316,7 @@ You can assess process conformance and performance through the following six KPI
 The first three KPIs focus on deviations from the process path, and the last three KPIs focus on the duration of the process. 
 By clicking multiple KPIs, you can also add them to a tile. 
 
-![](./images/MultiKPI.png "Multiple KPIs")
+![](docs/assets/MultiKPI.png "Multiple KPIs")
 
 
 **Happy Path Adherence** measures the proportion of patients who follow the predefined, optimal process flow (de jure process) for their care pathway.
@@ -352,7 +352,7 @@ You can hover over the edge to see the full source-to-target relationship with n
 The edges in red have the highest number in the dfg.
 
 
-![](./images/DFG.png "DFG")
+![](docs/assets/DFG.png "DFG")
 
 
 #### De-Jure Process
