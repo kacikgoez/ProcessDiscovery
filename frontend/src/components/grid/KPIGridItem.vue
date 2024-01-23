@@ -28,7 +28,7 @@
         <template #item="{ data }">
           <div class="overflow-y-auto overflow-x-hidden h-full">
             <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width * 0.9"
-              :height="height * 0.9" :filters="filterCleared" :title="title" :request="requestRef" :kpi="data"
+              :height="height * 0.9" :filters="filters" :title="title" :request="requestRef" :kpi="data"
               @change="change">
             </component>
           </div>
@@ -36,7 +36,7 @@
       </Carousel>
       <div v-else class="overflow-y-auto overflow-x-hidden h-full">
         <component :is="chart" :id="props.i" :key="changed" :type="props.type" :width="width" :height="height"
-          :filters="filterCleared" :title="title" :request="requestRef" @change="change"></component>
+          :filters="filters" :title="title" :request="requestRef" @change="change"></component>
       </div>
     </div>
     <div class="tile-footer">
@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import { layoutStore } from '@/stores/LayoutStore';
-import { Charts, downloadVisualizationBusKey, EndpointURI, Filter, FilterOperators, KPIActions, KPIChange, ServerRequest } from '@/types';
+import { Charts, downloadVisualizationBusKey, EndpointURI, Filter, KPIActions, KPIChange, ServerRequest } from '@/types';
 import { useElementSize, useEventBus } from '@vueuse/core';
 import { useConfirm } from 'primevue/useconfirm';
 import {
@@ -67,12 +67,14 @@ import {
 } from 'vue';
 import Filters from '../input/Filters.vue';
 import EditModal from '../modals/EditModal.vue';
+import {globalFiltersStore} from '@/stores/GlobalFiltersStore';
 
 const tileContent = ref(null);
 const { width, height } = useElementSize(tileContent);
 const requestRef = ref<ServerRequest>();
 
 const downloadBus = useEventBus(downloadVisualizationBusKey);
+const globalFilters = globalFiltersStore();
 
 const confirm = useConfirm();
 const openPopup = (event: Event, i: string) => {
@@ -104,17 +106,11 @@ const emits = defineEmits(['close', 'update:data', 'draggable', 'edit']);
 // Filter component
 const filters = ref(props.request.filters ?? []);
 
-// Clean of deleted filters
-const filterCleared = computed(() => {
-  return (filters.value as Filter[]).filter((filter) => filter.operator !== FilterOperators.NONE)
-});
-
 const isMultiKPI = computed(() => {
   return requestRef.value?.endpoint === EndpointURI.KPI && Array.isArray(requestRef.value?.kpi) && requestRef.value?.kpi.length > 1;
 });
 
 // Needed for deep watch, otherwise old val = new val
-const filterString = computed(() => JSON.stringify(filters.value));
 const globalLayout = layoutStore();
 const visible = ref(false);
 
@@ -129,12 +125,15 @@ const title = toRef(props, 'title');
 onBeforeMount(() => {
   requestRef.value = props.request;
 
-  watch(filterString, (newVal, oldVal) => {
-    if (newVal !== oldVal) {
-      globalLayout.updateFilter(props.i, filterCleared.value);
-      changed.value++;
-    }
+  watch(filters, (newVal, oldVal) => {
+    globalLayout.updateFilter(props.i, filters.value as Filter[] || []);
+    changed.value++;
   }, { deep: true });
+
+  globalFilters.$subscribe((mutation, state) => {
+    // Update filters if global filters are changed
+    changed.value++;
+  });
 });
 
 function show() {

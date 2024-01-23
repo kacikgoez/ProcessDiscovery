@@ -19,6 +19,7 @@ import { capitalizeWords } from '@/util';
 import { useEventBus } from '@vueuse/core';
 import * as echarts from 'echarts';
 import { PropType, defineProps, onBeforeMount, onMounted, ref, toRefs, watch } from 'vue';
+import {globalFiltersStore} from '@/stores/GlobalFiltersStore';
 
 const props = defineProps({
     id: { type: String, required: true },
@@ -36,6 +37,7 @@ const loaded = ref(false);
 const propRefs = toRefs(props);
 const chartDom = ref(null);
 const downloadBus = useEventBus(downloadVisualizationBusKey);
+const globalFilters = globalFiltersStore();
 let currentKPI: string | null = null;
 
 onBeforeMount(async () => {
@@ -111,7 +113,10 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ ...constructJson(propRefs.filters.value), ...requestBody }),
+            body: JSON.stringify({
+              ...constructJson(propRefs.filters.value.concat(globalFilters.filters)),
+              ...requestBody
+            }),
         });
 
         const textResponse: string = await response.text();

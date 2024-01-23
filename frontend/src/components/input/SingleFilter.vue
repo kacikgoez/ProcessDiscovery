@@ -6,7 +6,7 @@ const props = defineProps({
   modelValue: { type: Object as PropType<Filter>, required: true },
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'remove']);
 
 const editOverlay = ref();
 const selectedOperator = ref<FilterOperators>(props.modelValue?.operator ?? FilterOperators.IS_NOT_EMPTY);
@@ -103,6 +103,7 @@ const printFilterValue = computed(() => {
   }
 })
 
+// Reset filter value when operator changes
 watch(inputType, (newValue, oldValue) => {
   if (newValue != oldValue) {
     filterValue.value = null;
@@ -113,7 +114,6 @@ const trimString = (value: string) => {
   return value.length > 15 ? value.substring(0, 20) + '...' : value;
 }
 const showEditOverlay = (event) => {
-  console.log(event)
   editOverlay.value.toggle(event);
 }
 
@@ -149,11 +149,7 @@ const emitUpdate = () => {
 
 const removal = (event) => {
   event.stopPropagation();
-  emit('update:modelValue', {
-    ...props.modelValue,
-    operator: FilterOperators.NONE,
-    value: null,
-  });
+  emit('remove');
 }
 </script>
 

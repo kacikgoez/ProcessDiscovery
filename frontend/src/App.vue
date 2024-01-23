@@ -21,7 +21,7 @@
       <div class='bg-white p-3' style='border-bottom: 1px solid #efefef;'>
         <!-- <input class='bg-gray-50 border-[#cecece] border-[0.5px] p-1 rounded-xl text-sm pl-2 pr-2' placeholder='Search' /> -->
         <div class='inline-flex'>
-          <Filters style="color: unset"></Filters>
+          <Filters style="color: unset" v-model="filters"></Filters>
         </div>
       </div>
     </div>
@@ -35,10 +35,11 @@
 import Filters from '@/components/input/Filters.vue';
 import { patientAttributesStore } from '@/stores/PatientAttributesStore';
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
+import {computed, ref} from 'vue';
 import KPIGrid from './components/grid/KPIGrid.vue';
 import { layoutStore } from './stores/LayoutStore';
 import { Charts, EndpointURI, KPITile } from './types';
+import {globalFiltersStore} from '@/stores/GlobalFiltersStore';
 
 const commit = ref()
 const branch = ref()
@@ -67,6 +68,14 @@ fetch('/render-config')
 
 const patientAttributes = patientAttributesStore();
 patientAttributes.fetchAttributes();
+
+const globalFilters = globalFiltersStore();
+const filters = computed(
+    {
+        get: () => globalFilters.filters,
+        set: (value) => globalFilters.filters = value,
+    }
+)
 
 const globalLayout = layoutStore();
 const remove = globalLayout.removeTile;
