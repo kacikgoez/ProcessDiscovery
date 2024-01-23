@@ -182,7 +182,7 @@ class Variant:
     activities: list[str]
     count: int
     frequency: float
-    distribution: dict[str, int]
+    distribution: DataSeries
     id: int = field(init=False)
 
     def __post_init__(self):

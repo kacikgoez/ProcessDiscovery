@@ -3,7 +3,7 @@ from typing import Collection
 import pandas as pd
 from pm4py.objects.log.util import pandas_numpy_variants
 
-from backend.src.dataclasses.charts import Variant
+from backend.src.dataclasses.charts import Variant, DataSeries
 
 
 def get_variants_with_case_ids(el: pd.DataFrame) -> dict[Collection[str], list[str]]:
@@ -56,7 +56,11 @@ def get_variants_with_frequencies(el: pd.DataFrame, disaggregation_column: str) 
             activities=list(variant),
             count=len(case_ids),
             frequency=len(case_ids) / total_case_count,
-            distribution=distribution.to_dict(),
+            distribution=DataSeries.from_dict(
+                data=distribution.to_dict(),
+                name=disaggregation_column,
+                sort_by=disaggregation_column
+            )
         ))
 
     # sort the variants by their frequency

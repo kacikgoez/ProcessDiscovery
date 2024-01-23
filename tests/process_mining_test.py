@@ -55,8 +55,14 @@ class TestVariants:
         result = test_process_mining_service.get_variants(request)
 
         expected = [
-            Variant(activities=['Referral', 'Evaluation', 'Approach', 'Authorization', 'Procurement', 'Transplant'], count=1, frequency=0.5, distribution={'F': 1, 'M': 0}),
-            Variant(activities=['Referral', 'Evaluation'], count=1, frequency=0.5, distribution={'M': 1, 'F': 0})
+            Variant(
+                activities=['Referral', 'Evaluation', 'Approach', 'Authorization', 'Procurement', 'Transplant'],
+                count=1, frequency=0.5,
+                distribution=DataSeries.from_dict(data={'F': 1, 'M': 0}, name='gender')),
+            Variant(
+                activities=['Referral', 'Evaluation'],
+                count=1, frequency=0.5,
+                distribution=DataSeries.from_dict(data={'M': 1, 'F': 0}, name='gender')),
         ]
 
         assert result == expected
