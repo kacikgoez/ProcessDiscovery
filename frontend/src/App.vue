@@ -1,6 +1,7 @@
 <template>
   <Toast></Toast>
   <ConfirmPopup></ConfirmPopup>
+  <DynamicDialog />
   <div class='absolute h-full top-0 bottom-0 left-0 right-0'>
     <div class='flex flex-col'>
       <nav id='navigation-bar' style='border-bottom: 1px solid #efefef;'>
