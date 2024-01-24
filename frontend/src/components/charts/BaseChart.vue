@@ -129,7 +129,7 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
 
         let data = [];
 
-        if (props.request.endpoint !== EndpointURI.DFG) {
+        if (props.request.endpoint !== EndpointURI.DFG && props.request.endpoint !== EndpointURI.DEJURE) {
             let legend = (responseData.series ? responseData.series[0].data : responseData.data)
             legend = legend.filter((item: any) => item.name !== undefined || item.x !== undefined);
             legend = legend.map((item: any) => item.name || item.x);
@@ -208,7 +208,27 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
                     };
                 });
 
+                // Step 1: Identify and count connections between each pair of nodes
+                const connectionCounts = {};
+                responseData.edges.forEach(edge => {
+                    const key = `${edge.source}-${edge.target}`;
+                    if (!connectionCounts[key]) {
+                        connectionCounts[key] = 1;
+                    } else {
+                        connectionCounts[key] += 1;
+                    }
+                });
+
+                let curveness = 0;
+
+                // Step 3: Modify the edges to include curveness
                 let edges = responseData.edges.map((item) => {
+                    const key = `${item.source}-${item.target}`;
+                    if (connectionCounts[key] % 2 == 0) {
+                        curveness = connectionCounts[key]-- * 0.1 || 0;
+                    } else {
+                        curveness = ((connectionCounts[key]--) + 1) * -0.1 || 0;
+                    }
                     return {
                         source: item.source,
                         target: item.target,
@@ -216,11 +236,12 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
                         lineStyle: {
                             normal: {
                                 width: 1,
-                                color: getColorByValue(item.value, minValue, maxValue) // Dynamic gradient color based on value
+                                color: getColorByValue(item.value, minValue, maxValue), // Dynamic gradient color based on value
+                                curveness: curveness// Apply curveness, default to 0 for single connections
                             }
                         },
                         label: {
-                            formatter: item.value + '',
+                            formatter: (item.label || '') + ' : ' + (item.value).toFixed(3) + '',
                             show: true,
                         }
                     };

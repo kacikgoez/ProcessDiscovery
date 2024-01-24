@@ -24,6 +24,17 @@
                         <div>{{ slotProps.option.label }}</div>
                     </div>
                 </template>
+                <template #option="item">
+                    <div v-if="item.option.label === 'Dejure Process'">
+                        {{ item.option.label }}
+                        <!-- Dropdown with PrimeVue on the right -->
+                        <Dropdown v-model="selectedStatistic" :options="Object.values(DejureStatisticType)"
+                            placeholder="Select a statistic" class="w-full md:w-14rem" />
+                    </div>
+                    <div v-else>
+                        {{ item.option.label }}
+                    </div>
+                </template>
             </Listbox>
         </main>
         <template #footer>
@@ -66,6 +77,7 @@ const PatientAttributeKeysList = Object.values(ServerAttributes).map((key) => {
 }).filter((key) => key.name !== 'hospital id')
 
 const selectedChart: Ref<{ endpoint: string, value: string } | null> = ref()
+const selectedStatistic = ref();
 
 const modalStyle = ref({
     width: '50rem',
@@ -95,7 +107,7 @@ function confirm() {
             Object.assign(editObj, { type: Charts.HorizontalBarChart });
             break;
         case EndpointURI.DEJURE:
-            Object.assign(editObj.request, { statistic: DejureStatisticType.MEAN });
+            Object.assign(editObj.request, { statistic: selectedStatistic.value });
             Object.assign(editObj, { type: Charts.Graph });
             break;
         case EndpointURI.DFG:

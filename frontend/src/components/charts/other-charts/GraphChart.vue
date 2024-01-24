@@ -26,7 +26,7 @@ const option: Ref<echarts.EChartsOption> = ref({
             if (params.dataType === 'edge') {
                 // Return the custom tooltip text
                 // Here, it assumes your link has a property 'labelText' that holds the text you want to show
-                return params.name + ': ' + params.value + ''
+                return params.name + ': ' + (+(params.value).toFixed(3)) + ''
             }
             // Handle node tooltip or other types differently if needed
             return params.name; // Default display for nodes
