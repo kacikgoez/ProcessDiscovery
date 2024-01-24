@@ -271,6 +271,7 @@ export enum EndpointURI {
     DISTRIBUTION = '/distributions',
     VARIANT = '/variants',
     DFG = '/dfg',
+    DEJURE = '/dejure',
 }
 
 type BaseBody = {
@@ -319,10 +320,26 @@ export const KPI : EditModalEntryInt = {
     DROP_OUT: { value: 'DROP_OUT', label: 'Drop Out', endpoint: EndpointURI.KPI, pairable: 1},
     PERMUTED_PATH_ADHERENCE: { value: 'PERMUTED_PATH_ADHERENCE', label: 'Permuted Path Adherence', endpoint: EndpointURI.KPI, pairable: 0} ,
     PERMUTED_PATH_DFG: { value: 'PERMUTED_PATH_DFG', label: 'Permuted Path DFG', endpoint: EndpointURI.DFG, pairable: 2},
+    DEJURE: { value: 'DEJURE_PROCESS', label: 'Dejure Process', endpoint: EndpointURI.DEJURE, pairable: 2},
     BUREAUCRATIC_DURATION: { value: 'BUREAUCRATIC_DURATION', label: 'Bureaucratic Duration', endpoint: EndpointURI.KPI, pairable: 0 },
     EVALUATION_TO_APPROACH: { value: 'EVALUATION_TO_APPROACH', label: 'Evaluation to Approach', endpoint: EndpointURI.KPI, pairable: 0},
-    AUTHORIZATION_TO_PROCUREMENT: { value: 'AUTHORIZATION_TO_PROCUREMENT', label: 'Authorization to Procurement', endpoint: EndpointURI.KPI, pairable: 0}
+    AUTHORIZATION_TO_PROCUREMENT: { value: 'AUTHORIZATION_TO_PROCUREMENT', label: 'Authorization to Procurement', endpoint: EndpointURI.KPI, pairable: 0},
+    
 }
+
+export enum DejureStatisticType {
+    MAX = 'MAX',
+    MIN = 'MIN',
+    MEDIAN = 'MEDIAN',
+    MEAN = 'MEAN',
+    REMAIN = 'REMAIN',
+    DROP = 'DROP'
+}
+
+/**
+ * An enumeration of the metric types in dejure graph that can be requested.
+ */
+
 
 // Follows the type of EditModalEntry
 export const DistributionCharts : EditModalEntryInt = {

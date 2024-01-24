@@ -35,7 +35,7 @@
 <script setup lang="ts">
 
 import { layoutStore } from '@/stores/LayoutStore';
-import { Charts, EndpointURI, Endpoints, ServerAttributes } from '@/types';
+import { Charts, DejureStatisticType, EndpointURI, Endpoints, ServerAttributes } from '@/types';
 import Button from 'primevue/button';
 import Listbox from 'primevue/listbox';
 import { Ref, computed, ref, toRef, watch } from 'vue';
@@ -82,6 +82,7 @@ function close() {
 function confirm() {
     if (!selectedChart.value === null || !Array.isArray(selectedChart.value) || selectedChart.value.length == 0) return
     const editObj = { title: title.value, request: { endpoint: selectedChart.value![0].endpoint, disaggregation_attribute: { name: dis_attr.value.code } } };
+
     if (dis_attr.value.code == 'age') {
         Object.assign(editObj.request.disaggregation_attribute, { bins: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] });
     } else if (editObj.request.disaggregation_attribute.bins) {
@@ -92,6 +93,10 @@ function confirm() {
         case EndpointURI.KPI:
             Object.assign(editObj.request, { kpi: selectedChart.value!.map(item => item.value) });
             Object.assign(editObj, { type: Charts.HorizontalBarChart });
+            break;
+        case EndpointURI.DEJURE:
+            Object.assign(editObj.request, { statistic: DejureStatisticType.MEAN });
+            Object.assign(editObj, { type: Charts.Graph });
             break;
         case EndpointURI.DFG:
             Object.assign(editObj, { type: Charts.Graph });

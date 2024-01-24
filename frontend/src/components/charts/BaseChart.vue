@@ -60,6 +60,11 @@ onBeforeMount(async () => {
         currentKPI = propRefs.request.value.kpi[0];
     }
 
+
+    if (props.request.statistic) {
+        Object.assign(requestBody, { statistic: props.request.statistic })
+    }
+
     await fetchEndpoint(requestBody, baseDataItem);
 
     loaded.value = true;
@@ -174,6 +179,7 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
                 Object.assign(propRefs.option.value, { color: colors });
                 break;
             }
+            case EndpointURI.DEJURE:
             case EndpointURI.DFG: {
                 // Assuming responseData.edges is an array of edges with 'source', 'target', and 'value' properties
 

@@ -1,12 +1,8 @@
 import pandas as pd
 
-from backend.src.dataclasses.attributes import (AttributeType,
-                                                CategoricalAttribute,
-                                                DisaggregationAttribute,
-                                                NumericalAttribute,
-                                                PatientAttribute)
-from backend.src.dataclasses.charts import (DataSeries, DistributionDataItem,
-                                            Graph, MultiDataSeries, Variant)
+from backend.src.dataclasses.attributes import PatientAttribute
+from backend.src.dataclasses.charts import (DataSeries, Graph, MultiDataSeries,
+                                            Variant)
 from backend.src.dataclasses.requests import (DejureGraphRequest,
                                               DejureStatisticType, DfgRequest,
                                               DistributionRequest, KpiRequest,
