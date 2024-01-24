@@ -11,6 +11,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
 import './registerServiceWorker';
 
+import 'shepherd.js/dist/css/shepherd.css';
+
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 import AnimateOnScroll from 'primevue/animateonscroll';

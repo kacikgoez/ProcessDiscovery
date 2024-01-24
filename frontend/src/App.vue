@@ -6,7 +6,7 @@
     <div class='flex flex-col'>
       <nav id='navigation-bar' style='border-bottom: 1px solid #efefef;'>
         <div id='navbar-left'>
-          <button id='navbar-sidebar-btn'></button>
+          <Button icon="pi pi-question" aria-label="Show visual tour" @click="helpModalVisible = true" />
         </div>
         <div id='navbar-center'>
           <h1 id='navbar-title'>🐳 orca </h1>
@@ -15,14 +15,14 @@
           <div v-if='isRenderDeployment' id='render-version'>
             <h1>{{ commit }} - {{ branch }}</h1>
           </div>
-          <Button icon="pi pi-plus" aria-label="Add tile" class="float-right" @click="addTile" />
-          <Button icon="pi pi-download" aria-label="Download event log" class="float-right" @click="downloadEventLog" />
+          <Button icon="pi pi-plus" aria-label="Add tile" class="float-right" id="add-tile-button" @click="addTile" />
+          <Button icon="pi pi-download" aria-label="Download event log" class="float-right" id="download-button" @click="downloadEventLog" />
         </div>
       </nav>
       <div class='bg-white p-3' style='border-bottom: 1px solid #efefef;'>
         <!-- <input class='bg-gray-50 border-[#cecece] border-[0.5px] p-1 rounded-xl text-sm pl-2 pr-2' placeholder='Search' /> -->
         <div class='inline-flex'>
-          <Filters style="color: unset" v-model="filters"></Filters>
+          <Filters style="color: unset" v-model="filters" id="global-filters" class="mr-5 ml-5"></Filters>
         </div>
       </div>
     </div>
@@ -30,21 +30,25 @@
       <KPIGrid v-model:data="layout" class="mr-5 ml-5" @close="remove"></KPIGrid>
     </div>
   </div>
+  <HelpModal v-model:visible="helpModalVisible"></HelpModal>
 </template>
 <script setup lang='ts'>
 
 import Filters from '@/components/input/Filters.vue';
 import { patientAttributesStore } from '@/stores/PatientAttributesStore';
 import { storeToRefs } from 'pinia';
-import {computed, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import KPIGrid from './components/grid/KPIGrid.vue';
 import { layoutStore } from './stores/LayoutStore';
-import { Charts, EndpointURI, KPITile } from './types';
+import { Charts, EndpointURI } from './types';
 import {globalFiltersStore} from '@/stores/GlobalFiltersStore';
+import {visualTour, alreadySeenTour} from '@/visual-tour';
+import HelpModal from '@/components/modals/HelpModal.vue';
 
 const commit = ref()
 const branch = ref()
 const isRenderDeployment = ref(false)
+const helpModalVisible = ref(false)
 
 
 // Checks if a render.com deployment, if so, show version info top right
@@ -101,6 +105,12 @@ const addTile = () => {
 function downloadEventLog() {
   window.open('/event-log', '_blank');
 }
+
+onMounted(() =>  {
+  if (! alreadySeenTour) {
+    visualTour.start();
+  }
+});
 
 </script>
 <style>
