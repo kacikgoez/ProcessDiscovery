@@ -68,22 +68,21 @@ class ProcessMiningService:
     def get_dejure_graph(self, request: DejureGraphRequest) -> Graph:
         el = filter_log(self.event_log, request.filters)
 
-        disaggregation_attribute_column = 'disaggregation'
-        el = create_bins(el, request.disaggregation_attribute)
+        el, dac = create_bins(el, request.disaggregation_attribute)
 
         match request.statistic:
             case DejureStatisticType.MIN:
-                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'min')
+                return dejure.get_dejure_time_graph(el, dac, 'min')
             case DejureStatisticType.MAX:
-                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'max')
+                return dejure.get_dejure_time_graph(el, dac, 'max')
             case DejureStatisticType.MEAN:
-                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'mean')
+                return dejure.get_dejure_time_graph(el, dac, 'mean')
             case DejureStatisticType.MEDIAN:
-                return dejure.get_dejure_time_graph(el, disaggregation_attribute_column, 'median')
+                return dejure.get_dejure_time_graph(el, dac, 'median')
             case DejureStatisticType.REMAIN:
-                return dejure.get_dejure_remain_graph(el, disaggregation_attribute_column)
+                return dejure.get_dejure_remain_graph(el, dac)
             case DejureStatisticType.DROP:
-                return  dejure.get_dejure_drop_graph(el, disaggregation_attribute_column)
+                return  dejure.get_dejure_drop_graph(el, dac)
             case _:
                 raise ValueError('The given statistic is not supported.')
 
