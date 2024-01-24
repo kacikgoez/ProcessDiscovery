@@ -76,6 +76,10 @@ onMounted(() => {
     id.value = dialogRef.value.data.id;
     const currentTile = globalLayout.getTile(id.value)!;
 
+    if (currentTile.type == Charts.NewChart){
+      return
+    }
+
     title.value = currentTile.title;
 
     const currentDis = currentTile.request.disaggregation_attribute;
@@ -86,7 +90,7 @@ onMounted(() => {
       if (currentTile.request.kpi != null && endpoint.endpoint === EndpointURI.KPI) {
         return currentTile.request.kpi.includes(endpoint.value);
       } else {
-        return endpoint.endpoint === currentTile.request.endpoint;
+        return endpoint.endpoint === currentTile.request.endpoint && endpoint.value === currentTile.type;
       }
     }) || null;
     selectedStatistic.value = currentTile.request.statistic || null;
@@ -140,7 +144,6 @@ function confirm() {
 }
 
 const disableConfirm = computed(() => {
-  console.log(selectedChart.value)
     return !(selectedChart.value?.length > 0 && title.value.trim().length > 0 && !!selectedDisaggregationAttribute.value.name)
 })
 
