@@ -1,0 +1,1831 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://kacikgoez.github.io/ProcessDiscovery/">
+      
+      
+      
+        <link rel="next" href="event_log_extraction/">
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+    
+    
+      
+        <title>ORCA</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#orca-organ-retrieval-and-information-collection-analytics" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="ORCA" class="md-header__button md-logo" aria-label="ORCA" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ORCA
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="deep-purple"  aria-label="darker"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="darker" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/kacikgoez/ProcessDiscovery" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ProcessDiscovery
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="ORCA" class="md-nav__button md-logo" aria-label="ORCA" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    ORCA
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/kacikgoez/ProcessDiscovery" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ProcessDiscovery
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#orca-organ-retrieval-and-information-collection-analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      ORCA: Organ Retrieval and (Information) Collection Analytics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ORCA: Organ Retrieval and (Information) Collection Analytics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#introduction-analyzing-and-visualizing-the-organ-donation-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction: Analyzing and Visualizing the Organ Donation Process
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction: Analyzing and Visualizing the Organ Donation Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    <span class="md-ellipsis">
+      Background
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extraction-of-the-event-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extraction of the Event Log
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clone-the-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clone the repository
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acquire-the-raw-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acquire the raw dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-and-run-the-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build and run the dashboard
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      User Interface
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="User Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visual-tour" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visual Tour
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Layout
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#header" class="md-nav__link">
+    <span class="md-ellipsis">
+      Header
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Header">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#help" class="md-nav__link">
+    <span class="md-ellipsis">
+      Help
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Filters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-the-event-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download the Event Log
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-a-tile" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add a Tile
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grid
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-a-tile" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure a Tile
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#features-and-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features and Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Features and Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filtering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#available-visualizations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available Visualizations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Available Visualizations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variants
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kpis" class="md-nav__link">
+    <span class="md-ellipsis">
+      KPIs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dfg" class="md-nav__link">
+    <span class="md-ellipsis">
+      DFG
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#de-jure-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      De-Jure Process
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Glossary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="event_log_extraction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Event Log Extraction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Process Mining
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Process Mining
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="process_mining/event_log/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Event Log
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="process_mining/variants/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variants
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="process_mining/distribution/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="process_mining/kpi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    KPIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="process_mining/dfg/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DFG
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="dataclasses/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dataclasses
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#orca-organ-retrieval-and-information-collection-analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      ORCA: Organ Retrieval and (Information) Collection Analytics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ORCA: Organ Retrieval and (Information) Collection Analytics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Table of Contents
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#introduction-analyzing-and-visualizing-the-organ-donation-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction: Analyzing and Visualizing the Organ Donation Process
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction: Analyzing and Visualizing the Organ Donation Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#background" class="md-nav__link">
+    <span class="md-ellipsis">
+      Background
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extraction-of-the-event-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extraction of the Event Log
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Installation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clone-the-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clone the repository
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acquire-the-raw-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acquire the raw dataset
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-and-run-the-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Build and run the dashboard
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      User Interface
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="User Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visual-tour" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visual Tour
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#default-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      Default Layout
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#header" class="md-nav__link">
+    <span class="md-ellipsis">
+      Header
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Header">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#help" class="md-nav__link">
+    <span class="md-ellipsis">
+      Help
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#global-filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Global Filters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-the-event-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      Download the Event Log
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#add-a-tile" class="md-nav__link">
+    <span class="md-ellipsis">
+      Add a Tile
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      Grid
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configure-a-tile" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure a Tile
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#features-and-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Features and Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Features and Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filtering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Filtering
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#available-visualizations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available Visualizations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Available Visualizations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variants" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variants
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Distribution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kpis" class="md-nav__link">
+    <span class="md-ellipsis">
+      KPIs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dfg" class="md-nav__link">
+    <span class="md-ellipsis">
+      DFG
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#de-jure-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      De-Jure Process
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#glossary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Glossary
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Home</h1>
+
+<!-- BEGIN INCLUDE ../README.md -->
+<h2 id="orca-organ-retrieval-and-information-collection-analytics">ORCA: Organ Retrieval and (Information) Collection Analytics<a class="headerlink" href="#orca-organ-retrieval-and-information-collection-analytics" title="Permanent link">&para;</a></h2>
+<h3 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h3>
+<!-- TOC -->
+<ul>
+<li><a href="..#orca-organ-retrieval-and-information-collection-analytics">ORCA: Organ Retrieval and (Information) Collection Analytics</a></li>
+<li><a href="..#table-of-contents">Table of Contents</a></li>
+<li><a href="..#introduction-analyzing-and-visualizing-the-organ-donation-process">Introduction: Analyzing and Visualizing the Organ Donation Process</a><ul>
+<li><a href="..#background">Background</a></li>
+<li><a href="..#the-dataset">The Dataset</a></li>
+<li><a href="..#extraction-of-the-event-log">Extraction of the Event Log</a></li>
+</ul>
+</li>
+<li><a href="..#installation">Installation</a><ul>
+<li><a href="..#prerequisites">Prerequisites</a></li>
+<li><a href="..#clone-the-repository">Clone the repository</a></li>
+<li><a href="..#acquire-the-raw-dataset">Acquire the raw dataset</a></li>
+<li><a href="..#build-and-run-the-dashboard">Build and run the dashboard</a></li>
+</ul>
+</li>
+<li><a href="..#user-interface">User Interface</a><ul>
+<li><a href="..#overview">Overview</a></li>
+<li><a href="..#visual-tour">Visual Tour</a></li>
+<li><a href="..#default-layout">Default Layout</a></li>
+<li><a href="..#header">Header</a></li>
+<li><a href="..#help">Help</a></li>
+<li><a href="..#global-filters">Global Filters</a></li>
+<li><a href="..#download-the-event-log">Download the Event Log</a></li>
+<li><a href="..#add-a-tile">Add a Tile</a></li>
+<li><a href="..#grid">Grid</a></li>
+<li><a href="..#configure-a-tile">Configure a Tile</a></li>
+</ul>
+</li>
+<li><a href="..#features-and-functions">Features and Functions</a><ul>
+<li><a href="..#filtering">Filtering</a></li>
+<li><a href="..#available-visualizations">Available Visualizations</a></li>
+<li><a href="..#variants">Variants</a></li>
+<li><a href="..#distribution">Distribution</a></li>
+<li><a href="..#kpis">KPIs</a></li>
+<li><a href="..#dfg">DFG</a></li>
+<li><a href="..#de-jure-process">De-Jure Process</a></li>
+</ul>
+</li>
+<li><a href="..#troubleshooting">Troubleshooting</a></li>
+<li><a href="..#glossary">Glossary</a></li>
+<li><a href="..#references">References</a></li>
+</ul>
+<!-- TOC -->
+
+<h3 id="introduction-analyzing-and-visualizing-the-organ-donation-process">Introduction: Analyzing and Visualizing the Organ Donation Process<a class="headerlink" href="#introduction-analyzing-and-visualizing-the-organ-donation-process" title="Permanent link">&para;</a></h3>
+<p>This is a web-based dashboard for an M.Sc. student project at RWTH university.
+It is a dashboard written in Vue.js and Flask that shows KPIs for Organ Donation Process. 
+The dataset <strong>"Organ Retrieval and Collection of Health Information for Donation"
+(ORCHID, Adam. H et al.)</strong> is supplied by PhysioNet and accessible on https://physionet.org/content/orchid/1.0.0/.</p>
+<h4 id="background">Background<a class="headerlink" href="#background" title="Permanent link">&para;</a></h4>
+<p>Organ donation is a life-saving procedure that involves the removal of organs from a deceased or living donor and their transplantation into a recipient.
+For patients with end-stage organ failure, organ transplantation is often the only treatment option.
+However, the demand for organs far exceeds the supply.
+Prior research has focused on designing better allocation policies to distribute organs to patients on the waiting list.
+Yet the organ shortage remains a significant problem, with over 100,000 patients on the waiting list in the United States alone.
+To address this problem, researchers have recently started to examine the process by which organs are procured from deceased donors.
+Currently, the organ donation process is complex and involves many stakeholders, including hospitals, organ procurement organizations (OPOs), and transplant centers.
+The process is also highly variable, with significant differences in the number of organs procured across OPOs.
+In addition, there are well-documented inefficiencies in the process, such as the high rate of consent refusal by next-of-kin (NOK).
+This leads to a large number of missed opportunities for procuring transplant-viable organs.
+Procurement deficiencies have a disproportionate impact on Black, Indigenous, or people of color (BIPOC) individuals due to the higher prevalence of diseases requiring transplantation within these communities. 
+In addition, certain Organ Procurement Organizations (OPOs) face specific challenges in obtaining organs from BIPOC donors, which contributes to inequities since these organs are more likely to be medically compatible for BIPOC patients awaiting transplants. 
+The improvement of organ procurement is a significant public health concern. Each year, approximately 28,000 organs go untransplanted, resulting in the tragic loss of over 10,000 patients who are waiting for suitable transplants.</p>
+<p>Understanding the organ donation process is a crucial first step towards improving the process. However, until now, there has been no publicly available dataset that provides a comprehensive view of the organ donation process.</p>
+<h4 id="the-dataset">The Dataset<a class="headerlink" href="#the-dataset" title="Permanent link">&para;</a></h4>
+<p>The ORCHID dataset contains information about the organ donation process.
+It covers ten years of clinical, financial, and administrative information from six organ procurement organizations (OPOs) in the United States.
+The dataset is structured based on the standard procedure of organ procurement at an OPO. 
+The procurement process consists of six main stages: referral, evaluation, approach, authorization, procurement, and transplant:</p>
+<ol>
+<li>Referral: When a hospitalized patient is in critical condition, the hospital refers them to the local OPO for potential organ donation.</li>
+<li>Evaluation: The OPO assesses each referral, conducting an initial evaluation of the patient's suitability for organ donation.</li>
+<li>Approach: If the referred patient is found medically suitable, a representative from the OPO approaches the patient's next-of-kin (NOK) to seek their consent for donation.</li>
+<li>Authorization: Upon obtaining consent, the OPO oversees the procurement of transplant-ready organs from the deceased patient.</li>
+<li>Procurement: The OPO presents each obtained organ to individuals on the national transplant waitlist, prioritizing recipients based on the ranking established by the Organ Procurement and Transplantation Network (OPTN). The organ is assigned to the highest-ranked patient whose transplant surgeon accepts the offer.</li>
+<li>Transplant: Finally, the OPO manages the logistics of transporting the organ to the recipient's transplant center, facilitating the transplant procedure.</li>
+</ol>
+<p>To adhere to the Health Insurance Portability and Accountability Act (HIPAA) standards, all data underwent de-identification through structured data cleansing and date shifting. 
+This involved eliminating all eighteen identifiable data elements specified in HIPAA, such as patient name, address, and dates. 
+For patients aged 89 and above, their precise age was concealed, and they are represented in the dataset with an age of 100. 
+Dates were systematically shifted into the future with a random offset for each patient. 
+It is important to note that the date-shifting process maintained intervals, ensuring, for example, the preservation of the time span between death and the Organ Procurement Organization (OPO) approach for each patient.</p>
+<p>In total, the dataset covers 133,101 deceased donor referrals and 8,972 organ donations across 13 states. 
+For each patient, the dataset contains information about the patient and the process data (flags that indicate if the patient was approached, authorized, etc. and timestamps for these events).
+Listed below are the attributes that are available for each patient. For more information, please see the <a href="https://physionet.org/content/orchid/1.0.0/data_description.html">data description</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PatientID</code></td>
+<td>A unique identifier for each patient. We use this as the case id.</td>
+</tr>
+<tr>
+<td><code>OPO</code></td>
+<td>The OPO that is responsible for the patient.</td>
+</tr>
+<tr>
+<td><code>HospitalID</code></td>
+<td>The hospital where the patient was treated.</td>
+</tr>
+<tr>
+<td><code>Age</code></td>
+<td>The age of the patient.</td>
+</tr>
+<tr>
+<td><code>Gender</code></td>
+<td>The gender of the patient.</td>
+</tr>
+<tr>
+<td><code>Race</code></td>
+<td>The race of the patient.</td>
+</tr>
+<tr>
+<td><code>brain_death</code></td>
+<td>Indicates whether the patient experienced brain death.</td>
+</tr>
+<tr>
+<td><code>Referral_Year</code></td>
+<td>The year of patient referral.</td>
+</tr>
+<tr>
+<td><code>Referral_DayofWeek</code></td>
+<td>The day of the week of patient referral.</td>
+</tr>
+<tr>
+<td><code>Cause_of_Death_UNOS</code></td>
+<td>The cause of death according to UNOS (United Network for Organ Sharing).</td>
+</tr>
+<tr>
+<td><code>Mechanism_of_Death</code></td>
+<td>UNOS defined mechanism of death.</td>
+</tr>
+<tr>
+<td><code>Circumstances_of_Death</code></td>
+<td>UNOS defined circumstances of death.</td>
+</tr>
+<tr>
+<td><code>outcome_heart</code></td>
+<td>Outcome for the heart organ.</td>
+</tr>
+<tr>
+<td><code>outcome_liver</code></td>
+<td>Outcome for the liver organ.</td>
+</tr>
+<tr>
+<td><code>outcome_kidney_left</code></td>
+<td>Outcome for the left kidney organ.</td>
+</tr>
+<tr>
+<td><code>outcome_kidney_right</code></td>
+<td>Outcome for the right kidney organ.</td>
+</tr>
+<tr>
+<td><code>outcome_lung_left</code></td>
+<td>Outcome for the left lung organ.</td>
+</tr>
+<tr>
+<td><code>outcome_lung_right</code></td>
+<td>Outcome for the right lung organ.</td>
+</tr>
+<tr>
+<td><code>outcome_pancreas</code></td>
+<td>Outcome for the pancreas organ.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="extraction-of-the-event-log">Extraction of the Event Log<a class="headerlink" href="#extraction-of-the-event-log" title="Permanent link">&para;</a></h4>
+<p>The raw dataset contains one row for each patient. The row contains information about the patient and process data (flags that indicate if the patient was approached, authorized, etc. and timestamps for these events).
+To analyze the process, we need to extract an event log from the raw dataset. The event log contains one row for each event. The row contains information about the patient and the event (e.g., timestamp, event type).
+We use the patient id as the case id and the event type as the activity name. We rename the columns to match the standard format of an event log.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>case:concept:name</code></td>
+<td>A unique identifier for each case. We use the patient id.</td>
+</tr>
+<tr>
+<td><code>event:timestamp</code></td>
+<td>The timestamp of the event.</td>
+</tr>
+<tr>
+<td><code>concept:name</code></td>
+<td>The name of the event (activity). We use the six main stages of the organ donation process.</td>
+</tr>
+</tbody>
+</table>
+<p>In addition, we also rename the other columns to be a bit more consistent. Please see the table <a href="https://kacikgoez.github.io/ProcessDiscovery/event_log_extraction/#patients">here</a> for more information.</p>
+<p>However, the raw dataset contains no timestamps for the events "Evaluation" and "Transplant". 
+Therefore, we assume that these events happen one minute after the previous event. This is a simplification, but it is sufficient for our purposes, and ensures that the events are in the correct order.
+If timestamps for the other events are missing, we filter out the corresponding cases. This is because we cannot determine the correct order of the events if timestamps are missing.
+This attributes to roughly 3000 cases that are filtered out.</p>
+<p>The event log will be automatically extracted when you run the dashboard for the first time. After that, the event log will be stored in the folder <code>backend/data/processed/</code>.
+Note, when running the dashboard with Docker, the event log will NOT be stored on your host machine. It will only be stored in the Docker container.
+In this case, you can download the event log on the <a href="..#download-the-event-log">dashboard</a>. The event log will be downloaded as a CSV file.</p>
+<h3 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h3>
+<h4 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h4>
+<p>You can easily run the dashboard on your local machine using Docker. Make sure you have Docker installed on your machine. 
+If you don't have Docker installed, you can download it here: https://www.docker.com/products/docker-desktop.
+In addition, you need to have a reasonably modern browser installed. The dashboard was tested with the latest versions of Chrome, Firefox and Safari.</p>
+<h4 id="clone-the-repository">Clone the repository<a class="headerlink" href="#clone-the-repository" title="Permanent link">&para;</a></h4>
+<p>The repository is publically available, to clone it you can run the following <code>git</code> command:</p>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/kacikgoez/ProcessDiscovery.git
+</code></pre></div>
+<h4 id="acquire-the-raw-dataset">Acquire the raw dataset<a class="headerlink" href="#acquire-the-raw-dataset" title="Permanent link">&para;</a></h4>
+<p>The raw dataset is not included in this repository as it is a restricted dataset.
+You can download it from https://physionet.org/content/orchid/1.0.0/.
+For that, you need to create an account on PhysioNet and agree to the data use agreement. After that, you can download the dataset as a zip file.
+Unzip the file and place the content in the folder <code>backend/data/raw/</code>. The folder structure should look like this:
+<div class="highlight"><pre><span></span><code>backend/data/raw/
+├── .gitignore
+├── calc_deaths.csv
+├── data_description.html
+├── LICENSE.txt
+├── opd.csv
+└── SHA256SUMS.txt
+</code></pre></div>
+Note that for the dashboard to work, you only need the file <code>opd.csv</code>. The other files are not used. Please do not rename the file.</p>
+<p>The raw dataset will automatically be processed when you run the dashboard for the first time. This may take a few minutes.</p>
+<h4 id="build-and-run-the-dashboard">Build and run the dashboard<a class="headerlink" href="#build-and-run-the-dashboard" title="Permanent link">&para;</a></h4>
+<p>To build and run the dashboard, open a terminal and navigate to the root folder of the project. Then run the following command:
+<div class="highlight"><pre><span></span><code>docker-compose<span class="w"> </span>up<span class="w"> </span>--build
+</code></pre></div>
+This will build the docker images and run the dashboard. You can access the dashboard on http://localhost:80.</p>
+<h3 id="user-interface">User Interface<a class="headerlink" href="#user-interface" title="Permanent link">&para;</a></h3>
+<h4 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h4>
+<p>The dashboard is a single-page application. It can be subdivided into two parts: the <a href="..#header">header</a> and the <a href="..#grid">grid</a>. 
+We will explain each part in more detail below.</p>
+<h5 id="visual-tour">Visual Tour<a class="headerlink" href="#visual-tour" title="Permanent link">&para;</a></h5>
+<p>When first opening the dashboard, you will be greeted with a visual tour. The tour will guide you through the dashboard and explain the different features.
+You can either dismiss the tour completely (will not be shown again), skip the tour, or go through the tour step by step.
+The tour can be restarted at any time by clicking on the button (1) in the top left corner of the dashboard (see <a href="..#help">here</a> for more information).
+We would recommend going through the tour at least once to get a better understanding of the dashboard.</p>
+<h5 id="default-layout">Default Layout<a class="headerlink" href="#default-layout" title="Permanent link">&para;</a></h5>
+<p>The dashboard has a default layout that consists of four tiles. The tiles show the following visualizations: variants, distribution, KPIs, and DFG.
+TODO: Add image of default layout</p>
+<p><img alt="" src="assets/overview.png" title="Overview" /></p>
+<h4 id="header">Header<a class="headerlink" href="#header" title="Permanent link">&para;</a></h4>
+<p>In the header, you will find the following elements:</p>
+<h5 id="help">Help<a class="headerlink" href="#help" title="Permanent link">&para;</a></h5>
+<p>Click the question mark icon (1) to open the help page. 
+On the help page, you can either restart the <a href="..#visual-tour">visual tour</a> or reset the dashboard to the <a href="..#default-layout">default layout</a>.</p>
+<h5 id="global-filters">Global Filters<a class="headerlink" href="#global-filters" title="Permanent link">&para;</a></h5>
+<p>In the middle of the header, you will find the global filters.
+These filters are applied to all visualizations.
+Please see <a href="..#filtering">here</a> for more information how to use the filters.</p>
+<h5 id="download-the-event-log">Download the Event Log<a class="headerlink" href="#download-the-event-log" title="Permanent link">&para;</a></h5>
+<p>You can download the event log as a CSV file by clicking on the button (2) in the top right corner of the dashboard. The event log will be downloaded as a CSV file.
+The event log contains a row for each event. The row contains information about the patient and the event (e.g., timestamp, event type). See <a href="..#extraction-of-the-event-log">here</a> for more information.
+You can use the event log to analyze the process using other tools such as ProM or PM4Py.</p>
+<h5 id="add-a-tile">Add a Tile<a class="headerlink" href="#add-a-tile" title="Permanent link">&para;</a></h5>
+<p>You can add a new tile by clicking on the button (3) in the top right corner of the dashboard. </p>
+<h4 id="grid">Grid<a class="headerlink" href="#grid" title="Permanent link">&para;</a></h4>
+<p>The grid is the main part of the dashboard. It contains the tiles that show the visualizations.
+You can <a href="..#add-a-tile">add a new tile</a> by clicking on the button in the top right corner of the dashboard.
+The tiles can be moved by dragging them. You can also resize the tiles by dragging the button (2) in the bottom right corner of the tile.
+Lastly, you can delete a tile by clicking on the button (3) in the top right corner of the tile.</p>
+<p><img alt="" src="assets/tile.jpg" title="Tile" /></p>
+<p>In the header of each tile, you will find the following elements:</p>
+<ul>
+<li>The title of the tile</li>
+<li>The download button (1) to download the visualization as a PNG file</li>
+<li>The edit button (2) to <a href="..#configure-a-tile">configure the tile</a></li>
+<li>The delete button (3) to delete the tile</li>
+</ul>
+<p>In the body of each tile, you will find the visualization. Please see <a href="..#available-visualizations">here</a> for more information about the available visualizations and how to use them.
+All visualizations are interactive. You can hover over the visualization to see more information. You can also click on the visualization to filter the other visualizations.</p>
+<p>In the footer of each tile, you will find the filters of the tile. These filters are only applied to the corresponding visualization. 
+Please see <a href="..#filtering">here</a> for more information how to use the filters.</p>
+<p>The state of the dashboard is saved in the browser's local storage. This means that the dashboard will remember the layout and the configuration of the tiles when you close the browser.
+However, if you clear the browser's local storage, the dashboard will be reset to the <a href="..#default-layout">default layout</a>. 
+You can also reset the dashboard to the default layout by clicking on the button (1) in the top left corner of the dashboard (see <a href="..#help">here</a> for more information).</p>
+<h4 id="configure-a-tile">Configure a Tile<a class="headerlink" href="#configure-a-tile" title="Permanent link">&para;</a></h4>
+<p><img alt="" src="assets/configuration.png" title="Configuration" /></p>
+<p>You can configure a tile by clicking on the edit button (2) in the top right corner of the tile.
+Here you can change the visualization to be shown in the tile and the disaggregation attribute(s)
+to be used for that visualization.
+The visualization can be selected by clicking the according list item. For the KPIs visualization, you can select multiple KPIs.
+Please remember to scroll down to see all available visualizations. All selected visualizations will be marked with a blue background.
+The disaggregation attribute(s) can be selected with the dropdown menu (2).
+Lastly, you can change the title of the tile. Just click on the text (1) and type a new title.</p>
+<p>After completing the configuration, you need to click on the button (3) to save the changes.</p>
+<h3 id="features-and-functions">Features and Functions<a class="headerlink" href="#features-and-functions" title="Permanent link">&para;</a></h3>
+<h4 id="filtering">Filtering<a class="headerlink" href="#filtering" title="Permanent link">&para;</a></h4>
+<p>The dashboard supports two types of filters: global filters and individual filters.
+The global filters are applied to all visualizations. The individual filters are only applied to the corresponding visualization (in addition to the global filters).
+Multiple filters are combined with the logical operator "AND".</p>
+<p>You can add a <a href="..#global-filters">global filter</a> by clicking on the "Add filter" button in the top center of the dashboard. 
+Individual filters can be added by clicking on the "Add filter" button in the footer of the tile.</p>
+<p>Each filter consists of an attribute, an operator, and a value. 
+For the attribute, you can choose from the attributes that are available for each patient (see <a href="..#the-dataset">here</a> for more information) or from process attributes.
+Note that we treat all patient attributes except the patient age as categorical attributes.
+The following table shows the available process attributes:</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Attribute Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Start activity</td>
+<td>Categorical</td>
+<td>The first activity of the case.</td>
+</tr>
+<tr>
+<td>End activity</td>
+<td>Categorical</td>
+<td>The last activity of the case.</td>
+</tr>
+<tr>
+<td>Variant</td>
+<td>Categorical</td>
+<td>The variant of the case (sequence of activities).</td>
+</tr>
+<tr>
+<td>Case duration</td>
+<td>Numerical</td>
+<td>The duration of the case from first to last event (in seconds).</td>
+</tr>
+<tr>
+<td>Case size</td>
+<td>Numerical</td>
+<td>The number of events in the case.</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="assets/filter.png" title="Filter" /></p>
+<p>The attributes are grouped (either patient or process attributes). 
+You can also search for an attribute by typing in the search bar and then selecting the attribute from the dropdown menu.
+By default, a "IS NOT EMPTY" filter is added. This filter is used to filter out cases that do not have a value for the selected attribute.
+You can change the filter by clicking on the filter itself (1). This will open a dropdown menu where you can select the operator and the value (if necessary).</p>
+<p>For the operator, you can choose from the following operators (depending on the attribute type):</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Attribute Type</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IS EMPTY</td>
+<td>Both</td>
+<td>None</td>
+<td>The attribute is empty.</td>
+</tr>
+<tr>
+<td>IS NOT EMPTY</td>
+<td>Both</td>
+<td>None</td>
+<td>The attribute is not empty.</td>
+</tr>
+<tr>
+<td>EQUALS</td>
+<td>Both</td>
+<td>Single</td>
+<td>The attribute equals the value.</td>
+</tr>
+<tr>
+<td>NOT EQUALS</td>
+<td>Both</td>
+<td>Single</td>
+<td>The attribute does not equal the value.</td>
+</tr>
+<tr>
+<td>CONTAINS</td>
+<td>Categorical</td>
+<td>Multiple</td>
+<td>The attribute contains the value.</td>
+</tr>
+<tr>
+<td>NOT CONTAINS</td>
+<td>Categorical</td>
+<td>Multiple</td>
+<td>The attribute does not contain the value.</td>
+</tr>
+<tr>
+<td>LESS THAN</td>
+<td>Numerical</td>
+<td>Single</td>
+<td>The attribute is less than the value.</td>
+</tr>
+<tr>
+<td>LESS THAN OR EQUALS</td>
+<td>Numerical</td>
+<td>Single</td>
+<td>The attribute is less than or equal to the value.</td>
+</tr>
+<tr>
+<td>GREATER THAN</td>
+<td>Numerical</td>
+<td>Single</td>
+<td>The attribute is greater than the value.</td>
+</tr>
+<tr>
+<td>GREATER THAN OR EQUALS</td>
+<td>Numerical</td>
+<td>Single</td>
+<td>The attribute is greater than or equal to the value.</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="" src="assets/operator.png" title="Operator" /></p>
+<p>Depending on the operator, you must enter none, one, or multiple values. For example, if you choose the operator "CONTAINS", you must enter multiple values.
+For categorical attributes, you can select the value(s) via a dropdown menu. For numerical attributes, you must enter the value manually.</p>
+<h4 id="available-visualizations">Available Visualizations<a class="headerlink" href="#available-visualizations" title="Permanent link">&para;</a></h4>
+<h5 id="variants">Variants<a class="headerlink" href="#variants" title="Permanent link">&para;</a></h5>
+<p>You can get an overview of the variants of the process by using the "Variants" visualization.
+This visualization lists all variants of the process. A variant is a sequence of events that occurred in the process.</p>
+<p><img alt="" src="assets/variant_list.png" title="Variant List" /></p>
+<p>Each variant is represented by a chevron diagram. The chevron diagram shows the sequence of events for each variant.
+The activity names are abbreviated to fit the diagram. You can hover over the diagram to see the full activity name.
+On the right side of the diagram, you can see a pie chart that shows the number of cases for each variant based on the selected disaggregation attribute.
+If you hover over a pie chart, you can see the number of cases for each variant for the corresponding disaggregation attribute value.
+In addition, in the middle of the pie chart the overall percentage how often the variant occurs is shown.
+Note that the variants are sorted in descending order based on the overall percentage how often the variant occurs.</p>
+<h5 id="distribution">Distribution<a class="headerlink" href="#distribution" title="Permanent link">&para;</a></h5>
+<p>You can select a disaggregation attribute and then select a pie chart to view the distribution of the attribute across all cases.</p>
+<p><img alt="" src="assets/Pie.png" title="Distribution" /></p>
+<h5 id="kpis">KPIs<a class="headerlink" href="#kpis" title="Permanent link">&para;</a></h5>
+<p>You can assess process conformance and performance through the following six KPIs visualizations. 
+The first three KPIs focus on deviations from the process path, and the last three KPIs focus on the duration of the process. 
+By clicking multiple KPIs, you can also add them to a tile. </p>
+<p><img alt="" src="assets/MultiKPI.png" title="Multiple KPIs" /></p>
+<p><strong>Happy Path Adherence</strong> measures the proportion of patients who follow the predefined, optimal process flow (de jure process) for their care pathway.
+The de jure process is the standard process that is defined by the OPO (Referral -&gt; Evaluation -&gt; Approach -&gt; Authorization -&gt; Procurement -&gt; Transplant).
+The metric is calculated as the ratio of the number of patients following the de jure process to the total number of patients in the group. The group can be selected using one or two disaggregation attributes.
+Identifying deviations from the happy path can help healthcare providers to pinpoint process inefficiencies, understand the reasons for non-adherence, and develop interventions to improve compliance with the care pathway.</p>
+<p><strong>Dropout Rate</strong> calculates the rate at which patients discontinue or drop out from their prescribed care pathway at each stage of the process.
+The metric is calculated by analyzing the event log to determine the last recorded stage for each patient. The number of dropouts at each stage is then aggregated based on the selected disaggregation attribute.
+By understanding where and why patients are dropping out, healthcare organizations can tailor interventions to address specific challenges, thereby improving patient retention and outcomes.</p>
+<p><strong>Permuted Path Adherence</strong> assesses the extent to which patient care pathways differ from the standard (de jure) process.
+The de jure process is the standard process that is defined by the OPO (Referral -&gt; Evaluation -&gt; Approach -&gt; Authorization -&gt; Procurement -&gt; Transplant).
+The metric is calculated by identifying all patient pathways that do not strictly follow the de jure process. These pathways are then counted and categorized based on the selected disaggregation attribute(s).
+Analyzing permuted paths can reveal innovative practices or necessary adaptations to the standard care process. It can also help in identifying best practices and areas for standardization.</p>
+<p><strong>Bureaucratic Duration</strong> measures the time taken from referral to procurement, highlighting the efficiency of the administrative and logistical aspects of the care pathway.
+The metric is calculated by calculating the total duration from the referral event to the procurement event for each patient or case. The average duration is then calculated based on the selected disaggregation attribute(s).
+Shortening bureaucratic duration can lead to faster treatment initiation, improved patient experience, and reduced costs. This metric helps in pinpointing delays and inefficiencies in the process.</p>
+<p><strong>Evaluation to Approach</strong> measures the time interval between the evaluation and approach stages in the patient care pathway.
+The metric is calculated by calculating the total duration between the evaluation and approach stages for each patient or case. The average duration is then calculated based on the selected disaggregation attribute(s).
+Reducing the time between evaluation and approach can accelerate patient access to care, potentially improving outcomes by enabling timely treatment.</p>
+<p><strong>Authorization to Procurement</strong> quantifies the duration between obtaining treatment authorization and the procurement of necessary services or treatments.
+The metric is calculated by measuring the average time from authorization to procurement across different patient groups or treatment categories. The average duration is then calculated based on the selected disaggregation attribute(s).
+Streamlining the authorization to procurement process can reduce wait times for patients, improve resource utilization, and enhance overall process efficiency.</p>
+<h5 id="dfg">DFG<a class="headerlink" href="#dfg" title="Permanent link">&para;</a></h5>
+<p>You can select this visualization to see the paths for all cases, including happy paths and permuted paths. 
+The nodes in the graph represent activities, and the edges give the number of the directly following relation.
+You can hover over the edge to see the full source-to-target relationship with number. 
+The edges in red have the highest number in the dfg.</p>
+<p><img alt="" src="assets/DFG.png" title="DFG" /></p>
+<h5 id="de-jure-process">De-Jure Process<a class="headerlink" href="#de-jure-process" title="Permanent link">&para;</a></h5>
+<p>For the dejure process, you can select the visualization using different performance statistics for a disaggregation attribute. 
+The nodes in the graph represent activities and the edges give the statistics.</p>
+<table>
+<thead>
+<tr>
+<th>Statistics</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MAX</td>
+<td>The max duration between two activities</td>
+</tr>
+<tr>
+<td>MIN</td>
+<td>The min duration between two activities</td>
+</tr>
+<tr>
+<td>MEDIAN</td>
+<td>The median duration between two activities</td>
+</tr>
+<tr>
+<td>MEAN</td>
+<td>The mean duration between two activities</td>
+</tr>
+<tr>
+<td>REMAIN</td>
+<td>The percentage of activity that goes to the next activity</td>
+</tr>
+<tr>
+<td>DROP</td>
+<td>The percentage of disaggregated patient that drop in each activity</td>
+</tr>
+</tbody>
+</table>
+<h3 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h3>
+<ul>
+<li>
+<p>Ensure that port 80 is free when using Docker. Use <code>netstat</code> or <code>lsof</code> to check whether the ports are free.</p>
+</li>
+<li>
+<p>Use the reset button to reset the layout if it is bugged, which can sometimes happen for unknown reasons.</p>
+</li>
+</ul>
+<h3 id="glossary">Glossary<a class="headerlink" href="#glossary" title="Permanent link">&para;</a></h3>
+<p><strong>Approach</strong>: The OPO approaches the patient. This happens when a representative from the OPO approaches the patient's next-of-kin (NOK) to seek their consent for donation. In the dataset, a flag is available that indicates if the patient was approached. If the patient was approached, a timestamp is available.</p>
+<p><strong>Authorization</strong>: The patient is authorized for organ donation. This happens when the OPO obtains consent from the NOK for donation. In the dataset, a flag is available that indicates if the patient was authorized. If the patient was authorized, a timestamp is available.</p>
+<p><strong>BIPOC</strong>: Black, Indigenous, or people of color. A term used to describe people who are not white.</p>
+<p><strong>De-jure process</strong>: In this setting the de-jure process refers to the standard order of the organ donation process that is defined by the OPO (Referral -&gt; Evaluation -&gt; Approach -&gt; Authorization -&gt; Procurement -&gt; Transplant).</p>
+<p><strong>Evaluation</strong>: The patient is evaluated by the OPO. This happens when the OPO assesses each referral, conducting an initial evaluation of the patient's suitability for organ donation. This event is always present for each patient. However, no timestamp is available. Therefore, we assume that the event happens one minute after the previous event (Referral).</p>
+<p><strong>Event</strong>: An event is an action that happens during the organ donation process. The events are Referral, Evaluation, Approach, Authorization, Procurement, and Transplant. The events should happen in the above order. However, the dataset contains some inconsistencies. For example, there are cases where the patient was authorized before the patient was approached. Each event has a timestamp and a type (e.g., Referral, Evaluation, etc.) and corresponds to a case (patient) in the event log.</p>
+<p><strong>HIPAA</strong>: Health Insurance Portability and Accountability Act. A law that protects the privacy of patients' health information.</p>
+<p><strong>NOK</strong>: Next-of-kin. The next-of-kin is the closest living relative of a patient. The next-of-kin is responsible for making medical decisions for the patient if they are unable to do so.</p>
+<p><strong>OPO</strong>: Organ Procurement Organization. An organization that is responsible for the organ donation process.</p>
+<p><strong>ORCA</strong>: The name of the dashboard. It stands for Organ Retrieval and (Information) Collection Analytics.</p>
+<p><strong>ORCHID</strong>: The name of the raw dataset. It stands for Organ Retrieval and Collection of Health Information for Donation. It is supplied by PhysioNet and accessible on https://physionet.org/content/orchid/1.0.0/.</p>
+<p><strong>Procurement</strong>: The organs are procured. This happens when the OPO oversees the procurement of transplant-ready organs from the deceased patient. In the dataset, a flag is available that indicates if the organs were procured. If the organs were procured, a timestamp is available.</p>
+<p><strong>Referral</strong>: The patient is referred to the OPO. This happens when the patient is in critical condition and the hospital refers them to the local OPO for potential organ donation. This event is always present for each patient and a timestamp is available.</p>
+<p><strong>Transplant</strong>: The organs are transplanted. This happens when the OPO manages the logistics of transporting the organ to the recipient's transplant center, facilitating the transplant procedure. In the dataset, a flag is available that indicates if the organs were transplanted. However, no timestamp is available. Therefore, we assume that the event happens one minute after the previous event (Procurement).</p>
+<p><strong>UNOS</strong>: United Network for Organ Sharing. A non-profit organization that manages the nation's organ transplant system under contract with the federal government. UNOS maintains the national transplant waiting list, matching donors to recipients 24 hours a day, 365 days a year. </p>
+<h3 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Adam, H., Suriyakumar, V., Pollard, T., Moody, B., Erickson, J., Segal, G., Adams, B., Brockmeier, D., Lee, K., McBride, G., Ranum, K., Wadsworth, M., Whaley, J., Wilson, A., &amp; Ghassemi, M. (2023). Organ Retrieval and Collection of Health Information for Donation (ORCHID) (version 1.0.0). PhysioNet. https://doi.org/10.13026/eytj-4f29.</li>
+<li>Goldberger, A., Amaral, L., Glass, L., Hausdorff, J., Ivanov, P. C., Mark, R., ... &amp; Stanley, H. E. (2000). PhysioBank, PhysioToolkit, and PhysioNet: Components of a new research resource for complex physiologic signals. Circulation [Online]. 101 (23), pp. e215–e220.</li>
+</ol>
+<!-- END INCLUDE -->
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.indexes", "navigation.instant", "navigation.tabs.sticky"], "search": "assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,5782 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://kacikgoez.github.io/ProcessDiscovery/dataclasses/">
+      
+      
+        <link rel="prev" href="../process_mining/dfg/">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+    
+    
+      
+        <title>Dataclasses - ORCA</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#dataclasses-used-in-the-project" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ORCA" class="md-header__button md-logo" aria-label="ORCA" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ORCA
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Dataclasses
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="deep-purple"  aria-label="darker"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="darker" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/kacikgoez/ProcessDiscovery" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ProcessDiscovery
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ORCA" class="md-nav__button md-logo" aria-label="ORCA" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    ORCA
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/kacikgoez/ProcessDiscovery" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ProcessDiscovery
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../event_log_extraction/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Event Log Extraction
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Process Mining
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Process Mining
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../process_mining/event_log/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Event Log
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../process_mining/variants/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variants
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../process_mining/distribution/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../process_mining/kpi/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    KPIs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../process_mining/dfg/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DFG
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Dataclasses
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Dataclasses
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dataclasses-used-in-the-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dataclasses used in the project
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dataclasses used in the project">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses" class="md-nav__link">
+    <span class="md-ellipsis">
+      dataclasses
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      attributes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.PatientAttribute" class="md-nav__link">
+    <span class="md-ellipsis">
+      PatientAttribute
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.AttributeType" class="md-nav__link">
+    <span class="md-ellipsis">
+      AttributeType
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AttributeType">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.AttributeType.CATEGORICAL" class="md-nav__link">
+    <span class="md-ellipsis">
+      CATEGORICAL
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.AttributeType.NUMERICAL" class="md-nav__link">
+    <span class="md-ellipsis">
+      NUMERICAL
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.CategoricalAttribute" class="md-nav__link">
+    <span class="md-ellipsis">
+      CategoricalAttribute
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.DisaggregationAttribute" class="md-nav__link">
+    <span class="md-ellipsis">
+      DisaggregationAttribute
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DisaggregationAttribute">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.DisaggregationAttribute.get_bin_labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_bin_labels()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.DisaggregationAttribute.get_bins" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_bins()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.NumericalAttribute" class="md-nav__link">
+    <span class="md-ellipsis">
+      NumericalAttribute
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      charts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="charts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.DataItem" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataItem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.DataSeries" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataSeries
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DataSeries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.DataSeries.from_dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      from_dict()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.Edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Edge
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.Graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      Graph
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Graph">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.Graph.__post_init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __post_init__()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.MultiDataSeries" class="md-nav__link">
+    <span class="md-ellipsis">
+      MultiDataSeries
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MultiDataSeries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.MultiDataSeries.from_pandas" class="md-nav__link">
+    <span class="md-ellipsis">
+      from_pandas()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.Node" class="md-nav__link">
+    <span class="md-ellipsis">
+      Node
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.Variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variant
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      filters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="filters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.BaseFilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      BaseFilter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseFilter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.BaseFilter.filter_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      filter_value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.BaseFilter.supported_operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      supported_operators()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.CategoricalFilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      CategoricalFilter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CategoricalFilter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.CategoricalFilter.filter_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      filter_value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.CategoricalFilter.supported_operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      supported_operators()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator" class="md-nav__link">
+    <span class="md-ellipsis">
+      FilterOperator
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FilterOperator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.CONTAINS" class="md-nav__link">
+    <span class="md-ellipsis">
+      CONTAINS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.EQUALS" class="md-nav__link">
+    <span class="md-ellipsis">
+      EQUALS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.GREATER_THAN" class="md-nav__link">
+    <span class="md-ellipsis">
+      GREATER_THAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.GREATER_THAN_OR_EQUALS" class="md-nav__link">
+    <span class="md-ellipsis">
+      GREATER_THAN_OR_EQUALS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.IS_EMPTY" class="md-nav__link">
+    <span class="md-ellipsis">
+      IS_EMPTY
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.IS_NOT_EMPTY" class="md-nav__link">
+    <span class="md-ellipsis">
+      IS_NOT_EMPTY
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.LESS_THAN" class="md-nav__link">
+    <span class="md-ellipsis">
+      LESS_THAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.LESS_THAN_OR_EQUALS" class="md-nav__link">
+    <span class="md-ellipsis">
+      LESS_THAN_OR_EQUALS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.NOT_CONTAINS" class="md-nav__link">
+    <span class="md-ellipsis">
+      NOT_CONTAINS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.NOT_EQUALS" class="md-nav__link">
+    <span class="md-ellipsis">
+      NOT_EQUALS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.accepts_multiple_values" class="md-nav__link">
+    <span class="md-ellipsis">
+      accepts_multiple_values
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.accepts_no_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      accepts_no_value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.accepts_single_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      accepts_single_value
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.NumericalFilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      NumericalFilter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NumericalFilter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.NumericalFilter.filter_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      filter_value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.NumericalFilter.supported_operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      supported_operators()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      requests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="requests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureGraphRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      DejureGraphRequest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType" class="md-nav__link">
+    <span class="md-ellipsis">
+      DejureStatisticType
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DejureStatisticType">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.DROP" class="md-nav__link">
+    <span class="md-ellipsis">
+      DROP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.MAX" class="md-nav__link">
+    <span class="md-ellipsis">
+      MAX
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.MEAN" class="md-nav__link">
+    <span class="md-ellipsis">
+      MEAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.MEDIAN" class="md-nav__link">
+    <span class="md-ellipsis">
+      MEDIAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.MIN" class="md-nav__link">
+    <span class="md-ellipsis">
+      MIN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.REMAIN" class="md-nav__link">
+    <span class="md-ellipsis">
+      REMAIN
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DfgRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      DfgRequest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DistributionRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      DistributionRequest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.FilteredRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      FilteredRequest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      KpiRequest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType" class="md-nav__link">
+    <span class="md-ellipsis">
+      KpiType
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="KpiType">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.AUTHORIZATION_TO_PROCUREMENT" class="md-nav__link">
+    <span class="md-ellipsis">
+      AUTHORIZATION_TO_PROCUREMENT
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.BUREAUCRATIC_DURATION" class="md-nav__link">
+    <span class="md-ellipsis">
+      BUREAUCRATIC_DURATION
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.DROP_OUT" class="md-nav__link">
+    <span class="md-ellipsis">
+      DROP_OUT
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.EVALUATION_TO_APPROACH" class="md-nav__link">
+    <span class="md-ellipsis">
+      EVALUATION_TO_APPROACH
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.HAPPY_PATH_ADHERENCE" class="md-nav__link">
+    <span class="md-ellipsis">
+      HAPPY_PATH_ADHERENCE
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.PERMUTED_PATH_ADHERENCE" class="md-nav__link">
+    <span class="md-ellipsis">
+      PERMUTED_PATH_ADHERENCE
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.VariantListRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      VariantListRequest
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#dataclasses-used-in-the-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dataclasses used in the project
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dataclasses used in the project">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses" class="md-nav__link">
+    <span class="md-ellipsis">
+      dataclasses
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      attributes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.PatientAttribute" class="md-nav__link">
+    <span class="md-ellipsis">
+      PatientAttribute
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.AttributeType" class="md-nav__link">
+    <span class="md-ellipsis">
+      AttributeType
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AttributeType">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.AttributeType.CATEGORICAL" class="md-nav__link">
+    <span class="md-ellipsis">
+      CATEGORICAL
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.AttributeType.NUMERICAL" class="md-nav__link">
+    <span class="md-ellipsis">
+      NUMERICAL
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.CategoricalAttribute" class="md-nav__link">
+    <span class="md-ellipsis">
+      CategoricalAttribute
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.DisaggregationAttribute" class="md-nav__link">
+    <span class="md-ellipsis">
+      DisaggregationAttribute
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DisaggregationAttribute">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.DisaggregationAttribute.get_bin_labels" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_bin_labels()
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.DisaggregationAttribute.get_bins" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_bins()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.attributes.NumericalAttribute" class="md-nav__link">
+    <span class="md-ellipsis">
+      NumericalAttribute
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      charts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="charts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.DataItem" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataItem
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.DataSeries" class="md-nav__link">
+    <span class="md-ellipsis">
+      DataSeries
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DataSeries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.DataSeries.from_dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      from_dict()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.Edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Edge
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.Graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      Graph
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Graph">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.Graph.__post_init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      __post_init__()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.MultiDataSeries" class="md-nav__link">
+    <span class="md-ellipsis">
+      MultiDataSeries
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="MultiDataSeries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.MultiDataSeries.from_pandas" class="md-nav__link">
+    <span class="md-ellipsis">
+      from_pandas()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.Node" class="md-nav__link">
+    <span class="md-ellipsis">
+      Node
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.charts.Variant" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variant
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters" class="md-nav__link">
+    <span class="md-ellipsis">
+      filters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="filters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.BaseFilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      BaseFilter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseFilter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.BaseFilter.filter_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      filter_value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.BaseFilter.supported_operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      supported_operators()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.CategoricalFilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      CategoricalFilter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CategoricalFilter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.CategoricalFilter.filter_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      filter_value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.CategoricalFilter.supported_operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      supported_operators()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator" class="md-nav__link">
+    <span class="md-ellipsis">
+      FilterOperator
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FilterOperator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.CONTAINS" class="md-nav__link">
+    <span class="md-ellipsis">
+      CONTAINS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.EQUALS" class="md-nav__link">
+    <span class="md-ellipsis">
+      EQUALS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.GREATER_THAN" class="md-nav__link">
+    <span class="md-ellipsis">
+      GREATER_THAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.GREATER_THAN_OR_EQUALS" class="md-nav__link">
+    <span class="md-ellipsis">
+      GREATER_THAN_OR_EQUALS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.IS_EMPTY" class="md-nav__link">
+    <span class="md-ellipsis">
+      IS_EMPTY
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.IS_NOT_EMPTY" class="md-nav__link">
+    <span class="md-ellipsis">
+      IS_NOT_EMPTY
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.LESS_THAN" class="md-nav__link">
+    <span class="md-ellipsis">
+      LESS_THAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.LESS_THAN_OR_EQUALS" class="md-nav__link">
+    <span class="md-ellipsis">
+      LESS_THAN_OR_EQUALS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.NOT_CONTAINS" class="md-nav__link">
+    <span class="md-ellipsis">
+      NOT_CONTAINS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.NOT_EQUALS" class="md-nav__link">
+    <span class="md-ellipsis">
+      NOT_EQUALS
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.accepts_multiple_values" class="md-nav__link">
+    <span class="md-ellipsis">
+      accepts_multiple_values
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.accepts_no_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      accepts_no_value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.FilterOperator.accepts_single_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      accepts_single_value
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.NumericalFilter" class="md-nav__link">
+    <span class="md-ellipsis">
+      NumericalFilter
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NumericalFilter">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.NumericalFilter.filter_value" class="md-nav__link">
+    <span class="md-ellipsis">
+      filter_value
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.filters.NumericalFilter.supported_operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      supported_operators()
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      requests
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="requests">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureGraphRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      DejureGraphRequest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType" class="md-nav__link">
+    <span class="md-ellipsis">
+      DejureStatisticType
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="DejureStatisticType">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.DROP" class="md-nav__link">
+    <span class="md-ellipsis">
+      DROP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.MAX" class="md-nav__link">
+    <span class="md-ellipsis">
+      MAX
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.MEAN" class="md-nav__link">
+    <span class="md-ellipsis">
+      MEAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.MEDIAN" class="md-nav__link">
+    <span class="md-ellipsis">
+      MEDIAN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.MIN" class="md-nav__link">
+    <span class="md-ellipsis">
+      MIN
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DejureStatisticType.REMAIN" class="md-nav__link">
+    <span class="md-ellipsis">
+      REMAIN
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DfgRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      DfgRequest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.DistributionRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      DistributionRequest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.FilteredRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      FilteredRequest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      KpiRequest
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType" class="md-nav__link">
+    <span class="md-ellipsis">
+      KpiType
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="KpiType">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.AUTHORIZATION_TO_PROCUREMENT" class="md-nav__link">
+    <span class="md-ellipsis">
+      AUTHORIZATION_TO_PROCUREMENT
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.BUREAUCRATIC_DURATION" class="md-nav__link">
+    <span class="md-ellipsis">
+      BUREAUCRATIC_DURATION
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.DROP_OUT" class="md-nav__link">
+    <span class="md-ellipsis">
+      DROP_OUT
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.EVALUATION_TO_APPROACH" class="md-nav__link">
+    <span class="md-ellipsis">
+      EVALUATION_TO_APPROACH
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.HAPPY_PATH_ADHERENCE" class="md-nav__link">
+    <span class="md-ellipsis">
+      HAPPY_PATH_ADHERENCE
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.KpiType.PERMUTED_PATH_ADHERENCE" class="md-nav__link">
+    <span class="md-ellipsis">
+      PERMUTED_PATH_ADHERENCE
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend.src.dataclasses.requests.VariantListRequest" class="md-nav__link">
+    <span class="md-ellipsis">
+      VariantListRequest
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Dataclasses</h1>
+
+<h2 id="dataclasses-used-in-the-project">Dataclasses used in the project<a class="headerlink" href="#dataclasses-used-in-the-project" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="backend.src.dataclasses"></a>
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-module">
+
+
+
+
+<h2 id="backend.src.dataclasses.attributes" class="doc doc-heading">
+          <code>attributes</code>
+
+
+<a href="#backend.src.dataclasses.attributes" class="headerlink" title="Permanent link">&para;</a></h2>
+
+  <div class="doc doc-contents ">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h3 id="backend.src.dataclasses.attributes.PatientAttribute" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">PatientAttribute</span><span class="p">:</span> <span class="n">UnionType</span> <span class="o">=</span> <span class="n">CategoricalAttribute</span> <span class="o">|</span> <span class="n">NumericalAttribute</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.attributes.PatientAttribute" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>A patient attribute. Can be either a 
+<a class="autorefs autorefs-internal" href="#backend.src.dataclasses.attributes.CategoricalAttribute">CategoricalAttribute</a> or a 
+<a class="autorefs autorefs-internal" href="#backend.src.dataclasses.attributes.NumericalAttribute">NumericalAttribute</a>.</p>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.attributes.AttributeType" class="doc doc-heading">
+          <code>AttributeType</code>
+
+
+<a href="#backend.src.dataclasses.attributes.AttributeType" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="enum.Enum">Enum</span></code></p>
+
+  
+      <p>An enumeration of the attribute types.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.attributes.AttributeType.CATEGORICAL" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">CATEGORICAL</span> <span class="o">=</span> <span class="s1">&#39;categorical&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.attributes.AttributeType.CATEGORICAL" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The categorical attribute type.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.attributes.AttributeType.NUMERICAL" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">NUMERICAL</span> <span class="o">=</span> <span class="s1">&#39;numerical&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.attributes.AttributeType.NUMERICAL" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The numerical attribute type.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.attributes.CategoricalAttribute" class="doc doc-heading">
+          <code>CategoricalAttribute</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.attributes.CategoricalAttribute" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>A categorical attribute.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the attribute.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>values</code></td>
+          <td>
+                <code>list[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The values of the attribute.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>type</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The type of the attribute. Defaults to <a class="autorefs autorefs-internal" href="#backend.src.dataclasses.attributes.AttributeType.CATEGORICAL">AttributeType.CATEGORICAL</a>.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.attributes.DisaggregationAttribute" class="doc doc-heading">
+          <code>DisaggregationAttribute</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.attributes.DisaggregationAttribute" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>A disaggregation attribute. This will be used to disaggregate the data into different groups.
+For numerical attributes,the bins will be used to create the groups.
+For categorical attributes, the values will be used to create the groups.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the attribute.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>type</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.attributes.AttributeType" href="#backend.src.dataclasses.attributes.AttributeType">AttributeType</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The type of the attribute.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>bins</code></td>
+          <td>
+                <code>list[int]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The bins of the numerical attribute. Defaults to None.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h4 id="backend.src.dataclasses.attributes.DisaggregationAttribute.get_bin_labels" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">get_bin_labels</span><span class="p">(</span><span class="n">include_infinities</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#backend.src.dataclasses.attributes.DisaggregationAttribute.get_bin_labels" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns the bin labels of the numerical attribute.</p>
+<p>Example:
+<div class="highlight"><pre><span></span><code><span class="c1"># create a numerical attribute with bins</span>
+<span class="n">attribute</span> <span class="o">=</span> <span class="n">DisaggregationAttribute</span><span class="p">(</span><span class="s1">&#39;attribute&#39;</span><span class="p">,</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">NUMERICAL</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+
+<span class="c1"># get the bin labels</span>
+<span class="n">bin_labels</span> <span class="o">=</span> <span class="n">attribute</span><span class="o">.</span><span class="n">get_bin_labels</span><span class="p">(</span><span class="n">include_infinities</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bin_labels</span><span class="p">)</span>
+<span class="c1"># [&#39;&lt; 0&#39;, &#39;0 - 5&#39;, &#39;5 - 10&#39;, &#39;&gt; 10&#39;]</span>
+</code></pre></div></p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>include_infinities</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Whether to include the infinities in the bin labels. Defaults to False.</p>
+            </div>
+          </td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>list[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The bin labels.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>backend/src/dataclasses/attributes.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_bin_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_infinities</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the bin labels of the numerical attribute.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    ```python</span>
+<span class="sd">    # create a numerical attribute with bins</span>
+<span class="sd">    attribute = DisaggregationAttribute(&#39;attribute&#39;, AttributeType.NUMERICAL, bins=[0, 5, 10])</span>
+
+<span class="sd">    # get the bin labels</span>
+<span class="sd">    bin_labels = attribute.get_bin_labels(include_infinities=True)</span>
+<span class="sd">    print(bin_labels)</span>
+<span class="sd">    # [&#39;&lt; 0&#39;, &#39;0 - 5&#39;, &#39;5 - 10&#39;, &#39;&gt; 10&#39;]</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        include_infinities (bool, optional): Whether to include the infinities in the bin labels. Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (list[str]): The bin labels.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">NUMERICAL</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">include_infinities</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;&lt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
+                                            <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bins</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The bin labels are only available for numerical attributes.&#39;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h4 id="backend.src.dataclasses.attributes.DisaggregationAttribute.get_bins" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">get_bins</span><span class="p">(</span><span class="n">include_infinities</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#backend.src.dataclasses.attributes.DisaggregationAttribute.get_bins" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns the bins of the numerical attribute.</p>
+<p>Example:
+<div class="highlight"><pre><span></span><code><span class="c1"># create a numerical attribute with bins</span>
+<span class="n">attribute</span> <span class="o">=</span> <span class="n">DisaggregationAttribute</span><span class="p">(</span><span class="s1">&#39;attribute&#39;</span><span class="p">,</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">NUMERICAL</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+
+<span class="c1"># get the bins</span>
+<span class="n">bins</span> <span class="o">=</span> <span class="n">attribute</span><span class="o">.</span><span class="n">get_bins</span><span class="p">(</span><span class="n">include_infinities</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">bins</span><span class="p">)</span>
+<span class="c1"># [-inf, 0, 5, 10, inf]</span>
+</code></pre></div></p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>include_infinities</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Whether to include the infinities in the bins. Defaults to False.</p>
+            </div>
+          </td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>list[float]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The bins.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>backend/src/dataclasses/attributes.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_bins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">include_infinities</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns the bins of the numerical attribute.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">    ```python</span>
+<span class="sd">    # create a numerical attribute with bins</span>
+<span class="sd">    attribute = DisaggregationAttribute(&#39;attribute&#39;, AttributeType.NUMERICAL, bins=[0, 5, 10])</span>
+
+<span class="sd">    # get the bins</span>
+<span class="sd">    bins = attribute.get_bins(include_infinities=True)</span>
+<span class="sd">    print(bins)</span>
+<span class="sd">    # [-inf, 0, 5, 10, inf]</span>
+<span class="sd">    ```</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        include_infinities (bool, optional): Whether to include the infinities in the bins. Defaults to False.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (list[float]): The bins.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">AttributeType</span><span class="o">.</span><span class="n">NUMERICAL</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">include_infinities</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bins</span> <span class="o">+</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bins</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The bins are only available for numerical attributes.&#39;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.attributes.NumericalAttribute" class="doc doc-heading">
+          <code>NumericalAttribute</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.attributes.NumericalAttribute" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>A numerical attribute.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the attribute.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>min</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The minimum value of the attribute.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>max</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The maximum value of the attribute.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>type</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The type of the attribute. Defaults to <a class="autorefs autorefs-internal" href="#backend.src.dataclasses.attributes.AttributeType.NUMERICAL">AttributeType.NUMERICAL</a>.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+
+<h2 id="backend.src.dataclasses.charts" class="doc doc-heading">
+          <code>charts</code>
+
+
+<a href="#backend.src.dataclasses.charts" class="headerlink" title="Permanent link">&para;</a></h2>
+
+  <div class="doc doc-contents ">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.charts.DataItem" class="doc doc-heading">
+          <code>DataItem</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.charts.DataItem" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>A data item.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>x</code></td>
+          <td>
+                <code>str | int | float</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The x value of the data item.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>y</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The y value of the data item.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.charts.DataSeries" class="doc doc-heading">
+          <code>DataSeries</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.charts.DataSeries" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>A data series.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the data series.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>data</code></td>
+          <td>
+                <code>list[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.charts.DataItem" href="#backend.src.dataclasses.charts.DataItem">DataItem</a>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The data of the data series.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h4 id="backend.src.dataclasses.charts.DataSeries.from_dict" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">from_dict</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">sort_by</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.charts.DataSeries.from_dict" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Create a data series from a dictionary. The keys of the dictionary will be used as x values and the values of
+the dictionary will be used as y values. The data will be sorted by the x values. If the sort_by parameter is
+given and a sort order is defined for the given key, the data will be sorted by the sort order.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the data series.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>data</code></td>
+          <td>
+                <code>dict[str | int | float, float]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The data of the data series.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sort_by</code></td>
+          <td>
+                <code>str | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The key to sort the data by.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>DataSeries</code></td>          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.charts.DataSeries" href="#backend.src.dataclasses.charts.DataSeries">DataSeries</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The data series.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>backend/src/dataclasses/charts.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">sort_by</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;DataSeries&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a data series from a dictionary. The keys of the dictionary will be used as x values and the values of</span>
+<span class="sd">    the dictionary will be used as y values. The data will be sorted by the x values. If the sort_by parameter is</span>
+<span class="sd">    given and a sort order is defined for the given key, the data will be sorted by the sort order.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name (str): The name of the data series.</span>
+<span class="sd">        data (dict[str | int | float, float]): The data of the data series.</span>
+<span class="sd">        sort_by (str | None): The key to sort the data by.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        DataSeries: The data series.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># sort the data by the x values</span>
+    <span class="k">if</span> <span class="n">sort_by</span> <span class="ow">in</span> <span class="n">SORT_ORDERS</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">SORT_ORDERS</span><span class="p">[</span><span class="n">sort_by</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+    <span class="k">return</span> <span class="n">DataSeries</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">DataItem</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span> <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">else</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.charts.Edge" class="doc doc-heading">
+          <code>Edge</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.charts.Edge" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>An edge in a graph.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>source</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The source node.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>target</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The target node.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td>
+                <code>str | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The label of the edge.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td>
+                <code>float | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value of the edge.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.charts.Graph" class="doc doc-heading">
+          <code>Graph</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.charts.Graph" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>A graph.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the graph.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>nodes</code></td>
+          <td>
+                <code>list[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.charts.Node" href="#backend.src.dataclasses.charts.Node">Node</a>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The nodes of the graph.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>edges</code></td>
+          <td>
+                <code>list[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.charts.Edge" href="#backend.src.dataclasses.charts.Edge">Edge</a>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The edges of the graph.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h4 id="backend.src.dataclasses.charts.Graph.__post_init__" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">__post_init__</span><span class="p">()</span></code>
+
+<a href="#backend.src.dataclasses.charts.Graph.__post_init__" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Check that the nodes have unique ids and that the edges are valid.</p>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>ValueError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the node ids are not unique or if an edge is invalid.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>backend/src/dataclasses/charts.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check that the nodes have unique ids and that the edges are valid.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the node ids are not unique or if an edge is invalid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">([</span><span class="n">node</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">([</span><span class="n">node</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">])):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The node ids are not unique.&#39;</span><span class="p">)</span>
+    <span class="n">node_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">source</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node_ids</span> <span class="ow">or</span> <span class="n">edge</span><span class="o">.</span><span class="n">target</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node_ids</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The edge is invalid.&#39;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.charts.MultiDataSeries" class="doc doc-heading">
+          <code>MultiDataSeries</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.charts.MultiDataSeries" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>A data series.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the data series.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>series</code></td>
+          <td>
+                <code>list[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.charts.DataItem" href="#backend.src.dataclasses.charts.DataItem">DataItem</a>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The series of the data series.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h4 id="backend.src.dataclasses.charts.MultiDataSeries.from_pandas" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.charts.MultiDataSeries.from_pandas" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Create a data series from a pandas series. The index of the pandas series must have one or two levels. If the
+index has one level, the data series will contain one series. If the index has two levels, the data series will
+contain multiple series (one for each value of the first level).</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>df</code></td>
+          <td>
+                <code><span title="pandas.Series">Series</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The data of the data series.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the data series.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>MultiDataSeries</code></td>          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.charts.MultiDataSeries" href="#backend.src.dataclasses.charts.MultiDataSeries">MultiDataSeries</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The data series.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>backend/src/dataclasses/charts.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">from_pandas</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">|</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;MultiDataSeries&quot;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a data series from a pandas series. The index of the pandas series must have one or two levels. If the</span>
+<span class="sd">    index has one level, the data series will contain one series. If the index has two levels, the data series will</span>
+<span class="sd">    contain multiple series (one for each value of the first level).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        df (pd.Series): The data of the data series.</span>
+<span class="sd">        name (str): The name of the data series.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        MultiDataSeries: The data series.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">series</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">nlevels</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">series</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DataSeries</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+            <span class="n">sort_by</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span>
+        <span class="p">))</span>
+    <span class="k">elif</span> <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">nlevels</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="n">series</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DataSeries</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">index</span><span class="p">),</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(),</span>
+                <span class="n">sort_by</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;The index has more than two levels.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">MultiDataSeries</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">series</span><span class="o">=</span><span class="n">series</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.charts.Node" class="doc doc-heading">
+          <code>Node</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.charts.Node" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>A node in a graph.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>id</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The id of the node.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>label</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The label of the node.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td>
+                <code>float | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value of the node.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.charts.Variant" class="doc doc-heading">
+          <code>Variant</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.charts.Variant" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>A variant of the process.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>activities</code></td>
+          <td>
+                <code>list[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The activities of the variant.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>count</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The number of occurrences of the variant.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>frequency</code></td>
+          <td>
+                <code>float</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The frequency of the variant.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>distribution</code></td>
+          <td>
+                <code>dict[str, int]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The distribution of the variant based on another attribute.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>id</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The hash of the variant.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+
+<h2 id="backend.src.dataclasses.filters" class="doc doc-heading">
+          <code>filters</code>
+
+
+<a href="#backend.src.dataclasses.filters" class="headerlink" title="Permanent link">&para;</a></h2>
+
+  <div class="doc doc-contents ">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.filters.BaseFilter" class="doc doc-heading">
+          <code>BaseFilter</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.BaseFilter" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="abc.ABC">ABC</span></code></p>
+
+  
+      <p>A base filter.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>attribute_name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the attribute.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>operator</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.FilterOperator" href="#backend.src.dataclasses.filters.FilterOperator">FilterOperator</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The operator of the filter.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.BaseFilter.filter_value" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">filter_value</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.BaseFilter.filter_value" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns the value to filter for.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>list[str] | str | float | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value to filter for.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.BaseFilter.supported_operators" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">supported_operators</span><span class="p">()</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.BaseFilter.supported_operators" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns the supported operators for the filter.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>tuple[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.FilterOperator" href="#backend.src.dataclasses.filters.FilterOperator">FilterOperator</a>, ...]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The supported operators for the filter.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>backend/src/dataclasses/filters.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="nd">@abstractmethod</span>
+<span class="k">def</span> <span class="nf">supported_operators</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">FilterOperator</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the supported operators for the filter.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (tuple[FilterOperator, ...]): The supported operators for the filter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.filters.CategoricalFilter" class="doc doc-heading">
+          <code>CategoricalFilter</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.CategoricalFilter" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.BaseFilter" href="#backend.src.dataclasses.filters.BaseFilter">BaseFilter</a></code></p>
+
+  
+      <p>A categorical filter. The filter can be used to filter for categorical attributes.
+Currently, the filter supports the following operators:</p>
+<ul>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.IS_EMPTY">IS_EMPTY</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.IS_NOT_EMPTY">NOT_EMPTY</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.EQUALS">EQUALS</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.NOT_EQUALS">NOT_EQUALS</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.CONTAINS">CONTAINS</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.NOT_CONTAINS">NOT_CONTAINS</a></li>
+</ul>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>values</code></td>
+          <td>
+                <code>list[str] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The values to filter for.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.CategoricalFilter.filter_value" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">filter_value</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.CategoricalFilter.filter_value" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns the value to filter for. If the operator does not accept a value, None is returned.
+If the operator accepts multiple values, the values are returned as a list,
+otherwise the first value is returned.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>list[str] | str | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value to filter for.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.CategoricalFilter.supported_operators" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">supported_operators</span><span class="p">()</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.CategoricalFilter.supported_operators" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns the supported operators for the filter.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>tuple[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.FilterOperator" href="#backend.src.dataclasses.filters.FilterOperator">FilterOperator</a>, ...]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The supported operators for the filter.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>backend/src/dataclasses/filters.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">supported_operators</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">FilterOperator</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the supported operators for the filter.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (tuple[FilterOperator, ...]): The supported operators for the filter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">IS_EMPTY</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">IS_NOT_EMPTY</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">EQUALS</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">NOT_EQUALS</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">CONTAINS</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">NOT_CONTAINS</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.filters.FilterOperator" class="doc doc-heading">
+          <code>FilterOperator</code>
+
+
+<a href="#backend.src.dataclasses.filters.FilterOperator" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="enum.Enum">Enum</span></code></p>
+
+  
+      <p>An enumeration of the supported filter operators.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.CONTAINS" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">CONTAINS</span> <span class="o">=</span> <span class="s1">&#39;contains&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.CONTAINS" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The contains operator.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.EQUALS" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">EQUALS</span> <span class="o">=</span> <span class="s1">&#39;equals&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.EQUALS" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The equals operator.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.GREATER_THAN" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">GREATER_THAN</span> <span class="o">=</span> <span class="s1">&#39;greater_than&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.GREATER_THAN" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The greater than operator.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.GREATER_THAN_OR_EQUALS" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">GREATER_THAN_OR_EQUALS</span> <span class="o">=</span> <span class="s1">&#39;greater_than_or_equals&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.GREATER_THAN_OR_EQUALS" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The greater than or equals operator.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.IS_EMPTY" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">IS_EMPTY</span> <span class="o">=</span> <span class="s1">&#39;is_empty&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.IS_EMPTY" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The is empty operator.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.IS_NOT_EMPTY" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">IS_NOT_EMPTY</span> <span class="o">=</span> <span class="s1">&#39;is_not_empty&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.IS_NOT_EMPTY" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The is not empty operator.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.LESS_THAN" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">LESS_THAN</span> <span class="o">=</span> <span class="s1">&#39;less_than&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.LESS_THAN" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The less than operator.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.LESS_THAN_OR_EQUALS" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">LESS_THAN_OR_EQUALS</span> <span class="o">=</span> <span class="s1">&#39;less_than_or_equals&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.LESS_THAN_OR_EQUALS" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The less than or equals operator.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.NOT_CONTAINS" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">NOT_CONTAINS</span> <span class="o">=</span> <span class="s1">&#39;not_contains&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.NOT_CONTAINS" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The not contains operator.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.NOT_EQUALS" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">NOT_EQUALS</span> <span class="o">=</span> <span class="s1">&#39;not_equals&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.NOT_EQUALS" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The not equals operator.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.accepts_multiple_values" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">accepts_multiple_values</span><span class="p">:</span> <span class="nb">bool</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.accepts_multiple_values" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns whether the operator accepts multiple values.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Whether the operator accepts multiple values.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.accepts_no_value" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">accepts_no_value</span><span class="p">:</span> <span class="nb">bool</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.accepts_no_value" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns whether the operator accepts no value.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Whether the operator accepts no value.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.FilterOperator.accepts_single_value" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">accepts_single_value</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.FilterOperator.accepts_single_value" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns whether the operator accepts a single value.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Whether the operator accepts a single value.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.filters.NumericalFilter" class="doc doc-heading">
+          <code>NumericalFilter</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.NumericalFilter" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.BaseFilter" href="#backend.src.dataclasses.filters.BaseFilter">BaseFilter</a></code></p>
+
+  
+      <p>A numerical filter. The filter can be used to filter for numerical attributes.
+Currently, the filter supports the following operators:</p>
+<ul>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.IS_EMPTY">IS_EMPTY</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.IS_NOT_EMPTY">NOT_EMPTY</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.EQUALS">EQUALS</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.NOT_EQUALS">NOT_EQUALS</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.LESS_THAN">LESS_THAN</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.LESS_THAN_OR_EQUALS">LESS_THAN_OR_EQUALS</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.GREATER_THAN">GREATER_THAN</a></li>
+<li><a class="autorefs autorefs-internal" href="#backend.src.dataclasses.filters.FilterOperator.GREATER_THAN_OR_EQUALS">GREATER_THAN_OR_EQUALS</a></li>
+</ul>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>value</code></td>
+          <td>
+                <code>float | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value to filter for.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.NumericalFilter.filter_value" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">filter_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.NumericalFilter.filter_value" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns the value to filter for.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>float | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value to filter for.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
+<h4 id="backend.src.dataclasses.filters.NumericalFilter.supported_operators" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">supported_operators</span><span class="p">()</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.filters.NumericalFilter.supported_operators" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Returns the supported operators for the filter.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>tuple[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.FilterOperator" href="#backend.src.dataclasses.filters.FilterOperator">FilterOperator</a>, ...]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The supported operators for the filter.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>backend/src/dataclasses/filters.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">supported_operators</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">FilterOperator</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the supported operators for the filter.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        (tuple[FilterOperator, ...]): The supported operators for the filter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">IS_EMPTY</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">IS_NOT_EMPTY</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">EQUALS</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">NOT_EQUALS</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">LESS_THAN</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">LESS_THAN_OR_EQUALS</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">GREATER_THAN</span><span class="p">,</span>
+        <span class="n">FilterOperator</span><span class="o">.</span><span class="n">GREATER_THAN_OR_EQUALS</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+
+<h2 id="backend.src.dataclasses.requests" class="doc doc-heading">
+          <code>requests</code>
+
+
+<a href="#backend.src.dataclasses.requests" class="headerlink" title="Permanent link">&para;</a></h2>
+
+  <div class="doc doc-contents ">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.requests.DejureGraphRequest" class="doc doc-heading">
+          <code>DejureGraphRequest</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.DejureGraphRequest" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.requests.FilteredRequest" href="#backend.src.dataclasses.requests.FilteredRequest">FilteredRequest</a></code></p>
+
+  
+      <p>A request for a dejure graph. The graph will be calculated based on the given filters. The graph will be disaggregated by the
+given disaggregation attribute. The graph will show the given merics.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>filters</code></td>
+          <td>
+                <code>list[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.BaseFilter" href="#backend.src.dataclasses.filters.BaseFilter">BaseFilter</a>] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The filters of the request. Defaults to None.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>statistic</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.requests.DejureStatisticType" href="#backend.src.dataclasses.requests.DejureStatisticType">DejureStatisticType</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The metric to request.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>disaggregation_attribute</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.attributes.DisaggregationAttribute" href="#backend.src.dataclasses.attributes.DisaggregationAttribute">DisaggregationAttribute</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The attribute to disaggregate the graph by.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.requests.DejureStatisticType" class="doc doc-heading">
+          <code>DejureStatisticType</code>
+
+
+<a href="#backend.src.dataclasses.requests.DejureStatisticType" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="enum.Enum">Enum</span></code></p>
+
+  
+      <p>An enumeration of the metric types in dejure graph that can be requested.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.DejureStatisticType.DROP" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">DROP</span> <span class="o">=</span> <span class="s1">&#39;drop&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.DejureStatisticType.DROP" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The percentage of disaggregated patient that drop in each activity.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.DejureStatisticType.MAX" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">MAX</span> <span class="o">=</span> <span class="s1">&#39;max&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.DejureStatisticType.MAX" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The max duration between two events.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.DejureStatisticType.MEAN" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">MEAN</span> <span class="o">=</span> <span class="s1">&#39;mean&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.DejureStatisticType.MEAN" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The mean duration between two events.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.DejureStatisticType.MEDIAN" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">MEDIAN</span> <span class="o">=</span> <span class="s1">&#39;median&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.DejureStatisticType.MEDIAN" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The median duration between two events.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.DejureStatisticType.MIN" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">MIN</span> <span class="o">=</span> <span class="s1">&#39;min&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.DejureStatisticType.MIN" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The min duration between two events.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.DejureStatisticType.REMAIN" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">REMAIN</span> <span class="o">=</span> <span class="s1">&#39;remain&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.DejureStatisticType.REMAIN" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The percentage of activity that goes to the next activity.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.requests.DfgRequest" class="doc doc-heading">
+          <code>DfgRequest</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.DfgRequest" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.requests.FilteredRequest" href="#backend.src.dataclasses.requests.FilteredRequest">FilteredRequest</a></code></p>
+
+  
+      <p>A request for a DFG. The graph will be calculated based on the given filters.The DFG will
+be disaggregated by the given disaggregation attribute.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>filters</code></td>
+          <td>
+                <code>list[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.BaseFilter" href="#backend.src.dataclasses.filters.BaseFilter">BaseFilter</a>] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The filters of the request. Defaults to None.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>disaggregation_attribute</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.attributes.DisaggregationAttribute" href="#backend.src.dataclasses.attributes.DisaggregationAttribute">DisaggregationAttribute</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The attribute to disaggregate the distribution by.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.requests.DistributionRequest" class="doc doc-heading">
+          <code>DistributionRequest</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.DistributionRequest" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.requests.FilteredRequest" href="#backend.src.dataclasses.requests.FilteredRequest">FilteredRequest</a></code></p>
+
+  
+      <p>A request for a distribution. The distribution will be calculated based on the given filters. The distribution will
+be disaggregated by the given disaggregation attribute.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>filters</code></td>
+          <td>
+                <code>list[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.BaseFilter" href="#backend.src.dataclasses.filters.BaseFilter">BaseFilter</a>] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The filters of the request. Defaults to None.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>disaggregation_attribute</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.attributes.DisaggregationAttribute" href="#backend.src.dataclasses.attributes.DisaggregationAttribute">DisaggregationAttribute</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The attribute to disaggregate the distribution by.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.requests.FilteredRequest" class="doc doc-heading">
+          <code>FilteredRequest</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.FilteredRequest" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="abc.ABC">ABC</span></code></p>
+
+  
+      <p>A base request with filters.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>filters</code></td>
+          <td>
+                <code>list[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.BaseFilter" href="#backend.src.dataclasses.filters.BaseFilter">BaseFilter</a>] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The filters of the request. Defaults to None.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.requests.KpiRequest" class="doc doc-heading">
+          <code>KpiRequest</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.KpiRequest" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.requests.FilteredRequest" href="#backend.src.dataclasses.requests.FilteredRequest">FilteredRequest</a></code></p>
+
+  
+      <p>A request for a KPI. The KPI will be calculated based on the given filters. The KPI will be disaggregated by the
+given disaggregation attribute. The KPI will be displayed in the legend by the given legend attribute.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>filters</code></td>
+          <td>
+                <code>list[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.BaseFilter" href="#backend.src.dataclasses.filters.BaseFilter">BaseFilter</a>] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The filters of the request. Defaults to None.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>kpi</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.requests.KpiType" href="#backend.src.dataclasses.requests.KpiType">KpiType</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The KPI to request.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>disaggregation_attribute</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.attributes.DisaggregationAttribute" href="#backend.src.dataclasses.attributes.DisaggregationAttribute">DisaggregationAttribute</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The attribute to disaggregate the KPI by.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>legend_attribute</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.attributes.DisaggregationAttribute" href="#backend.src.dataclasses.attributes.DisaggregationAttribute">DisaggregationAttribute</a> | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The attribute to display the KPI in the legend by. Defaults to None.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.requests.KpiType" class="doc doc-heading">
+          <code>KpiType</code>
+
+
+<a href="#backend.src.dataclasses.requests.KpiType" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="enum.Enum">Enum</span></code></p>
+
+  
+      <p>An enumeration of the KPI types that can be requested.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.KpiType.AUTHORIZATION_TO_PROCUREMENT" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">AUTHORIZATION_TO_PROCUREMENT</span> <span class="o">=</span> <span class="s1">&#39;authorization_to_procurement&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.KpiType.AUTHORIZATION_TO_PROCUREMENT" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The authorization to procurement KPI. This KPI measures the average time from authorization to procurement.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.KpiType.BUREAUCRATIC_DURATION" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">BUREAUCRATIC_DURATION</span> <span class="o">=</span> <span class="s1">&#39;bureaucratic_duration&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.KpiType.BUREAUCRATIC_DURATION" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The bureaucratic duration KPI. This KPI measures the average bureaucratic duration.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.KpiType.DROP_OUT" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">DROP_OUT</span> <span class="o">=</span> <span class="s1">&#39;drop_out&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.KpiType.DROP_OUT" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The drop out KPI. The KPI measures the percentage of cases that drop out.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.KpiType.EVALUATION_TO_APPROACH" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">EVALUATION_TO_APPROACH</span> <span class="o">=</span> <span class="s1">&#39;evaluation_to_approach&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.KpiType.EVALUATION_TO_APPROACH" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The evaluation to approach KPI. This KPI measures the average time from evaluation to approach.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.KpiType.HAPPY_PATH_ADHERENCE" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">HAPPY_PATH_ADHERENCE</span> <span class="o">=</span> <span class="s1">&#39;happy_path_adherence&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.KpiType.HAPPY_PATH_ADHERENCE" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The happy path adherence KPI. The KPI measures the percentage of cases that follow the happy path.</p>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+
+<h4 id="backend.src.dataclasses.requests.KpiType.PERMUTED_PATH_ADHERENCE" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">PERMUTED_PATH_ADHERENCE</span> <span class="o">=</span> <span class="s1">&#39;permuted_path_adherence&#39;</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.KpiType.PERMUTED_PATH_ADHERENCE" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>The permuted path adherence KPI. The KPI measures the percentage of cases that follow a permuted path.</p>
+  </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+
+<h3 id="backend.src.dataclasses.requests.VariantListRequest" class="doc doc-heading">
+          <code>VariantListRequest</code>
+
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#backend.src.dataclasses.requests.VariantListRequest" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.requests.FilteredRequest" href="#backend.src.dataclasses.requests.FilteredRequest">FilteredRequest</a></code></p>
+
+  
+      <p>A request for a list of variants.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>filters</code></td>
+          <td>
+                <code>list[<a class="autorefs autorefs-internal" title="backend.src.dataclasses.filters.BaseFilter" href="#backend.src.dataclasses.filters.BaseFilter">BaseFilter</a>] | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The filters of the request. Defaults to None.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>disaggregation_attribute</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="backend.src.dataclasses.attributes.DisaggregationAttribute" href="#backend.src.dataclasses.attributes.DisaggregationAttribute">DisaggregationAttribute</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The attribute to disaggregate the variants by.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.indexes", "navigation.instant", "navigation.tabs.sticky"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+    
+  </body>
+</html>
