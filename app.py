@@ -159,27 +159,6 @@ def serve_static_file(file):
 
 
 if __name__ == '__main__':
-    def run_server():
-        # List of ports to attempt to allocate.
-        print("Running ORCA 🐋: ")
-        for port in [80, 8080, 8000, 8081]:
-            try:
-                print(f'🟢 - Server running at', colored(f'http://127.0.0.1:{port}', 'green'))
-                serve(app, host='0.0.0.0', port=port)
-            except Exception:
-                # This print clears the prior line, which is always the 'Server running ...' message
-                print('\033[A                             \033[A')
-                print(f'🔴 - Taking', colored(f'port {port} failed', 'red'), ', trying next port ...')
-        print('All pre-defined ports have failed. Either change them or check your system!')
-
-
-    # Create a separate process for running the server
-    try:
-        server_process = thread.Thread(target=run_server)
-    except Exception as e:
-        raise e
-
-    with open('backend/files/orca-ascii.txt', mode='r') as ascii:
-        print(colored(ascii.read(), "blue"))
-
-    server_process.start()
+    port = 80
+    print(f'🟢 - Server running at', colored(f'http://127.0.0.1:{port}', 'green'))
+    serve(app, host='0.0.0.0', port=80)
