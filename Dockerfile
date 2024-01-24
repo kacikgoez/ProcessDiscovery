@@ -23,7 +23,9 @@ RUN pip install poetry
 COPY pyproject.toml poetry.lock ./
 
 # Install the dependencies
-RUN poetry config virtualenvs.create false && poetry install --without dev
+RUN poetry config virtualenvs.create false 
+
+RUN poetry install
 
 # Copy the backend code
 COPY backend backend
