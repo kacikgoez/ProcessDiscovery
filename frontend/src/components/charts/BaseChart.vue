@@ -245,7 +245,7 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
                             }
                         },
                         label: {
-                            formatter: (item.label || '') + ' : ' + (item.value).toFixed(3) + '',
+                            formatter: item.label ? item.label + ' : ' + (item.value).toFixed(3) : (item.value).toFixed(3) + '',
                             show: true,
                         }
                     };
