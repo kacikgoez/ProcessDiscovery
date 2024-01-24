@@ -224,11 +224,15 @@ async function fetchEndpoint(requestBody: ServerRequest, baseDataItem: echarts.S
                 // Step 3: Modify the edges to include curveness
                 let edges = responseData.edges.map((item) => {
                     const key = `${item.source}-${item.target}`;
-                    if (connectionCounts[key] % 2 == 0) {
+
+                    if (connectionCounts[key] > 1 && connectionCounts[key] % 2 == 0) {
                         curveness = connectionCounts[key]-- * 0.1 || 0;
-                    } else {
+                    } else if (connectionCounts[key] > 1) {
                         curveness = ((connectionCounts[key]--) + 1) * -0.1 || 0;
+                    } else {
+                        curveness = 0;
                     }
+
                     return {
                         source: item.source,
                         target: item.target,
