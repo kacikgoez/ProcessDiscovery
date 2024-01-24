@@ -42,9 +42,6 @@
     <div class="tile-footer">
       <Filters :id="props.i" v-model="filters"></Filters>
     </div>
-    <EditModal :id="props.i" v-model:visible="visible">
-
-    </EditModal>
   </div>
 </template>
 
@@ -68,6 +65,7 @@ import {
 import Filters from '../input/Filters.vue';
 import EditModal from '../modals/EditModal.vue';
 import {globalFiltersStore} from '@/stores/GlobalFiltersStore';
+import {useDialog} from 'primevue/usedialog';
 
 const tileContent = ref(null);
 const { width, height } = useElementSize(tileContent);
@@ -77,6 +75,8 @@ const downloadBus = useEventBus(downloadVisualizationBusKey);
 const globalFilters = globalFiltersStore();
 
 const confirm = useConfirm();
+const dialog = useDialog();
+
 const openPopup = (event: Event, i: string) => {
   confirm.require({
     target: event.currentTarget as HTMLElement,
@@ -137,7 +137,12 @@ onBeforeMount(() => {
 });
 
 function show() {
-  visible.value = true;
+  // visible.value = true;
+  dialog.open(EditModal,{
+    data: {
+      id: props.i,
+      visible: true
+    }})
 }
 
 function draggable(state: Boolean) {

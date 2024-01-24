@@ -1,5 +1,5 @@
 <template>
-    <Dialog :id="id" v-model:visible="visibleProp" :closable="true" :draggable="false" class="modal-window" modal
+    <Dialog :id="id" :visible="true" :closable="true" :draggable="false" class="modal-window" modal
         header="Header" :style="modalStyle" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" :pt="{
             mask: {
                 style: 'backdrop-filter: blur(2px); background-color: rgba(0, 0, 0, 0.2);'
@@ -7,7 +7,7 @@
         }" @submit="close">
         <template #header>
             <input id="change-title" v-model="title" type="text">
-            <Dropdown v-model="dis_attr" :options="PatientAttributeKeysList" option-label="name"
+            <Dropdown v-model="selectedDisaggregationAttribute" :options="disaggregationAttributes" option-label="label"
                 placeholder="Select an attribute" class="w-full md:w-14rem" />
         </template>
         <main>
@@ -46,38 +46,53 @@
 <script setup lang="ts">
 
 import { layoutStore } from '@/stores/LayoutStore';
-import { Charts, DejureStatisticType, EndpointURI, Endpoints, ServerAttributes } from '@/types';
+import {Charts, DejureStatisticType, EndpointURI, Endpoints, ServerAttributes, KPITile, EditModalEntry} from '@/types';
 import Button from 'primevue/button';
 import Listbox from 'primevue/listbox';
-import { Ref, computed, ref, toRef, watch } from 'vue';
+import {Ref, computed, ref, toRef, watch, inject, onMounted} from 'vue';
+import {prettyAttributeNames} from '@/util';
 
-const props = defineProps({
-    visible: { type: Boolean, required: true },
-    id: { type: String, required: true }
-})
-
-const emit = defineEmits(['update:visible'])
-
+const dialogRef = inject('dialogRef');
 const globalLayout = layoutStore();
 
-const title = ref(globalLayout.getTile(props.id)!.title)
-
-const visibleArg = toRef(props, 'visible')
-const visibleProp = ref(false)
-const id = toRef(props, 'id')
-
-const dis_attr = ref('')
-
-// Format patient-list JSON to list & remove hospital id
-const PatientAttributeKeysList = Object.values(ServerAttributes).map((key) => {
-    return {
-        name: key.name.replaceAll('_', ' '),
-        code: key.name,
-    }
-}).filter((key) => key.name !== 'hospital id')
-
-const selectedChart: Ref<{ endpoint: string, value: string } | null> = ref()
+const id = ref();
+const title = ref('')
+const selectedDisaggregationAttribute = ref()
+const selectedChart: Ref<EditModalEntry[] | null> = ref(null)
 const selectedStatistic = ref();
+
+const disaggregationAttributes = computed(() => {
+    return Object.values(ServerAttributes)
+    .filter((attr) => attr.name !== 'hospital_id')
+    .map((attr) => {
+      return {
+        ...attr,
+        label: prettyAttributeNames(attr.name),
+      }
+    });
+})
+
+onMounted(() => {
+    id.value = dialogRef.value.data.id;
+    const currentTile = globalLayout.getTile(id.value)!;
+
+    title.value = currentTile.title;
+
+    const currentDis = currentTile.request.disaggregation_attribute;
+    selectedDisaggregationAttribute.value = disaggregationAttributes.value.find((attr) => attr.name === currentDis.name);
+
+    const allEndpoints: EditModalEntry[] = Endpoints.flatMap((endpoint) => endpoint.items);
+    selectedChart.value = allEndpoints.filter((endpoint) => {
+      if (currentTile.request.kpi != null && endpoint.endpoint === EndpointURI.KPI) {
+        return currentTile.request.kpi.includes(endpoint.value);
+      } else {
+        return endpoint.endpoint === currentTile.request.endpoint;
+      }
+    }) || null;
+    selectedStatistic.value = currentTile.request.statistic || null;
+})
+
+
 
 const modalStyle = ref({
     width: '50rem',
@@ -88,14 +103,14 @@ const modalStyle = ref({
 })
 
 function close() {
-    visibleProp.value = false
+  dialogRef.value.close();
 }
 
 function confirm() {
     if (!selectedChart.value === null || !Array.isArray(selectedChart.value) || selectedChart.value.length == 0) return
-    const editObj = { title: title.value, request: { endpoint: selectedChart.value![0].endpoint, disaggregation_attribute: { name: dis_attr.value.code } } };
+    const editObj = { title: title.value, request: { endpoint: selectedChart.value![0].endpoint, disaggregation_attribute: { name: selectedDisaggregationAttribute.value.name } } };
 
-    if (dis_attr.value.code == 'age') {
+    if (selectedDisaggregationAttribute.value.name == 'age') {
         Object.assign(editObj.request.disaggregation_attribute, { bins: [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100] });
     } else if (editObj.request.disaggregation_attribute.bins) {
         delete editObj.request.disaggregation_attribute;
@@ -120,22 +135,14 @@ function confirm() {
             Object.assign(editObj, { type: selectedChart.value![0].value });
             break;
     }
-    globalLayout.updateTile(props.id, editObj)
-    visibleProp.value = false
+    globalLayout.updateTile(id.value, editObj)
+    dialogRef.value.close();
 }
 
 const disableConfirm = computed(() => {
-    return !(!!selectedChart.value && title.value.trim().length > 0 && !!dis_attr.value.code)
+  console.log(selectedChart.value)
+    return !(selectedChart.value?.length > 0 && title.value.trim().length > 0 && !!selectedDisaggregationAttribute.value.name)
 })
-
-watch(visibleProp, async (value) => {
-    emit('update:visible', value)
-})
-
-watch(visibleArg, async (value) => {
-    visibleProp.value = value
-})
-
 
 </script>
 <style scoped>
